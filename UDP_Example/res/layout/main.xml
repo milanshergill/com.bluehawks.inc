@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<!--
+     Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,30 +14,52 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" 
-android:layout_height="fill_parent" 
-android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <EditText 
-android:id="@+id/editText1" 
-android:layout_width="match_parent" 
-android:layout_height="wrap_content" >
-
-        <requestFocus /> 
-</EditText>
-
-    <Button 
-android:id="@+id/button1" 
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content" 
-android:text="Send" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+         
+         <EditText
+             android:id="@+id/editText2"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="20dp"
+             android:hint="Server IP Address" />
 
     <TextView 
 android:id="@+id/textView1" 
 android:layout_width="wrap_content" 
 android:layout_height="wrap_content" 
 android:text="Communication History:" 
-android:textAppearance="?android:attr/textAppearanceLarge" />
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:layout_below="@+id/button2"
+android:layout_marginTop="20dp" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText2"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="22dp"
+        android:text="Send" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="56dp"
+        android:onClick="onClick_Stop"
+        android:text="Stop" />
+        
+    </RelativeLayout>
+
+</ScrollView>
