@@ -22,8 +22,15 @@
             android:icon="@drawable/ic_launcher"
             android:debuggable="true"
             android:hardwareAccelerated="true">
-        <activity android:name="com.example.android.mediafx.UDPExample"
+        <!-- <activity android:name="com.example.android.mediafx.UDPExample"
                 android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> -->
+        <activity android:name="UDP_Main"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
