@@ -245,7 +245,7 @@ public class GestureTrainer extends Activity {
 
         @Override
         protected void onResume() {
-                Intent bindIntent = new Intent("de.dfki.ccaal.gestures.GESTURE_RECOGNIZER");
+                Intent bindIntent = new Intent("com.example.original_gesture.GESTURE_RECOGNIZER");
                 bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE);
                 super.onResume();
         }

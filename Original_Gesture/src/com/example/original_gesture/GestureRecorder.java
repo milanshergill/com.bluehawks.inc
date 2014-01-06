@@ -53,8 +53,8 @@ public class GestureRecorder implements SensorEventListener {
         }
 
         private float calcVectorNorm(float[] values) {
-                float norm = (float) Math.sqrt(values[SensorManager.DATA_X] * values[SensorManager.DATA_X] + values[SensorManager.DATA_Y] * values[SensorManager.DATA_Y] + values[SensorManager.DATA_Z]
-                                * values[SensorManager.DATA_Z]) - 9.9f;
+                float norm = (float) Math.sqrt(values[0] * values[0] + values[1] * values[1] + values[2]
+                                * values[2]) - 9.9f;
                 return norm;
         }
 
@@ -100,7 +100,7 @@ public class GestureRecorder implements SensorEventListener {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
 
-                float[] value = { sensorEvent.values[SensorManager.DATA_X], sensorEvent.values[SensorManager.DATA_Y], sensorEvent.values[SensorManager.DATA_Z] };
+                float[] value = { sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2] };
 
                 switch (recordMode) {
                 case MOTION_DETECTION:

@@ -82,7 +82,7 @@ public class GestureOverview extends ListActivity {
         @Override
         protected void onResume() {
                 trainingSet = getIntent().getExtras().get("trainingSetName").toString();
-                Intent bindIntent = new Intent("de.dfki.ccaal.gestures.GESTURE_RECOGNIZER");
+                Intent bindIntent = new Intent("com.example.original_gesture.GESTURE_RECOGNIZER");
                 bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
                 super.onResume();
