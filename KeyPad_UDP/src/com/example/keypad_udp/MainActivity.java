@@ -101,7 +101,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	        }
 	     };
 	     
-	     timer_udp = new CountDownTimer(20000, 150) {
+	     timer_udp = new CountDownTimer(20000, 250) {
     	 	String dataToSend = "Nothing";
 	        public void onTick(long millisUntilFinished) {
 	        	if(counter < dataList.size() && !dataList.isEmpty()) {
