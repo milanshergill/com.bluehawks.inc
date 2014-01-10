@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	    	sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_FASTEST);
 	    }
 	    
-	    timer = new CountDownTimer(10000, 50) {
+	    timer = new CountDownTimer(20000, 50) {
 
 	        public void onTick(long millisUntilFinished) {
 	        	if(start) {
@@ -101,7 +101,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	        }
 	     };
 	     
-	     timer_udp = new CountDownTimer(20000, 250) {
+	     timer_udp = new CountDownTimer(100000, 250) {
     	 	String dataToSend = "Nothing";
 	        public void onTick(long millisUntilFinished) {
 	        	if(counter < dataList.size() && !dataList.isEmpty()) {
