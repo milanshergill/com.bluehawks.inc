@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	    for (Sensor s : sensorList) {
 	    	sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_FASTEST);
 	    }
-	    
+	    //comment
 	    timer = new CountDownTimer(20000, 50) {
 
 	        public void onTick(long millisUntilFinished) {
