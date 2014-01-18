@@ -32,6 +32,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	int counter = 0;
 	int foundSame = 0;
 	@Override
+	//dsfs
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
