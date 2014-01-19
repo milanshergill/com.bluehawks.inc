@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class DTWAlgorithm {
 
         static float OFFSET_PENALTY = .5f;
-
+/*satsriakal*/
         static private float pnorm(ArrayList<Double> vector, int p) {
                 float result = 0, sum;
                 for (double b : vector) {
