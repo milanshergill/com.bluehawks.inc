@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	    }
 	 
 	    timer = new CountDownTimer(20000, 50) {
-
+ /*satriakal*/
 	        public void onTick(long millisUntilFinished) {
         	
     			accelXList.add(Float.valueOf(accelX)); //Contains only acceleration "x" values
@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	/*satriakal*/
 	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
 		// TODO Auto-generated method stub
