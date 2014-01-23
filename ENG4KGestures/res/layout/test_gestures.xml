@@ -31,8 +31,7 @@
         android:layout_alignLeft="@+id/start"
         android:layout_below="@+id/start"
         android:layout_marginTop="25dp"
-        android:visibility="invisible"
-        android:text="TextView" />
+        android:text="Results" />
 
     <ListView
         android:id="@+id/resultsList"
