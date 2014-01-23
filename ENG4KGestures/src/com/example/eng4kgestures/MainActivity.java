@@ -31,4 +31,9 @@ public class MainActivity extends Activity {
 	Intent myIntent = new Intent(MainActivity.this, RecordGestures.class);
 	MainActivity.this.startActivity(myIntent);
 	}
+	
+	public void onClickTestGestures(View v) {
+		Intent myIntent = new Intent(MainActivity.this, TestGestures.class);
+		MainActivity.this.startActivity(myIntent);
+		}
 }
