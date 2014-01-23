@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
-        android:text="Record Gestures" />
+        android:text="Record Gestures" 
+        android:onClick="onClickRecordGestures"/>
 
     <Button
         android:id="@+id/TestGestures"
