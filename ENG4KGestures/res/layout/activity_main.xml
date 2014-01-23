@@ -8,9 +8,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
+     <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:orientation="vertical" >
+        
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/RecordGestures"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:text="Record Gestures" />
+
+    <Button
+        android:id="@+id/TestGestures"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RecordGestures"
+        android:layout_centerHorizontal="true"
+ 
+        android:text="Test Gestures" />
 
 </RelativeLayout>
