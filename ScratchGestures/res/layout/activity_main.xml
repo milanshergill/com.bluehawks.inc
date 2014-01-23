@@ -8,9 +8,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
+    <Button
+        android:id="@+id/RecordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="Record"
+        android:onClick="onClickRecord" />
 
+   <Button
+       android:id="@+id/StopButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignBaseline="@+id/RecordButton"
+       android:layout_alignBottom="@+id/RecordButton"
+       android:layout_alignParentRight="true"
+       android:layout_marginRight="28dp"
+       android:text="Stop" />
+
+
+      <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical" >
+
+          <ListView
+              android:id="@+id/listView1"
+              android:layout_width="match_parent"
+              android:layout_height="300dp" >
+          </ListView>
+  
+       </LinearLayout>
+
+  
 </RelativeLayout>
