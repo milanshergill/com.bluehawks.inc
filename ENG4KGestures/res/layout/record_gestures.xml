@@ -23,7 +23,8 @@
          android:id="@+id/startRecording"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:text="Start Recording" />
+         android:text="Start Recording" 
+         android:onClick="onClickStartRecording"/>
      
 
  <Button
@@ -31,7 +32,8 @@
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:text="Stop Recording" 
-      android:layout_below="@+id/startRecording"/>
+      android:layout_below="@+id/startRecording"
+      android:onClick="onClickStopRecording"/>
  
     </RelativeLayout>
 </LinearLayout>
