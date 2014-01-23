@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/RecordGestures"
         android:layout_centerHorizontal="true"
- 
+        android:onClick="onClickTestGestures"
         android:text="Test Gestures" />
 
 </RelativeLayout>

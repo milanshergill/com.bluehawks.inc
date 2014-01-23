@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name="RecordGestures"></activity>
+        <activity android:name="TestGestures"></activity>
     </application>
 
 </manifest>
