@@ -8,23 +8,16 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
-	ListView list;
-	Button recordButton;
 	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		list =  (ListView) findViewById(R.id.listView1);
-		recordButton = (Button) findViewById(R.id.RecordButton);
-		
-	}
-	
-	void onClickRecord (View v) {
 
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

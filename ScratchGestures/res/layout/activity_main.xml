@@ -8,36 +8,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/RecordButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Record"
-        android:onClick="onClickRecord" />
+        android:orientation="vertical" >
+    </LinearLayout>
 
-   <Button
-       android:id="@+id/StopButton"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignBaseline="@+id/RecordButton"
-       android:layout_alignBottom="@+id/RecordButton"
-       android:layout_alignParentRight="true"
-       android:layout_marginRight="28dp"
-       android:text="Stop" />
+    <Button
+        android:id="@+id/RecordGestures"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:text="Record Gestures" />
 
+    <Button
+        android:id="@+id/TestGestures"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RecordGestures"
+        android:layout_centerHorizontal="true"
+ 
+        android:text="Test Gestures" />
 
-      <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical" >
-
-          <ListView
-              android:id="@+id/listView1"
-              android:layout_width="match_parent"
-              android:layout_height="300dp" >
-          </ListView>
-  
-       </LinearLayout>
-
-  
 </RelativeLayout>
