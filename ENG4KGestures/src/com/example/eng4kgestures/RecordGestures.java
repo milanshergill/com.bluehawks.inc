@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class RecordGestures extends Activity implements SensorEventListener {
 	SensorManager sensorManager;
@@ -23,11 +25,14 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	private float accelX, accelY, accelZ;
 	CountDownTimer timer;
 	Boolean StartRecording = false;
+	TextView Recording_Status;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record_gestures);
+		
+		Recording_Status =  (TextView) (findViewById((R.id.Recording_Status)));
 		
 		//initialize the sensor
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -45,10 +50,12 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    		sensorXDataList.add(accelX);
 		    		sensorYDataList.add(accelY);
 		    		sensorZDataList.add(accelZ);
+		    		Recording_Status.setText("Recording Data");
 		    	}
 	    	 }
 	    	 public void onFinish() {
 	    		StartRecording = false; 
+	    		Recording_Status.setText("Stopped");
 	    	 }
 	    };
 	    
@@ -60,6 +67,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    super.onResume();
 	    sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
+    
   //Service methods for the accelerometer initialization
     protected void onPause() {
 	    super.onPause();
@@ -99,6 +107,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStopRecording(View v) {
 		StartRecording = false;
+		Recording_Status.setText("Stopped");
 		}
 	
 	
