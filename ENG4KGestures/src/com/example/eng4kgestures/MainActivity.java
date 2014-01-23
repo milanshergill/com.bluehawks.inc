@@ -11,13 +11,14 @@ public class MainActivity extends Activity {
 
 	Button RecordGestures;
 	Button TestGestures;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		RecordGestures =  (Button) (findViewById((R.id.RecordGestures))) ;
-		TestGestures =  (Button) (findViewById((R.id.TestGestures))) ;
+		RecordGestures =  (Button) (findViewById((R.id.RecordGestures)));
+		TestGestures =  (Button) (findViewById((R.id.TestGestures)));
 	}
 
 	@Override
@@ -28,12 +29,12 @@ public class MainActivity extends Activity {
 	}
 
 	public void onClickRecordGestures(View v) {
-	Intent myIntent = new Intent(MainActivity.this, RecordGestures.class);
-	MainActivity.this.startActivity(myIntent);
+		Intent myIntent = new Intent(MainActivity.this, RecordGestures.class);
+		MainActivity.this.startActivity(myIntent);
 	}
 	
 	public void onClickTestGestures(View v) {
 		Intent myIntent = new Intent(MainActivity.this, TestGestures.class);
 		MainActivity.this.startActivity(myIntent);
-		}
+	}
 }
