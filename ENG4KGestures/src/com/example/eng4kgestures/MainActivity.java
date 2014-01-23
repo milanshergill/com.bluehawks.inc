@@ -9,16 +9,10 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-	Button RecordGestures;
-	Button TestGestures;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		RecordGestures =  (Button) (findViewById((R.id.RecordGestures)));
-		TestGestures =  (Button) (findViewById((R.id.TestGestures)));
 	}
 
 	@Override

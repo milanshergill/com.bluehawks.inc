@@ -8,30 +8,37 @@
         android:id="@+id/gestureName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" 
-        android:hint="Enter Gesture Name"
-        >
+        android:ems="10"
+        android:hint="Enter Gesture Name" >
+
         <requestFocus />
     </EditText>
-    
- <RelativeLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-       android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-     <Button
-         android:id="@+id/startRecording"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Start Recording" />
-     
+        <Button
+            android:id="@+id/startRecording"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickStartRecording"
+            android:text="Start Recording" />
 
- <Button
-     android:id="@+id/stopRecording"
-     android:layout_width="fill_parent"
-     android:layout_height="wrap_content"
-     android:text="Stop Recording" 
-      android:layout_below="@+id/startRecording"/>
- 
+        <Button
+            android:id="@+id/stopRecording"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/startRecording"
+            android:onClick="onClickStopRecording"
+            android:text="Stop Recording" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/Recording_Status"
+        android:layout_width="226dp"
+        android:layout_height="49dp"
+        android:text="Recording Status" />
+
 </LinearLayout>
