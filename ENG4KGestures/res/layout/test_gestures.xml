@@ -5,22 +5,20 @@
 
     <Button
         android:id="@+id/start"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="35dp"
         android:layout_marginTop="20dp"
         android:onClick="onClickStart"
         android:text="Start" />
 
     <Button
         android:id="@+id/stop"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/start"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="35dp"
         android:onClick="onClickStop"
         android:text="Stop" />
 
@@ -30,18 +28,24 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/start"
         android:layout_below="@+id/start"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="25dp"
+        android:textSize="20sp"
         android:text="Results" />
 
-    <ListView
+    <GridView
         android:id="@+id/resultsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/start"
+        android:layout_marginLeft="20dp"
         android:layout_alignRight="@+id/stop"
+        android:layout_marginRight="20dp"
         android:layout_below="@+id/resultsView"
+        android:numColumns="2"
+        android:layoutDirection="ltr"
         android:layout_marginTop="15dp" >
 
-    </ListView>
+    </GridView>
 
 </RelativeLayout>
