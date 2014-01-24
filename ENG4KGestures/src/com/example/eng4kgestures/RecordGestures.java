@@ -44,7 +44,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    sensorZDataList = new ArrayList<Float>();
 	    
 	    //timer to start recording accelerometer data
-	    timer = new CountDownTimer(20000, 50) {
+	    timer = new CountDownTimer(20000, 10) {
 	    	 public void onTick(long millisUntilFinished) {
 		    	if(StartRecording){
 		    		sensorXDataList.add(accelX);
@@ -107,7 +107,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStopRecording(View v) {
 		StartRecording = false;
-		Recording_Status.setText("Stopped");
+		Recording_Status.setText("Stopped, The Size of Array is " + sensorXDataList.size());
 		}
 	
 	
