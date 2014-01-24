@@ -9,8 +9,25 @@ public class DynamicTimeWarping
 		double distance = (double) calcDistance(a,b);
 		System.out.println(distance);
 	}
-
 	
+	static public float calcDistanceAfterConversion(ArrayList<Float> recordedX, ArrayList<Float> recordedY, ArrayList<Float> recordedZ,
+			ArrayList<Float> savedX, ArrayList<Float> savedY, ArrayList<Float> savedZ) {
+		double [][] recordedAccel = new double[3][recordedX.size()];
+		for (int i = 0; i < recordedAccel.length; i++) {
+			recordedAccel[0][i] = recordedX.get(i);
+			recordedAccel[1][i] = recordedX.get(i);
+			recordedAccel[2][i] = recordedX.get(i);
+		}
+		
+		double [][] savedAccel = new double[3][savedX.size()];
+		for (int i = 0; i < recordedAccel.length; i++) {
+			savedAccel[0][i] = savedX.get(i);
+			savedAccel[1][i] = savedY.get(i);
+			savedAccel[2][i] = savedZ.get(i);
+		}
+		return calcDistance(recordedAccel, savedAccel);
+	}
+
 	static public float calcDistance(double gesture1[][], double gesture2[][]) 
     {
 		float distMatrix[][] = calculateDistanceMatrix(gesture1, gesture2);

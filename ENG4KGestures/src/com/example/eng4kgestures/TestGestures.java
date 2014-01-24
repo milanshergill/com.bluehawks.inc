@@ -86,13 +86,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 	protected void processData() {
 		// TODO Auto-generated method stub
 		String name = "Circle Gesture";
-		double [][] recordedAccel = new double[3][accelXList.size()];
-		for (int i = 0; i < recordedAccel.length; i++) {
-			recordedAccel[0][i] = accelX;
-			recordedAccel[1][i] = accelY;
-			recordedAccel[2][i] = accelZ;
-		}
-		minDistance = (double) DynamicTimeWarping.calcDistance(recordedAccel, recordedAccel);
+		minDistance = (double) DynamicTimeWarping.calcDistanceAfterConversion(accelXList, accelYList, accelZList, 
+				accelXList, accelYList, accelZList);
 		addItem(name);
 		addItem("" + minDistance);
 	}
