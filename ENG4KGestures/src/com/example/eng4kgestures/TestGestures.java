@@ -18,17 +18,16 @@ import android.widget.TextView;
 public class TestGestures extends Activity implements SensorEventListener {
 	
 	Button start, stop;
-	TextView results, timerText;
+	TextView results;
 	ListView resultsList;
 	
 	SensorManager sensorManager;
 	Sensor accelerometerSensor;
 	private float accelX, accelY, accelZ;
 	private float oldAccelX, oldAccelY, oldAccelZ = 0;
-//	private ArrayList<Float> accelXList, accelYList, accelZList;
-	float [][] recordedAccel;
+	private ArrayList<Float> accelXList, accelYList, accelZList;
 	CountDownTimer timer;
-	int foundSame = 0, index = 0;
+	int foundSame = 0;
 	double minDistance = -1;
 	
     ArrayList<String> listItems = new ArrayList<String>();
@@ -44,7 +43,6 @@ public class TestGestures extends Activity implements SensorEventListener {
 		start = (Button) findViewById(R.id.start);
 		start = (Button) findViewById(R.id.stop);
 		results = (TextView) findViewById(R.id.resultsView);
-		timerText = (TextView) findViewById(R.id.timerText);
 		resultsList = (ListView) findViewById(R.id.resultsList);
 		
 		resultsList.setAdapter(adapter);
@@ -52,48 +50,46 @@ public class TestGestures extends Activity implements SensorEventListener {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	    
-//	    accelXList = new ArrayList<Float>();
-//	    accelYList = new ArrayList<Float>();
-//	    accelZList = new ArrayList<Float>();
+	    accelXList = new ArrayList<Float>();
+	    accelYList = new ArrayList<Float>();
+	    accelZList = new ArrayList<Float>();
 	    
 	    timer = new CountDownTimer(20000, 50) {
 
 	        public void onTick(long millisUntilFinished) {
         		if(accelX != oldAccelX && accelY != oldAccelY && accelZ != oldAccelZ) {
-        			recordedAccel[1][index] = accelX;
-        			recordedAccel[2][index] = accelY;
-        			recordedAccel[3][index] = accelZ;
-        			index++;
-//        			accelXList.add(Float.valueOf(accelX)); //Contains only acceleration "x" values
-//	    			accelYList.add(Float.valueOf(accelY)); //Contains only acceleration "y" values
-//	    			accelZList.add(Float.valueOf(accelZ)); //Contains only acceleration "z" values
+        			accelXList.add(Float.valueOf(accelX)); //Contains only acceleration "x" values
+	    			accelYList.add(Float.valueOf(accelY)); //Contains only acceleration "y" values
+	    			accelZList.add(Float.valueOf(accelZ)); //Contains only acceleration "z" values
         		}
         		else
         			foundSame++;
     			oldAccelX = accelX;
         		oldAccelY = accelY;
         		oldAccelZ = accelZ;
-        		
-	            timerText.setText("seconds remaining: " + millisUntilFinished / 1000);
-	        }
+    		}
 
 	        public void onFinish() {
-	            timerText.setText("Timer Finished! and foundSame" + foundSame);
 	            processData();
 	            foundSame = 0;
 	            oldAccelX = 0;
         		oldAccelY = 0;
         		oldAccelZ = 0;
-        		index = 0;
 	        }
 	     };
 	}
 	
 	protected void processData() {
 		// TODO Auto-generated method stub
-		double a[][] = {{1.0,2.0} , {2.0,6.0} , {4.0,6.0} , {5.0,10.0}};
-		double b[][] = {{1.0,5.0}, { 5.0,7.0 }, { 4.0,9.0 }, { 2.0, 7.0}};
-		minDistance = (double) DynamicTimeWarping.calcDistance(a, b);
+		String name = "Circle Gesture";
+		double [][] recordedAccel = new double[3][accelXList.size()];
+		for (int i = 0; i < recordedAccel.length; i++) {
+			recordedAccel[1][i] = accelX;
+			recordedAccel[2][i] = accelY;
+			recordedAccel[3][i] = accelZ;
+		}
+		minDistance = (double) DynamicTimeWarping.calcDistance(recordedAccel, recordedAccel);
+		addItem(name + minDistance);
 	}
 
 	protected void onResume() {
@@ -125,7 +121,6 @@ public class TestGestures extends Activity implements SensorEventListener {
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
