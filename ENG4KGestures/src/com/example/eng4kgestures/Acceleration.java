@@ -2,22 +2,11 @@ package com.example.eng4kgestures;
 
 public class Acceleration {
 
-	private long id;
-	private String name;
 	private Float accelerationX;
 	private Float accelerationY;
 	private Float accelerationZ;
 
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
 	public Float getAccelerationX() {
 		return accelerationX;
 	}
@@ -30,9 +19,6 @@ public class Acceleration {
 		return accelerationZ;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 	public void setAccelerationX(Float accelerationX) {
 		this.accelerationX = accelerationX;
 	}
@@ -48,7 +34,7 @@ public class Acceleration {
 	// Will be used by the ArrayAdapter in the ListView
 	@Override
 	public String toString() {
-		return " Name "+ name + " accelerationX " + accelerationX.toString() + " AccelerationY "
+		return " accelerationX " + accelerationX.toString() + " AccelerationY "
 				+ accelerationY.toString() + " AccelerationZ "
 				+ accelerationZ.toString();
 	}
