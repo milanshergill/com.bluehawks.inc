@@ -7,6 +7,14 @@ public class Acceleration {
 	private float z;
 
 
+	public Acceleration(float accelX, float accelY, float accelZ) {
+		// TODO Auto-generated constructor stub
+		this.x = accelX;
+		this.y = accelY;
+		this.z = accelZ;
+		
+	}
+
 	public float getAccelerationX() {
 		return x;
 	}

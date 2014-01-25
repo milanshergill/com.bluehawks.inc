@@ -19,14 +19,13 @@ import android.widget.TextView;
 public class RecordGestures extends Activity implements SensorEventListener {
 	SensorManager sensorManager;
 	Sensor accelerometerSensor;
-	private ArrayList<Float> sensorXDataList;
-	private ArrayList<Float> sensorYDataList;
-	private ArrayList<Float> sensorZDataList;
+	private ArrayList<Acceleration> accelerationList;
 	private float accelX, accelY, accelZ;
 	CountDownTimer timer;
 	Boolean StartRecording = false;
 	TextView Recording_Status;
 	private GestureDataBase datasource;
+	Acceleration acceletationObject;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,17 +45,15 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);	
 	    
 	    //Array list to hold sensor data
-	    sensorXDataList = new ArrayList<Float>();
-	    sensorYDataList = new ArrayList<Float>();
-	    sensorZDataList = new ArrayList<Float>();
+	    accelerationList = new ArrayList<Acceleration>();
+	    
 	    
 	    //timer to start recording accelerometer data
 	    timer = new CountDownTimer(20000, 10) {
 	    	 public void onTick(long millisUntilFinished) {
 		    	if(StartRecording){
-		    		sensorXDataList.add(accelX);
-		    		sensorYDataList.add(accelY);
-		    		sensorZDataList.add(accelZ);
+		    		acceletationObject =  new Acceleration(accelX,accelY,accelZ);
+		    		accelerationList.add(acceletationObject);
 		    		Recording_Status.setText("Recording Data");
 		    	}
 	    	 }
@@ -108,15 +105,13 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStartRecording(View v) {
 		StartRecording = true;
-		sensorXDataList.clear();
-		sensorYDataList.clear();
-		sensorZDataList.clear();
+		accelerationList.clear();
 		timer.start();
 		}
 	
 	public void onClickStopRecording(View v) {
 		StartRecording = false;
-		Recording_Status.setText("Stopped, The Size of Array is " + sensorXDataList.size());
+		Recording_Status.setText("Stopped, The Size of Array is " + accelerationList.size());
 		}
 	
 	
