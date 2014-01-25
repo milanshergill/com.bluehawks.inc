@@ -26,7 +26,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	CountDownTimer timer;
 	Boolean StartRecording = false;
 	TextView Recording_Status;
-	private AccelerationDataSource datasource;
+	private GestureDataBase datasource;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,10 +35,10 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		Recording_Status =  (TextView) (findViewById((R.id.Recording_Status)));
 		
 		//setting up database for acceleration recording
-		datasource = new AccelerationDataSource(this);
+		datasource = new GestureDataBase(this);
 	    datasource.open();
 	    
-	    List<Acceleration> values = datasource.getAllAccelerations();
+//	    List<Acceleration> values = datasource.getAllAccelerations();
 	    
 	    
 		//initialize the sensor

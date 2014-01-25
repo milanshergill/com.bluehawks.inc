@@ -1,8 +1,5 @@
 package com.example.eng4kgestures;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
