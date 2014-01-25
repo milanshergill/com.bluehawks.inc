@@ -26,14 +26,21 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	CountDownTimer timer;
 	Boolean StartRecording = false;
 	TextView Recording_Status;
-
+	private AccelerationDataSource datasource;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record_gestures);
-		
+		//textCiew to show the current recording status
 		Recording_Status =  (TextView) (findViewById((R.id.Recording_Status)));
 		
+		//setting up database for acceleration recording
+		datasource = new AccelerationDataSource(this);
+	    datasource.open();
+	    
+	    List<Acceleration> values = datasource.getAllAccelerations();
+	    
+	    
 		//initialize the sensor
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);	
@@ -65,12 +72,14 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	//Service methods for the accelerometer initialization
     protected void onResume() {
 	    super.onResume();
+	    datasource.open();
 	    sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
   //Service methods for the accelerometer initialization
     protected void onPause() {
 	    super.onPause();
+	    datasource.close();
 	    sensorManager.unregisterListener(this);
     }
 
