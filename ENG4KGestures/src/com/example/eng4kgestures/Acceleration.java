@@ -2,40 +2,46 @@ package com.example.eng4kgestures;
 
 public class Acceleration {
 
-	private Float accelerationX;
-	private Float accelerationY;
-	private Float accelerationZ;
+	private float x;
+	private float y;
+	private float z;
 
 
-	public Float getAccelerationX() {
-		return accelerationX;
+	public float getAccelerationX() {
+		return x;
 	}
 
-	public Float getAccelerationY() {
-		return accelerationY;
+	public float getAccelerationY() {
+		return y;
 	}
 
-	public Float getAccelerationZ() {
-		return accelerationZ;
+	public float getAccelerationZ() {
+		return z;
 	}
 
-	public void setAccelerationX(Float accelerationX) {
-		this.accelerationX = accelerationX;
+	public void setAccelerationX(float x) {
+		this.x = x;
 	}
 
-	public void setAccelerationY(Float accelerationY) {
-		this.accelerationY = accelerationY;
+	public void setAccelerationY(float y) {
+		this.y = y;
 	}
 
-	public void setAccelerationZ(Float accelerationZ) {
-		this.accelerationZ = accelerationZ;
+	public void setAccelerationZ(float z) {
+		this.z = z;
 	}
-
+	
+	public void setAccelerationXYZ(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
 	// Will be used by the ArrayAdapter in the ListView
 	@Override
 	public String toString() {
-		return " accelerationX " + accelerationX.toString() + " AccelerationY "
-				+ accelerationY.toString() + " AccelerationZ "
-				+ accelerationZ.toString();
+		return " accelerationX " + x + " AccelerationY "
+				+ y + " AccelerationZ "
+				+ z;
 	}
 }
