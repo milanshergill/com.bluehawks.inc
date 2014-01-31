@@ -9,7 +9,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
   public static final String GESTURE_TABLE = "GesturesTable";
   public static final String COLUMN_ID = "_id";
-  public static final String COLUMN1_COMMENT = "GestureObjects";
+  public static final String COLUMN_GESTURE = "GestureObjects";
 
   private static final String DATABASE_NAME = "gestures.db";
   private static final int DATABASE_VERSION = 1;
@@ -17,7 +17,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
   // Database creation sql statement
   private static final String DATABASE_CREATE = "create table "
       + GESTURE_TABLE + "(" + COLUMN_ID
-      + " integer primary key autoincrement, " + COLUMN1_COMMENT
+      + " integer primary key autoincrement, " + COLUMN_GESTURE
       + " BLOB not null );";
 
   public MySQLiteHelper(Context context) {

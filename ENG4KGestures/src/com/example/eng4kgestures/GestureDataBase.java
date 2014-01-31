@@ -12,7 +12,7 @@ public class GestureDataBase {
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
 	private String[] allColumns = { MySQLiteHelper.COLUMN_ID,
-			MySQLiteHelper.COLUMN1_COMMENT };
+			MySQLiteHelper.COLUMN_GESTURE };
 
 	public GestureDataBase(Context context) {
 		dbHelper = new MySQLiteHelper(context);
@@ -29,7 +29,7 @@ public class GestureDataBase {
 	public long insertGesture(Gesture gesture) {
 		ContentValues values = new ContentValues();
 		byte[] blob = Gesture.serializeGesture(gesture);
-		values.put(MySQLiteHelper.COLUMN1_COMMENT, blob);
+		values.put(MySQLiteHelper.COLUMN_GESTURE, blob);
 		
 		return database.insert(MySQLiteHelper.GESTURE_TABLE, null,
 				values);
@@ -38,7 +38,7 @@ public class GestureDataBase {
 	public Gesture retriveGesture() throws SQLException {
 		Cursor cur = database.query(true, MySQLiteHelper.GESTURE_TABLE, allColumns, null, null, null, null, null, null);
 		if (cur.moveToFirst()) {
-			byte[] blob = cur.getBlob(cur.getColumnIndex(MySQLiteHelper.COLUMN1_COMMENT));
+			byte[] blob = cur.getBlob(cur.getColumnIndex(MySQLiteHelper.COLUMN_GESTURE));
 			cur.close();
 			return Gesture.deserializeGesture(blob);
 		}
