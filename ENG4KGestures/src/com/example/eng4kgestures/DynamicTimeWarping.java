@@ -1,8 +1,8 @@
 package com.example.eng4kgestures;
 import java.util.ArrayList;
 public class DynamicTimeWarping
-/*{
-	public static void main(String[] args) throws Exception 
+{
+	/*public static void main(String[] args) throws Exception 
 	{
 	double a[][] = {{1.0,2.0} , {2.0,6.0} , {4.0,6.0} , {5.0,10.0}};
 	double b[][] = {{1.0,5.0}, { 5.0,7.0 }, { 4.0,9.0 }, { 2.0, 7.0}};
@@ -34,15 +34,15 @@ public class DynamicTimeWarping
 		float costMatrix[][] = calculateCostMatrix(gesture1,gesture2, distMatrix);
 		
 		// the distance between gesture a and b is the end'th value of the cost matrix
-        return costMatrix[gesture1.getAccelerationList().size()-1][gesture2.getAccelerationList().size()-1];
+        return costMatrix[gesture1.getAccelerationArray().length-1][gesture2.getAccelerationArray().length-1];
 	}
 
 	// creating matrix thats is gesture1Length x gesture2Length in size
 		static private float[][] initializeMatrix(Gesture gesture1, Gesture gesture2)
 		{
 			// length of the gesture1 and gesture2 sequence
-			int gesture1Length = gesture1.getAccelerationList().size();
-			int gesture2Length = gesture2.getAccelerationList().size();
+			int gesture1Length = gesture1.getAccelerationArray().length;
+			int gesture2Length = gesture2.getAccelerationArray().length;
 			float Matrix[][] ;
 			Matrix = new float[gesture1Length][];
 			for (int i = 0; i < gesture1Length; i++) 
@@ -58,15 +58,18 @@ public class DynamicTimeWarping
 		/* gestureComponents is axis components used to compare signal.Accelerometer provides data in x,y,z axis*/
 		int gestureComponents = 3;
 		float distMatrix[][] = initializeMatrix(gesture1, gesture2);
+		Acceleration[] gesture1Array = gesture1.getAccelerationArray();
+		Acceleration[] gesture2Array = gesture2.getAccelerationArray();
 		for (int i = 0; i < distMatrix.length; i++) 
         {
 			for (int j = 0; j < distMatrix[0].length; j++) 
             { 
 				ArrayList<Double> differenceVector = new ArrayList<Double>();
                 // calculate the difference for each component
-				differenceVector.add((double) (gesture1.getAccelerationList().get(i).getAccelerationX() - gesture2.getAccelerationList().get(j).getAccelerationX()));
-				differenceVector.add((double) (gesture1.getAccelerationList().get(i).getAccelerationY() - gesture2.getAccelerationList().get(j).getAccelerationY()));
-				differenceVector.add((double) (gesture1.getAccelerationList().get(i).getAccelerationZ() - gesture2.getAccelerationList().get(j).getAccelerationZ()));
+
+				differenceVector.add((double) gesture1Array[i].getAccelerationX() -  gesture1Array[j].getAccelerationX());
+				differenceVector.add((double) gesture1Array[i].getAccelerationY() -  gesture1Array[j].getAccelerationY());
+				differenceVector.add((double) gesture1Array[i].getAccelerationZ() -  gesture1Array[j].getAccelerationZ());
                /* for(int k=0; k<gestureComponents ; k++)
                 {
                     differenceVector.add((double) (gesture1[i][k] - gesture2[j][k]));
