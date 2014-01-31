@@ -1,7 +1,13 @@
 package com.example.eng4kgestures;
 
-public class Acceleration {
+import java.io.Serializable;
 
+public class Acceleration implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private float x;
 	private float y;
 	private float z;

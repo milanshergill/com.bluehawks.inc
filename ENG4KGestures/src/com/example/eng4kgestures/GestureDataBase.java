@@ -19,8 +19,12 @@ public class GestureDataBase {
 		dbHelper = new MySQLiteHelper(context);
 	}
 
-	public void open() throws SQLException {
+	public void openWriteable() throws SQLException {
 		database = dbHelper.getWritableDatabase();
+	}
+	
+	public void openReadable() throws SQLException {
+		database = dbHelper.getReadableDatabase();
 	}
 
 	public void close() {

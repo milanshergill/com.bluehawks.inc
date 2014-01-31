@@ -75,7 +75,7 @@ public class DynamicTimeWarping
                     differenceVector.add((double) (gesture1[i][k] - gesture2[j][k]));
                 }  */ 
                 distMatrix[i][j] = normaliseVector(differenceVector);
-                System.out.println("distance matrix " + distMatrix[i][j] + " i" + i + " j" + j);
+                //System.out.println("distance matrix " + distMatrix[i][j] + " i" + i + " j" + j);
             }
         }
 		return distMatrix;
@@ -90,7 +90,7 @@ public class DynamicTimeWarping
         for (int i = 0; i < costMatrix.length; i++) 
         {
         	costMatrix[i][0] = distMatrix[i][0];
-            System.out.println(" costMatrix[i][j] " + costMatrix[i][0]);
+            //System.out.println(" costMatrix[i][j] " + costMatrix[i][0]);
         }
         
         // The algorithm below is used to create the remaining column of the cost matrix
@@ -118,7 +118,7 @@ public class DynamicTimeWarping
                     	minCost = cost + OFFSET_PENALTY;
                     }
                     costMatrix[i][j] = minCost;
-                    System.out.println("costMatrix[i][j] " + costMatrix[i][j] + " i= " + i + " j= " + j );
+                    //System.out.println("costMatrix[i][j] " + costMatrix[i][j] + " i= " + i + " j= " + j );
                 }
             }
         	

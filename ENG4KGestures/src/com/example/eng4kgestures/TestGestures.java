@@ -51,7 +51,10 @@ public class TestGestures extends Activity implements SensorEventListener {
 		
 		//setting up database for acceleration recording
 		gestureDataBase = new GestureDataBase(this);
-	    gestureDataBase.open();
+	    gestureDataBase.openReadable();
+	    
+	    //Array list to hold sensor data
+	    accelerationList = new ArrayList<Acceleration>();
 
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -101,7 +104,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        gestureDataBase.open();
+        gestureDataBase.openReadable();
     }
 
     protected void onPause() {

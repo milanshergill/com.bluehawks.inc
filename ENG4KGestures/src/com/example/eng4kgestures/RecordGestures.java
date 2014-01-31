@@ -38,7 +38,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		
 		//setting up database for acceleration recording
 		gestureDataBase = new GestureDataBase(this);
-	    gestureDataBase.open();	    
+	    gestureDataBase.openWriteable();	    
 	    
 		//initialize the sensor
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -58,8 +58,9 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    	}
 	    	 }
 	    	 public void onFinish() {
-	    		startRecording = false; 
-	    		recordingStatus.setText("Stopped");
+	    		 startRecording = false; 
+	    		 recordingStatus.setText("Stopped");
+	    		 processData();
 	    	 }
 	    };
     }
@@ -74,7 +75,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	//Service methods for the accelerometer initialization
     protected void onResume() {
 	    super.onResume();
-	    gestureDataBase.open();
+	    gestureDataBase.openWriteable();
 	    sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
@@ -115,6 +116,10 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStopRecording(View v) {
 		startRecording = false;
+		if (timer != null) {
+			timer.cancel();
+			timer.onFinish();
+		}
 		recordingStatus.setText("Stopped, The Size of Array is " + accelerationList.size());
 	}
 	

@@ -6,10 +6,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import android.util.Log;
 
-public class Gesture {
+public class Gesture implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String name;
 	private Acceleration[] accelerationArray;
 	
