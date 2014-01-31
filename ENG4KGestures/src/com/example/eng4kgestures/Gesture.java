@@ -6,19 +6,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-
 import android.util.Log;
 
 public class Gesture {
 
 	String name;
-	private Acceleration [] accelerationArray;
+	private Acceleration[] accelerationArray;
 	
 	public Gesture(String name, Acceleration [] accelerationArray)
 	{
-	this.name =  name;
-	this.accelerationArray=accelerationArray;
+		this.name =  name;
+		this.accelerationArray = accelerationArray;
 	}
 	
 	
@@ -30,11 +28,11 @@ public class Gesture {
 		this.name = name;
 	}
 	
-	public ArrayList<Acceleration> getAccelerationList() {
+	public Acceleration[] getAccelerationArray() {
 		return accelerationArray;
 	}
 	
-	public void setAccelerationList(ArrayList<Acceleration> accelerationList) {
+	public void setAccelerationList(Acceleration[] accelerationList) {
 		this.accelerationArray = accelerationList;
 	}
 	

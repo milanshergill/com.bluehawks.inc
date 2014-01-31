@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	    	sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_FASTEST);
 	    }
 	    
-	    timer = new CountDownTimer(20000, 50) {
+	    timer = new CountDownTimer(120000, 50) {
 
 	        public void onTick(long millisUntilFinished) {
 	        	if(start) {
@@ -101,7 +101,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	        }
 	     };
 	     
-	     timer_udp = new CountDownTimer(100000, 250) {
+	     timer_udp = new CountDownTimer(150000, 50) {
     	 	String dataToSend = "Nothing";
 	        public void onTick(long millisUntilFinished) {
 	        	if(counter < dataList.size() && !dataList.isEmpty()) {
@@ -139,7 +139,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		// TODO Auto-generated method stub
-		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 			accelX = event.values[0];
 			accelY = event.values[1];
 			accelZ = event.values[2];

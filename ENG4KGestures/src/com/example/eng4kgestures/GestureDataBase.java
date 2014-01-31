@@ -1,5 +1,6 @@
 package com.example.eng4kgestures;
 
+import java.util.ArrayList;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,19 +29,20 @@ public class GestureDataBase {
 
 	public long insertGesture(Gesture gesture) {
 		ContentValues values = new ContentValues();
-		byte[] blob = Gesture.serializeGesture(gesture);
-		values.put(MySQLiteHelper.COLUMN_GESTURE, blob);
+		byte[] gestureBlob = Gesture.serializeGesture(gesture);
+		values.put(MySQLiteHelper.COLUMN_GESTURE, gestureBlob);
 		
 		return database.insert(MySQLiteHelper.GESTURE_TABLE, null,
 				values);
 	}
 	
-	public Gesture retriveGesture() throws SQLException {
-		Cursor cur = database.query(true, MySQLiteHelper.GESTURE_TABLE, allColumns, null, null, null, null, null, null);
+	public Gesture retriveGesture(long id) throws SQLException {
+		Cursor cur = database.query(true, MySQLiteHelper.GESTURE_TABLE, allColumns, MySQLiteHelper.COLUMN_ID
+				+ " = " + id, null, null, null, null, null);
 		if (cur.moveToFirst()) {
-			byte[] blob = cur.getBlob(cur.getColumnIndex(MySQLiteHelper.COLUMN_GESTURE));
+			byte[] gestureBlob = cur.getBlob(cur.getColumnIndex(MySQLiteHelper.COLUMN_GESTURE));
 			cur.close();
-			return Gesture.deserializeGesture(blob);
+			return Gesture.deserializeGesture(gestureBlob);
 		}
 		cur.close();
 		return null;
@@ -52,30 +54,17 @@ public class GestureDataBase {
 				+ " = " + id, null);
 	}
 
-//	public List<Acceleration> getAllAccelerations() {
-//		List<Acceleration> accelerations = new ArrayList<Acceleration>();
-//
-//		Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS,
-//				allColumns, null, null, null, null, null);
-//
-//		cursor.moveToFirst();
-//		while (!cursor.isAfterLast()) {
-//			Acceleration acceleration = cursorToAcceleration(cursor);
-//			accelerations.add(acceleration);
-//			cursor.moveToNext();
-//		}
-//		// make sure to close the cursor
-//		cursor.close();
-//		return accelerations;
-//	}
-
-//	private Acceleration cursorToAcceleration(Cursor cursor) {
-//		Acceleration acceleration = new Acceleration();
-//		acceleration.setId(cursor.getLong(0));
-//		acceleration.setName(cursor.getString(1));
-//		acceleration.setAccelerationX(cursor.getFloat(2));
-//		acceleration.setAccelerationY(cursor.getFloat(3));
-//		acceleration.setAccelerationZ(cursor.getFloat(4));
-//		return acceleration;
-//	}
+	public ArrayList<Gesture> getAllGestures() {
+		ArrayList<Gesture> gestureList = new ArrayList<Gesture>();
+		Cursor cur = database.query(MySQLiteHelper.GESTURE_TABLE, allColumns, null, null, null, null, null);
+		cur.moveToFirst();
+		while (!cur.isAfterLast()) {
+			byte[] gestureBlob = cur.getBlob(cur.getColumnIndex(MySQLiteHelper.COLUMN_GESTURE));
+			gestureList.add(Gesture.deserializeGesture(gestureBlob));
+			cur.moveToNext();
+		}
+		// make sure to close the cursor
+		cur.close();
+		return gestureList;
+	}
 }

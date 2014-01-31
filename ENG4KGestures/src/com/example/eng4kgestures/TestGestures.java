@@ -23,6 +23,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 	
 	SensorManager sensorManager;
 	Sensor accelerometerSensor;
+	private ArrayList<Acceleration> accelerationList;
+	Acceleration acceletationObject;
 	private float accelX, accelY, accelZ;
 	private float oldAccelX, oldAccelY, oldAccelZ = 0;
 	private ArrayList<Float> accelXList, accelYList, accelZList;
@@ -30,6 +32,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	int foundSame = 0;
 	double minDistance = -1;
 	
+	private GestureDataBase gestureDataBase;
     ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<String> adapter;
 	
@@ -47,6 +50,10 @@ public class TestGestures extends Activity implements SensorEventListener {
 		
 		resultsList.setAdapter(adapter);
 		
+		//setting up database for acceleration recording
+		gestureDataBase = new GestureDataBase(this);
+	    gestureDataBase.open();
+
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 	    
@@ -58,9 +65,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 
 	        public void onTick(long millisUntilFinished) {
         		if(accelX != oldAccelX && accelY != oldAccelY && accelZ != oldAccelZ) {
-        			accelXList.add(Float.valueOf(accelX)); //Contains only acceleration "x" values
-	    			accelYList.add(Float.valueOf(accelY)); //Contains only acceleration "y" values
-	    			accelZList.add(Float.valueOf(accelZ)); //Contains only acceleration "z" values
+        			acceletationObject =  new Acceleration(accelX, accelY, accelZ);
+		    		accelerationList.add(acceletationObject);
         		}
         		else
         			foundSame++;
@@ -85,21 +91,23 @@ public class TestGestures extends Activity implements SensorEventListener {
 	
 	protected void processData() {
 		// TODO Auto-generated method stub
-		String name = "Circle Gesture";
-		minDistance = (double) DynamicTimeWarping.calcDistanceAfterConversion(accelXList, accelYList, accelZList, 
-				accelXList, accelYList, accelZList);
-		addItem(name);
+		Gesture testGesture = createGesureObject(accelerationList);
+//		minDistance = (double) DynamicTimeWarping.calcDistanceAfterConversion(accelXList, accelYList, accelZList, 
+//				accelXList, accelYList, accelZList);
+//		addItem(name);
 		addItem("" + minDistance);
 	}
 
 	protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        gestureDataBase.open();
     }
 
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
+        gestureDataBase.close();
     }
 	
 	public void onClickStart(View v) {
@@ -139,5 +147,16 @@ public class TestGestures extends Activity implements SensorEventListener {
 			accelY = event.values[1];
 			accelZ = event.values[2];
 		}
+	}
+	
+	public Gesture createGesureObject(ArrayList<Acceleration> accelerationList) {
+		int size =  accelerationList.size();
+		Acceleration [] accelerationArray = new Acceleration[size] ;
+		for (int i = 0; i < size; i++) {
+			accelerationArray[i] = accelerationList.get(i);
+		}
+		String name = "Test Gesture";
+		Gesture gestureObject =  new  Gesture(name, accelerationArray);
+		return gestureObject;
 	}
 }

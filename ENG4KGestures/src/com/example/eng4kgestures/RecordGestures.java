@@ -1,10 +1,8 @@
 package com.example.eng4kgestures;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,7 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class RecordGestures extends Activity implements SensorEventListener {
@@ -22,23 +20,25 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	private ArrayList<Acceleration> accelerationList;
 	private float accelX, accelY, accelZ;
 	CountDownTimer timer;
-	Boolean StartRecording = false;
-	TextView Recording_Status;
-	private GestureDataBase datasource;
+	Boolean startRecording = false;
+	TextView recordingStatus;
+	EditText gestureName;
+	private GestureDataBase gestureDataBase;
 	Acceleration acceletationObject;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record_gestures);
+		
+		//EditText having the gesture name
+		gestureName = (EditText) findViewById(R.id.gestureName);
+		
 		//textCiew to show the current recording status
-		Recording_Status =  (TextView) (findViewById((R.id.Recording_Status)));
+		recordingStatus =  (TextView) (findViewById((R.id.Recording_Status)));
 		
 		//setting up database for acceleration recording
-		datasource = new GestureDataBase(this);
-	    datasource.open();
-	    
-//	    List<Acceleration> values = datasource.getAllAccelerations();
-	    
+		gestureDataBase = new GestureDataBase(this);
+	    gestureDataBase.open();	    
 	    
 		//initialize the sensor
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -51,32 +51,37 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    //timer to start recording accelerometer data
 	    timer = new CountDownTimer(20000, 10) {
 	    	 public void onTick(long millisUntilFinished) {
-		    	if(StartRecording){
+		    	if(startRecording){
 		    		acceletationObject =  new Acceleration(accelX,accelY,accelZ);
 		    		accelerationList.add(acceletationObject);
-		    		Recording_Status.setText("Recording Data");
+		    		recordingStatus.setText("Recording Data");
 		    	}
 	    	 }
 	    	 public void onFinish() {
-	    		StartRecording = false; 
-	    		Recording_Status.setText("Stopped");
+	    		startRecording = false; 
+	    		recordingStatus.setText("Stopped");
 	    	 }
 	    };
-	    
-	    
     }
+	
+	protected void processData() {
+		// TODO Auto-generated method stub
+		String name = gestureName.getText().toString();
+		Gesture gesture = createGesureObject(name, accelerationList);
+		gestureDataBase.insertGesture(gesture);
+	}
 	
 	//Service methods for the accelerometer initialization
     protected void onResume() {
 	    super.onResume();
-	    datasource.open();
+	    gestureDataBase.open();
 	    sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
   //Service methods for the accelerometer initialization
     protected void onPause() {
 	    super.onPause();
-	    datasource.close();
+	    gestureDataBase.close();
 	    sensorManager.unregisterListener(this);
     }
 
@@ -95,36 +100,34 @@ public class RecordGestures extends Activity implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-				if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-					accelX = event.values[0];
-					accelY = event.values[1];
-					accelZ = event.values[2];
-				}
-		
+		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+			accelX = event.values[0];
+			accelY = event.values[1];
+			accelZ = event.values[2];
+		}
 	}
 	
 	public void onClickStartRecording(View v) {
-		StartRecording = true;
+		startRecording = true;
 		accelerationList.clear();
 		timer.start();
-		}
+	}
 	
 	public void onClickStopRecording(View v) {
-		StartRecording = false;
-		Recording_Status.setText("Stopped, The Size of Array is " + accelerationList.size());
-		}
+		startRecording = false;
+		recordingStatus.setText("Stopped, The Size of Array is " + accelerationList.size());
+	}
 	
-	 public Gesture createGesureObject(String name,ArrayList<Acceleration> accelerationList) {
-		 int size =  accelerationList.size();
-		 Acceleration [] accelerationArray = new Acceleration[size] ;
-		 for (int i = 0; i < size; i++) {
+	public Gesture createGesureObject(String name, ArrayList<Acceleration> accelerationList) {
+		int size =  accelerationList.size();
+		Acceleration [] accelerationArray = new Acceleration[size] ;
+		for (int i = 0; i < size; i++) {
 			accelerationArray[i] = accelerationList.get(i);
-		 }
-		 
-		 Gesture gestureObject =  new  Gesture(name,accelerationArray);
-		 return gestureObject;
-		
 		}
+		 
+		Gesture gestureObject =  new  Gesture(name, accelerationArray);
+		return gestureObject;
+	}
 }
 	
 	
