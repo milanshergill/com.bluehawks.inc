@@ -56,7 +56,7 @@ public class DynamicTimeWarping
 	static private float[][] calculateDistanceMatrix(Gesture gesture1, Gesture gesture2)
 	{
 		/* gestureComponents is axis components used to compare signal.Accelerometer provides data in x,y,z axis*/
-		int gestureComponents = 3;
+//		int gestureComponents = 3;
 		float distMatrix[][] = initializeMatrix(gesture1, gesture2);
 		Acceleration[] gesture1Array = gesture1.getAccelerationArray();
 		Acceleration[] gesture2Array = gesture2.getAccelerationArray();
@@ -67,9 +67,9 @@ public class DynamicTimeWarping
 				ArrayList<Double> differenceVector = new ArrayList<Double>();
                 // calculate the difference for each component
 
-				differenceVector.add((double) gesture1Array[i].getAccelerationX() -  gesture1Array[j].getAccelerationX());
-				differenceVector.add((double) gesture1Array[i].getAccelerationY() -  gesture1Array[j].getAccelerationY());
-				differenceVector.add((double) gesture1Array[i].getAccelerationZ() -  gesture1Array[j].getAccelerationZ());
+				differenceVector.add((double) gesture1Array[i].getAccelerationX() -  gesture2Array[j].getAccelerationX());
+				differenceVector.add((double) gesture1Array[i].getAccelerationY() -  gesture2Array[j].getAccelerationY());
+				differenceVector.add((double) gesture1Array[i].getAccelerationZ() -  gesture2Array[j].getAccelerationZ());
                /* for(int k=0; k<gestureComponents ; k++)
                 {
                     differenceVector.add((double) (gesture1[i][k] - gesture2[j][k]));
