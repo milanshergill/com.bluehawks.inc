@@ -13,7 +13,14 @@ import android.util.Log;
 public class Gesture {
 
 	String name;
-	private ArrayList<Acceleration> accelerationList;
+	private Acceleration [] accelerationArray;
+	
+	public Gesture(String name, Acceleration [] accelerationArray)
+	{
+	this.name =  name;
+	this.accelerationArray=accelerationArray;
+	}
+	
 	
 	public String getName() {
 		return name;
@@ -24,11 +31,11 @@ public class Gesture {
 	}
 	
 	public ArrayList<Acceleration> getAccelerationList() {
-		return accelerationList;
+		return accelerationArray;
 	}
 	
 	public void setAccelerationList(ArrayList<Acceleration> accelerationList) {
-		this.accelerationList = accelerationList;
+		this.accelerationArray = accelerationList;
 	}
 	
 	public static byte[] serializeGesture(Gesture gesture) { 

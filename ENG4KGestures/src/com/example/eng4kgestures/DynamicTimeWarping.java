@@ -2,31 +2,31 @@ package com.example.eng4kgestures;
 import java.util.ArrayList;
 public class DynamicTimeWarping
 {
-	public static void main(String[] args) throws Exception 
-	{
-		double a[][] = {{1.0,2.0} , {2.0,6.0} , {4.0,6.0} , {5.0,10.0}};
-		double b[][] = {{1.0,5.0}, { 5.0,7.0 }, { 4.0,9.0 }, { 2.0, 7.0}};
-		double distance = (double) calcDistance(a,b);
-		System.out.println(distance);
-	}
+//	public static void main(String[] args) throws Exception 
+//	{
+//		double a[][] = {{1.0,2.0} , {2.0,6.0} , {4.0,6.0} , {5.0,10.0}};
+//		double b[][] = {{1.0,5.0}, { 5.0,7.0 }, { 4.0,9.0 }, { 2.0, 7.0}};
+//		double distance = (double) calcDistance(a,b);
+//		System.out.println(distance);
+//	}
 	
-	static public float calcDistanceAfterConversion(ArrayList<Float> recordedX, ArrayList<Float> recordedY, ArrayList<Float> recordedZ,
-			ArrayList<Float> savedX, ArrayList<Float> savedY, ArrayList<Float> savedZ) {
-		double [][] recordedAccel = new double[3][recordedX.size()];
-		for (int i = 0; i < recordedAccel.length; i++) {
-			recordedAccel[0][i] = recordedX.get(i);
-			recordedAccel[1][i] = recordedX.get(i);
-			recordedAccel[2][i] = recordedX.get(i);
-		}
-		
-		double [][] savedAccel = new double[3][savedX.size()];
-		for (int i = 0; i < recordedAccel.length; i++) {
-			savedAccel[0][i] = savedX.get(i);
-			savedAccel[1][i] = savedY.get(i);
-			savedAccel[2][i] = savedZ.get(i);
-		}
-		return calcDistance(recordedAccel, savedAccel);
-	}
+//	static public float calcDistanceAfterConversion(ArrayList<Float> recordedX, ArrayList<Float> recordedY, ArrayList<Float> recordedZ,
+//			ArrayList<Float> savedX, ArrayList<Float> savedY, ArrayList<Float> savedZ) {
+//		double [][] recordedAccel = new double[3][recordedX.size()];
+//		for (int i = 0; i < recordedAccel.length; i++) {
+//			recordedAccel[0][i] = recordedX.get(i);
+//			recordedAccel[1][i] = recordedX.get(i);
+//			recordedAccel[2][i] = recordedX.get(i);
+//		}
+//		
+//		double [][] savedAccel = new double[3][savedX.size()];
+//		for (int i = 0; i < recordedAccel.length; i++) {
+//			savedAccel[0][i] = savedX.get(i);
+//			savedAccel[1][i] = savedY.get(i);
+//			savedAccel[2][i] = savedZ.get(i);
+//		}
+//		return calcDistance(recordedAccel, savedAccel);
+//	}
 
 	static public float calcDistance(double gesture1[][], double gesture2[][]) 
     {

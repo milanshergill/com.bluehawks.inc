@@ -114,5 +114,17 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		Recording_Status.setText("Stopped, The Size of Array is " + accelerationList.size());
 		}
 	
-	
+	 public Gesture createGesureObject(String name,ArrayList<Acceleration> accelerationList) {
+		 int size =  accelerationList.size();
+		 Acceleration [] accelerationArray = new Acceleration[size] ;
+		 for (int i = 0; i < size; i++) {
+			accelerationArray[i] = accelerationList.get(i);
+		 }
+		 
+		 Gesture gestureObject =  new  Gesture(name,accelerationArray);
+		 return gestureObject;
+		
+		}
 }
+	
+	
