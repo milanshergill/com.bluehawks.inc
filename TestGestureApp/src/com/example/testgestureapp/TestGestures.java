@@ -62,7 +62,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 	    
-	    timer = new CountDownTimer(10000, 50) {
+	    timer = new CountDownTimer(20000, 10) {
 	        public void onTick(long millisUntilFinished) {
         		if(accelX != oldAccelX && accelY != oldAccelY && accelZ != oldAccelZ) {
         			acceletationObject =  new Acceleration(accelX, accelY, accelZ);
