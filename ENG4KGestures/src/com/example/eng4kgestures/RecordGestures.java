@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +21,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	private ArrayList<Acceleration> accelerationList;
 	private float accelX, accelY, accelZ;
 	CountDownTimer timer;
-	Boolean startRecording = false;
+	boolean startRecording = false, buttonPressed = false;
 	TextView recordingStatus;
 	EditText gestureName;
 	private GestureDataBase gestureDataBase;
@@ -54,7 +55,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    	if(startRecording){
 		    		acceletationObject =  new Acceleration(accelX,accelY,accelZ);
 		    		accelerationList.add(acceletationObject);
-//		    		recordingStatus.setText("Recording Data");
+		    		recordingStatus.setText("Recording Data");
 		    	}
 	    	 }
 	    	 public void onFinish() {
@@ -117,7 +118,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	}
 	
 	public void onClickStartRecording(View v) {
-		recordingStatus.setText("Waiting for data to be recorded...");
+//		recordingStatus.setText("Waiting for data to be recorded...");
 		startRecording = true;
 		accelerationList.clear();
 		timer.start();
@@ -143,6 +144,54 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		 
 		Gesture gestureObject =  new  Gesture(name, accelerationArray);
 		return gestureObject;
+	}
+	
+	
+	
+	
+	public boolean dispatchKeyEvent(KeyEvent event) {
+	    int action = event.getAction();
+	    int keyCode = event.getKeyCode();
+        switch (keyCode) {
+        case KeyEvent.KEYCODE_VOLUME_UP:
+            if (action == KeyEvent.ACTION_DOWN) {
+            	if(!buttonPressed) {
+            		buttonPressed = true;
+            		startRecording = true;
+            		accelerationList.clear();
+            		timer.start();
+            	}
+            }
+            if (action == KeyEvent.ACTION_UP) {
+            	startRecording = false;
+        		if (timer != null) {
+        			timer.cancel();
+        			timer.onFinish();
+        		}
+				buttonPressed = false;
+            }
+            return true;
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+            if (action == KeyEvent.ACTION_DOWN) {
+            	if(!buttonPressed) {
+            		buttonPressed = true;
+            		startRecording = true;
+            		accelerationList.clear();
+            		timer.start();
+            	}
+            }
+            if (action == KeyEvent.ACTION_UP) {
+            	startRecording = false;
+        		if (timer != null) {
+        			timer.cancel();
+        			timer.onFinish();
+        		}
+				buttonPressed = false;
+            }
+            return true;
+        default:
+            return super.dispatchKeyEvent(event);
+        }
 	}
 }
 	

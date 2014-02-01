@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,6 +31,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	private static CountDownTimer timer;
 	int foundSame = 0;
 	double minDistance = -1;
+	boolean buttonPressed = false;
 	
 	private GestureDataBase gestureDataBase;
     ArrayList<String> listItems = new ArrayList<String>();
@@ -125,7 +127,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStart(View v) {
 		// Start Recording Data & send for Testing
-		results.setText("Waiting for test...");
+		results.setText("Testing...");
 		clearItems();
 		timer.start();
 	}
@@ -172,5 +174,49 @@ public class TestGestures extends Activity implements SensorEventListener {
 		 
 		Gesture gestureObject =  new  Gesture(name, accelerationArray);
 		return gestureObject;
+	}
+	
+	
+	public boolean dispatchKeyEvent(KeyEvent event) {
+	    int action = event.getAction();
+	    int keyCode = event.getKeyCode();
+        switch (keyCode) {
+        case KeyEvent.KEYCODE_VOLUME_UP:
+            if (action == KeyEvent.ACTION_DOWN) {
+            	if(!buttonPressed) {
+            		buttonPressed = true;
+            		results.setText("Testing...");
+            		clearItems();
+            		timer.start();
+            	}
+            }
+            if (action == KeyEvent.ACTION_UP) {
+            	if (timer != null) {
+        			timer.cancel();
+        			timer.onFinish();
+        		}
+				buttonPressed = false;
+            }
+            return true;
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+            if (action == KeyEvent.ACTION_DOWN) {
+            	if(!buttonPressed) {
+            		buttonPressed = true;
+            		results.setText("Testing...");
+            		clearItems();
+            		timer.start();
+            	}
+            }
+            if (action == KeyEvent.ACTION_UP) {
+            	if (timer != null) {
+        			timer.cancel();
+        			timer.onFinish();
+        		}
+				buttonPressed = false;
+            }
+            return true;
+        default:
+            return super.dispatchKeyEvent(event);
+        }
 	}
 }
