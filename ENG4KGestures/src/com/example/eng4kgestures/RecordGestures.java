@@ -133,6 +133,8 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	}
 	
 	public Gesture createGesureObject(String name, ArrayList<Acceleration> accelerationList) {
+		if(name.isEmpty())
+			name = "Default Name";
 		int size =  accelerationList.size();
 		Acceleration [] accelerationArray = new Acceleration[size] ;
 		for (int i = 0; i < size; i++) {
