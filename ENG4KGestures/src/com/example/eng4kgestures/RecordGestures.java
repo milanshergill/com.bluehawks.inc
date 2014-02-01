@@ -50,7 +50,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    
 	    
 	    //timer to start recording accelerometer data
-	    timer = new CountDownTimer(20000, 10) {
+	    timer = new CountDownTimer(750, 10) {
 	    	 public void onTick(long millisUntilFinished) {
 		    	if(startRecording){
 		    		acceletationObject =  new Acceleration(accelX,accelY,accelZ);
