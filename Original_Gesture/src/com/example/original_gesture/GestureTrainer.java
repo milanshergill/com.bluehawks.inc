@@ -48,6 +48,8 @@ public class GestureTrainer extends Activity {
 
         IGestureRecognitionService recognitionService;
         String activeTrainingSet;
+        boolean bound = false;
+       TextView status;
 
         private final ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -101,6 +103,7 @@ public class GestureTrainer extends Activity {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.main);
                 final TextView activeTrainingSetText = (TextView) findViewById(R.id.activeTrainingSet);
+                status = (TextView) findViewById(R.id.textView1);
                 final EditText trainingSetText = (EditText) findViewById(R.id.trainingSetName);
                 final EditText editText = (EditText) findViewById(R.id.gestureName);
                 activeTrainingSet = editText.getText().toString();
@@ -246,7 +249,8 @@ public class GestureTrainer extends Activity {
         @Override
         protected void onResume() {
                 Intent bindIntent = new Intent("com.example.original_gesture.GESTURE_RECOGNIZER");
-                bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                bound = bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                status.setText(bound + "");
                 super.onResume();
         }
 }
