@@ -34,4 +34,14 @@
         android:onClick="onClickTestGestures"
         android:text="Test Gestures" />
 
+    <Button
+        android:id="@+id/clearDatabase"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/TestGestures"
+        android:layout_marginTop="50dp"
+        android:onClick="onClickClearDatabase"
+        android:text="Clear Database" />
+
 </RelativeLayout>

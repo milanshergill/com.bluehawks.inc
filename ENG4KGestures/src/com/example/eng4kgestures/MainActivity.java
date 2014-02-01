@@ -8,10 +8,16 @@ import android.view.View;
 
 public class MainActivity extends Activity {
 
+	private GestureDataBase gestureDataBase;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//setting up database for acceleration recording
+		gestureDataBase = new GestureDataBase(this);
+	    gestureDataBase.openWriteable();
 	}
 
 	@Override
@@ -20,6 +26,16 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+    protected void onResume() {
+	    super.onResume();
+	    gestureDataBase.openWriteable();
+    }
+    
+    protected void onPause() {
+	    super.onPause();
+	    gestureDataBase.close();
+    }
 
 	public void onClickRecordGestures(View v) {
 		Intent myIntent = new Intent(MainActivity.this, RecordGestures.class);
@@ -29,5 +45,9 @@ public class MainActivity extends Activity {
 	public void onClickTestGestures(View v) {
 		Intent myIntent = new Intent(MainActivity.this, TestGestures.class);
 		MainActivity.this.startActivity(myIntent);
+	}
+	
+	public void onClickClearDatabase(View v) {
+		this.deleteDatabase(MySQLiteHelper.DATABASE_NAME);
 	}
 }

@@ -90,6 +90,11 @@ public class TestGestures extends Activity implements SensorEventListener {
 			//Get the list of all the gestures stored in Database
 			ArrayList<Gesture> savedGestures = gestureDataBase.getAllGestures();
 			
+			if(savedGestures.size() > 0)
+				results.setText("Results");
+			else
+				results.setText("No saved gestures in database, record gestures first!");
+			
 			//Create the gesture object for newly recorded gesture
 			String name = "Test Gesture";
 			Gesture testGesture = createGesureObject(name, accelerationList);
@@ -102,6 +107,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 				addItem("" + minDistance);
 			}
 		}
+		else
+			results.setText("Nothing recorded, press Start to record data.");
 	}
 
 	protected void onResume() {
@@ -118,6 +125,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStart(View v) {
 		// Start Recording Data & send for Testing
+		results.setText("Waiting for test...");
 		clearItems();
 		timer.start();
 	}
@@ -156,6 +164,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 	}
 	
 	public Gesture createGesureObject(String name, ArrayList<Acceleration> accelerationList) {
+		if(name.isEmpty())
+			name = "Default Name";
 		int size =  accelerationList.size();
 		Acceleration [] accelerationArray = new Acceleration[size] ;
 		for (int i = 0; i < size; i++) {

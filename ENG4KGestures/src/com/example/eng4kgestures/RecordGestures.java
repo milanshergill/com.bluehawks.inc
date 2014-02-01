@@ -54,13 +54,13 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    	if(startRecording){
 		    		acceletationObject =  new Acceleration(accelX,accelY,accelZ);
 		    		accelerationList.add(acceletationObject);
-		    		recordingStatus.setText("Recording Data");
+//		    		recordingStatus.setText("Recording Data");
 		    	}
 	    	 }
 	    	 public void onFinish() {
 	    		 processData();
 	    		 startRecording = false; 
-	    		 recordingStatus.setText("Stopped");
+//	    		 recordingStatus.setText("Stopped");
 	    		 // Clear the old readings from the list
 	    		 accelerationList.clear();
 	    	 }
@@ -74,7 +74,10 @@ public class RecordGestures extends Activity implements SensorEventListener {
 			String name = gestureName.getText().toString();
 			Gesture gesture = createGesureObject(name, accelerationList);
 			gestureDataBase.insertGesture(gesture);
+			recordingStatus.setText("Gesture saved, the size of accel array is " + accelerationList.size());
 		}
+		else
+			recordingStatus.setText("Nothing recorded, press Start to record data.");
 	}
 	
 	//Service methods for the accelerometer initialization
@@ -114,6 +117,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	}
 	
 	public void onClickStartRecording(View v) {
+		recordingStatus.setText("Waiting for data to be recorded...");
 		startRecording = true;
 		accelerationList.clear();
 		timer.start();
@@ -125,7 +129,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 			timer.cancel();
 			timer.onFinish();
 		}
-		recordingStatus.setText("Stopped, The Size of Array is " + accelerationList.size());
+//		recordingStatus.setText("Stopped, The Size of Array is " + accelerationList.size());
 	}
 	
 	public Gesture createGesureObject(String name, ArrayList<Acceleration> accelerationList) {
