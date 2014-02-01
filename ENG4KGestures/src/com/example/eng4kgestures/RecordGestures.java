@@ -42,7 +42,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    
 		//initialize the sensor
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);	
+	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);	
 	    
 	    //Array list to hold sensor data
 	    accelerationList = new ArrayList<Acceleration>();
@@ -58,18 +58,23 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    	}
 	    	 }
 	    	 public void onFinish() {
+	    		 processData();
 	    		 startRecording = false; 
 	    		 recordingStatus.setText("Stopped");
-	    		 processData();
+	    		 // Clear the old readings from the list
+	    		 accelerationList.clear();
 	    	 }
 	    };
     }
 	
 	protected void processData() {
-		// TODO Auto-generated method stub
-		String name = gestureName.getText().toString();
-		Gesture gesture = createGesureObject(name, accelerationList);
-		gestureDataBase.insertGesture(gesture);
+		// Add this reading to database only if there is something recorded
+		if(!accelerationList.isEmpty()) {
+			// TODO Auto-generated method stub
+			String name = gestureName.getText().toString();
+			Gesture gesture = createGesureObject(name, accelerationList);
+			gestureDataBase.insertGesture(gesture);
+		}
 	}
 	
 	//Service methods for the accelerometer initialization

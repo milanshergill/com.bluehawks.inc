@@ -85,19 +85,22 @@ public class TestGestures extends Activity implements SensorEventListener {
 	}
 	
 	protected void processData() {
-		//Get the list of all the gestures stored in Database
-		ArrayList<Gesture> savedGestures = gestureDataBase.getAllGestures();
-		
-		//Create the gesture object for newly recorded gesture
-		String name = "Test Gesture";
-		Gesture testGesture = createGesureObject(name, accelerationList);
-		
-		//Compare the newly gesture object with all saved gestures
-		for (int i = 0; i < savedGestures.size(); i++)
-		{
-			minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
-			addItem(name);
-			addItem("" + minDistance);
+		//Process only when there is new data recorded to test
+		if(!accelerationList.isEmpty()) {
+			//Get the list of all the gestures stored in Database
+			ArrayList<Gesture> savedGestures = gestureDataBase.getAllGestures();
+			
+			//Create the gesture object for newly recorded gesture
+			String name = "Test Gesture";
+			Gesture testGesture = createGesureObject(name, accelerationList);
+			
+			//Compare the newly gesture object with all saved gestures
+			for (int i = 0; i < savedGestures.size(); i++)
+			{
+				minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
+				addItem(savedGestures.get(i).getName());
+				addItem("" + minDistance);
+			}
 		}
 	}
 
