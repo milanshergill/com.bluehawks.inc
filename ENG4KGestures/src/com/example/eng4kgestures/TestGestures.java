@@ -59,7 +59,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	    accelerationList = new ArrayList<Acceleration>();
 
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	    
 	    timer = new CountDownTimer(10000, 50) {
 	        public void onTick(long millisUntilFinished) {
@@ -158,7 +158,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		// TODO Auto-generated method stub
-		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 			accelX = event.values[0];
 			accelY = event.values[1];
 			accelZ = event.values[2];

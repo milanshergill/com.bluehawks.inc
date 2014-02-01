@@ -43,7 +43,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    
 		//initialize the sensor
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);	
+	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);	
 	    
 	    //Array list to hold sensor data
 	    accelerationList = new ArrayList<Acceleration>();
@@ -110,7 +110,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 			accelX = event.values[0];
 			accelY = event.values[1];
 			accelZ = event.values[2];
