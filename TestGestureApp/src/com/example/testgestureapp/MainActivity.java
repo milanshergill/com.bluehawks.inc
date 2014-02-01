@@ -1,5 +1,7 @@
 package com.example.testgestureapp;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -77,8 +79,15 @@ public class MainActivity extends Activity {
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				context.deleteDatabase(MySQLiteHelper.DATABASE_NAME);
+				//Get the list of all the gestures stored in Database
+				ArrayList<Gesture_Object> savedGestures = gestureDataBase.getAllGestures();
 				try {
 					recognitionService.deleteTrainingSet(GESTURES_RECORDED);
+					//Compare the newly gesture object with all saved gestures
+					for (int i = 0; i < savedGestures.size(); i++)
+					{
+						recognitionService.deleteGesture(GESTURES_RECORDED, savedGestures.get(i).getName());
+					}
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
