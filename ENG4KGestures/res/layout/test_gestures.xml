@@ -2,13 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+	
+	<EditText
+        android:id="@+id/serverIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:hint="Enter server ip address..."
+        android:ems="20" >
 
+        <requestFocus />
+    </EditText>
+    
     <Button
         android:id="@+id/start"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/serverIP"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
         android:onClick="onClickStart"
         android:text="Start" />
@@ -17,8 +29,10 @@
         android:id="@+id/stop"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/serverIP"
         android:layout_alignBottom="@+id/start"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
         android:onClick="onClickStop"
         android:text="Stop" />
 

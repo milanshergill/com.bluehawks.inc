@@ -7,19 +7,25 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TestGestures extends Activity implements SensorEventListener {
 	
 	Button start, stop;
 	TextView results;
+	EditText serverIP;
 	GridView resultsList;
 	
 	SensorManager sensorManager;
@@ -28,14 +34,18 @@ public class TestGestures extends Activity implements SensorEventListener {
 	Acceleration acceletationObject;
 	private float accelX, accelY, accelZ;
 	private float oldAccelX, oldAccelY, oldAccelZ = 0;
-	private static CountDownTimer timer;
-	int foundSame = 0;
+	private static CountDownTimer timer, udpTimer;
+	int foundSame = 0, count = 0;
 	double minDistance = -1;
 	boolean buttonPressed = false;
 	
 	private GestureDataBase gestureDataBase;
+	ArrayList<Gesture> savedGestures;
     ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<String> adapter;
+    Gesture gestureToSend;
+    
+    AsyncTask<String, Void, Void> task = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +58,10 @@ public class TestGestures extends Activity implements SensorEventListener {
 		start = (Button) findViewById(R.id.stop);
 		results = (TextView) findViewById(R.id.resultsView);
 		resultsList = (GridView) findViewById(R.id.resultsList);
+		serverIP = (EditText) findViewById(R.id.serverIP);
 		
 		resultsList.setAdapter(adapter);
+		resultsList.setOnItemLongClickListener(listItemClickListener);
 		
 		//setting up database for acceleration recording
 		gestureDataBase = new GestureDataBase(this);
@@ -84,13 +96,44 @@ public class TestGestures extends Activity implements SensorEventListener {
         		accelerationList.clear();
 	        }
 	     };
+	     
+	     udpTimer = new CountDownTimer(200000, 250) {
+	        public void onTick(long millisUntilFinished) {
+	        	String data = gestureToSend.getAccelerationArray()[count].getAccelerationX() + "," + gestureToSend.getAccelerationArray()[count].getAccelerationY() + ","
+	        			+ gestureToSend.getAccelerationArray()[count].getAccelerationZ() + ",";
+	        	task = new MyTask().execute(serverIP.getText().toString(), data);
+	        	count++;
+    		}
+
+	        public void onFinish() {
+	        	if (task != null)
+	    			task.cancel(true);
+	        	count = 0;
+	        }
+	     };
 	}
+	
+	OnItemLongClickListener listItemClickListener = new OnItemLongClickListener() {
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
+			String name = (String)parent.getItemAtPosition(position);
+			for (int i = 0; i < savedGestures.size(); i++) {
+        		if(savedGestures.get(i).getName().equals(name)) {
+        			
+        		}
+			}
+			udpTimer.start();
+			Toast.makeText(getBaseContext(), "Item Clicked " + name, Toast.LENGTH_SHORT).show();
+			return false;
+		}
+	};
 	
 	protected void processData() {
 		//Process only when there is new data recorded to test
 		if(!accelerationList.isEmpty()) {
 			//Get the list of all the gestures stored in Database
-			ArrayList<Gesture> savedGestures = gestureDataBase.getAllGestures();
+			savedGestures = gestureDataBase.getAllGestures();
 			
 			if(savedGestures.size() > 0)
 				results.setText("Results");
