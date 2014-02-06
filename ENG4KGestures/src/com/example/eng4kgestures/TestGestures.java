@@ -3,6 +3,9 @@ package com.example.eng4kgestures;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -99,16 +102,19 @@ public class TestGestures extends Activity implements SensorEventListener {
 	     
 	     udpTimer = new CountDownTimer(200000, 250) {
 	        public void onTick(long millisUntilFinished) {
-	        	String data = gestureToSend.getAccelerationArray()[count].getAccelerationX() + "," + gestureToSend.getAccelerationArray()[count].getAccelerationY() + ","
-	        			+ gestureToSend.getAccelerationArray()[count].getAccelerationZ() + ",";
-	        	task = new MyTask().execute(serverIP.getText().toString(), data);
-	        	count++;
+	        	if (count < gestureToSend.getAccelerationArray().length) {
+		        	String data = gestureToSend.getAccelerationArray()[count].getAccelerationX() + "," + gestureToSend.getAccelerationArray()[count].getAccelerationY() + ","
+		        			+ gestureToSend.getAccelerationArray()[count].getAccelerationZ() + ",";
+		        	task = new MyTask().execute(serverIP.getText().toString(), data);
+		        	count++;
+	        	}
     		}
 
 	        public void onFinish() {
 	        	if (task != null)
 	    			task.cancel(true);
 	        	count = 0;
+	        	Toast.makeText(getBaseContext(), "Stopped sending gesture " + gestureToSend.getName(), Toast.LENGTH_SHORT).show();
 	        }
 	     };
 	}
@@ -117,15 +123,21 @@ public class TestGestures extends Activity implements SensorEventListener {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
 				int position, long id) {
-			String name = (String)parent.getItemAtPosition(position);
-			for (int i = 0; i < savedGestures.size(); i++) {
-        		if(savedGestures.get(i).getName().equals(name)) {
-        			
-        		}
+			// Should click on the name to send the gesture, position start from 0
+			if(position % 2 == 0 ) {
+				String name = (String) parent.getItemAtPosition(position);
+				for (int i = 0; i < savedGestures.size(); i++) {
+	        		if(savedGestures.get(i).getName().equals(name)) {
+	        			gestureToSend = savedGestures.get(i);
+	        		}
+				}
+				Toast.makeText(getBaseContext(), "Item Clicked " + name + " ID is " + position, Toast.LENGTH_SHORT).show();
+				AlertDialog diaBox = AskOption(getBaseContext());
+				diaBox.show();
+				return true;
 			}
-			udpTimer.start();
-			Toast.makeText(getBaseContext(), "Item Clicked " + name, Toast.LENGTH_SHORT).show();
-			return false;
+			else
+				return false;
 		}
 	};
 	
@@ -178,6 +190,14 @@ public class TestGestures extends Activity implements SensorEventListener {
 	public void onClickStop(View v) {
 		// Stop Testing and add results to the resultsList
 		if (timer != null) {
+			timer.cancel();
+			timer.onFinish();
+		}
+	}
+	
+	public void onClickStopUDPTransfer(View v) {
+		// Stop transfering gesture via UDP
+		if (udpTimer != null) {
 			timer.cancel();
 			timer.onFinish();
 		}
@@ -261,5 +281,28 @@ public class TestGestures extends Activity implements SensorEventListener {
         default:
             return super.dispatchKeyEvent(event);
         }
+	}
+	
+	private AlertDialog AskOption(final Context context)
+	{
+		AlertDialog sendGestureDialog = new AlertDialog.Builder(this) 
+	    //set message and title
+		.setTitle("Send Gesture via UDP") 
+		.setMessage("Do you want to send this Gesture?")
+		
+		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				udpTimer.start();
+			    dialog.dismiss();
+		    }
+		})
+		
+		.setNegativeButton("No", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		    }
+		})
+		.create();
+		return sendGestureDialog;
 	}
 }

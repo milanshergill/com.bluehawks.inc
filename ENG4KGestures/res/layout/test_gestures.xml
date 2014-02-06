@@ -43,7 +43,7 @@
         android:layout_alignLeft="@+id/start"
         android:layout_below="@+id/start"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="40dp"
         android:textSize="20sp"
         android:text="Waiting for test..." />
 
@@ -61,5 +61,16 @@
         android:layout_marginTop="15dp" >
 
     </GridView>
+
+    <Button
+        android:id="@+id/stopUDPTranfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/resultsList"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/resultsView"
+        android:layout_marginTop="40dp"
+        android:onClick="onClickStopUDPTransfer"
+        android:text="Stop Transfer" />
 
 </RelativeLayout>
