@@ -18,6 +18,7 @@ import android.widget.TextView;
 public class RecordGestures extends Activity implements SensorEventListener {
 	SensorManager sensorManager;
 	Sensor accelerometerSensor;
+	int count = 0;
 	private ArrayList<Acceleration> accelerationList;
 	private float accelX, accelY, accelZ;
 	CountDownTimer timer;
@@ -50,8 +51,9 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    
 	    
 	    //timer to start recording accelerometer data
-	    timer = new CountDownTimer(750, 10) {
+	    timer = new CountDownTimer(750, 20) {
 	    	 public void onTick(long millisUntilFinished) {
+	    		 count++;
 		    	if(startRecording){
 		    		acceletationObject =  new Acceleration(accelX,accelY,accelZ);
 		    		accelerationList.add(acceletationObject);
@@ -64,6 +66,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 //	    		 recordingStatus.setText("Stopped");
 	    		 // Clear the old readings from the list
 	    		 accelerationList.clear();
+	    		 count = 0;
 	    	 }
 	    };
     }
@@ -75,7 +78,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 			String name = gestureName.getText().toString();
 			Gesture gesture = createGesureObject(name, accelerationList);
 			gestureDataBase.insertGesture(gesture);
-			recordingStatus.setText("Gesture saved, the size of accel array is " + accelerationList.size());
+			recordingStatus.setText("Gesture saved, the size of accel array is " + accelerationList.size() + " Count is " + count);
 		}
 		else
 			recordingStatus.setText("Nothing recorded, press Start to record data.");

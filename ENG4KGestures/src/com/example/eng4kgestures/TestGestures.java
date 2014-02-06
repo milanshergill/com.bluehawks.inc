@@ -76,7 +76,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	    
-	    timer = new CountDownTimer(750, 10) {
+	    timer = new CountDownTimer(750, 20) {
 	        public void onTick(long millisUntilFinished) {
         		if(accelX != oldAccelX && accelY != oldAccelY && accelZ != oldAccelZ) {
         			acceletationObject =  new Acceleration(accelX, accelY, accelZ);
@@ -100,7 +100,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	        }
 	     };
 	     
-	     udpTimer = new CountDownTimer(200000, 250) {
+	     udpTimer = new CountDownTimer(10000, 250) {
 	        public void onTick(long millisUntilFinished) {
 	        	if (count < gestureToSend.getAccelerationArray().length) {
 		        	String data = gestureToSend.getAccelerationArray()[count].getAccelerationX() + "," + gestureToSend.getAccelerationArray()[count].getAccelerationY() + ","
@@ -198,8 +198,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 	public void onClickStopUDPTransfer(View v) {
 		// Stop transfering gesture via UDP
 		if (udpTimer != null) {
-			timer.cancel();
-			timer.onFinish();
+			udpTimer.cancel();
+			udpTimer.onFinish();
 		}
 	}
 	

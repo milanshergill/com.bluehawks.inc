@@ -35,15 +35,25 @@
         android:layout_marginTop="20dp"
         android:onClick="onClickStop"
         android:text="Stop" />
+    
+    <Button
+        android:id="@+id/stopUDPTranfer"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/start"
+        android:layout_marginTop="10dp"
+        android:onClick="onClickStopUDPTransfer"
+        android:text="Stop Transfer"
+        android:layout_alignLeft="@+id/start"/>
 
     <TextView
         android:id="@+id/resultsView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/start"
-        android:layout_below="@+id/start"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_alignLeft="@+id/stopUDPTranfer"
+        android:layout_below="@+id/stopUDPTranfer"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:text="Waiting for test..." />
 
@@ -52,25 +62,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/start"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:layout_alignRight="@+id/stop"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:layout_below="@+id/resultsView"
         android:numColumns="2"
         android:layoutDirection="ltr"
         android:layout_marginTop="15dp" >
 
     </GridView>
-
-    <Button
-        android:id="@+id/stopUDPTranfer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/resultsList"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/resultsView"
-        android:layout_marginTop="40dp"
-        android:onClick="onClickStopUDPTransfer"
-        android:text="Stop Transfer" />
-
 </RelativeLayout>
