@@ -116,7 +116,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 
 	protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
         gestureDataBase.openReadable();
     }
 

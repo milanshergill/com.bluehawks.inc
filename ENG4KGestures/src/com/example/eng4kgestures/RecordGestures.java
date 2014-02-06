@@ -88,7 +88,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
     protected void onResume() {
 	    super.onResume();
 	    gestureDataBase.openWriteable();
-	    sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+	    sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
     
   //Service methods for the accelerometer initialization
