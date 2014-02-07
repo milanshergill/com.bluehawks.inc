@@ -95,13 +95,13 @@ public class RecordGestures extends Activity implements SensorEventListener {
 			int k = accelerationList.size();
 			if(!accelerationList.isEmpty()) {
 				int j = Math.min(50,accelerationList.size());
-			for(;j<accelerationList.size();)
-			{
-				accelerationList.remove(j);
-			}
-			
-			Gesture gesture = createGesureObject(name, accelerationList);
-			gestureDataBase.insertGesture(gesture);
+				for(;j<accelerationList.size();)
+				{
+					accelerationList.remove(j);
+				}
+				
+				Gesture gesture = createGesureObject(name, accelerationList);
+				gestureDataBase.insertGesture(gesture);
 			}
 			recordingStatus.setText("Gesture saved, initial size was " +size+ " after cleanup size was "+k+ " the size of accel array is " + accelerationList.size() );
 		}

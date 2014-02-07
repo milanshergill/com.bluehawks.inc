@@ -157,32 +157,36 @@ public class TestGestures extends Activity implements SensorEventListener {
 			int k = accelerationList.size();
 			if(!accelerationList.isEmpty()) {
 				int j = Math.min(50,accelerationList.size());
-			for(;j<accelerationList.size();)
-			{
-				accelerationList.remove(j);
-			}
+				for(;j<accelerationList.size();)
+				{
+					accelerationList.remove(j);
+				}
 			}
 			
-			//Get the list of all the gestures stored in Database
-			savedGestures = gestureDataBase.getAllGestures();
+			if(!accelerationList.isEmpty()) {
 			
-			if(savedGestures.size() > 0)
-				results.setText("Results");
+				//Get the list of all the gestures stored in Database
+				savedGestures = gestureDataBase.getAllGestures();
+				
+				if(savedGestures.size() > 0)
+					results.setText("Results");
+				else
+					results.setText("No saved gestures in database, record gestures first!");
+				
+				//Create the gesture object for newly recorded gesture
+				String name = "Test Gesture";
+				Gesture testGesture = createGesureObject(name, accelerationList);
+				
+				//Compare the newly gesture object with all saved gestures
+				for (int i = 0; i < savedGestures.size(); i++)
+				{
+					minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
+					addItem(savedGestures.get(i).getName());
+					addItem("" + minDistance);
+				}
+			}
 			else
-				results.setText("No saved gestures in database, record gestures first!");
-			
-			//Create the gesture object for newly recorded gesture
-			String name = "Test Gesture";
-			Gesture testGesture = createGesureObject(name, accelerationList);
-			
-			//Compare the newly gesture object with all saved gestures
-			for (int i = 0; i < savedGestures.size(); i++)
-			{
-				minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
-				addItem(savedGestures.get(i).getName());
-				addItem("" + minDistance);
-			}
-			
+				results.setText("Nothing recorded, press Start to record data.");
 		}
 //		else
 //			results.setText("Nothing recorded, press Start to record data.");
