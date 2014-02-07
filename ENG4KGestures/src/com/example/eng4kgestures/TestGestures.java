@@ -76,14 +76,14 @@ public class TestGestures extends Activity implements SensorEventListener {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	    
-	    timer = new CountDownTimer(1000, 20) {
+	    timer = new CountDownTimer(10000, 20) {
 	        public void onTick(long millisUntilFinished) {
         			acceletationObject =  new Acceleration(accelX, accelY, accelZ);
 		    		accelerationList.add(acceletationObject);
     		}
 
 	        public void onFinish() {
-	            processData();
+	            processData(14.0);
 	            foundSame = 0;
 	            oldAccelX = 0;
         		oldAccelY = 0;
@@ -93,7 +93,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 	        }
 	     };
 	     
-	     udpTimer = new CountDownTimer(10000, 250) {
+	     udpTimer = new CountDownTimer(12500, 250) {
 	        public void onTick(long millisUntilFinished) {
 	        	if (count < gestureToSend.getAccelerationArray().length) {
 		        	String data = gestureToSend.getAccelerationArray()[count].getAccelerationX() + "," + gestureToSend.getAccelerationArray()[count].getAccelerationY() + ","
@@ -134,9 +134,35 @@ public class TestGestures extends Activity implements SensorEventListener {
 		}
 	};
 	
-	protected void processData() {
+	protected void processData(double d) {
 		//Process only when there is new data recorded to test
 		if(!accelerationList.isEmpty()) {
+			boolean thresholdMet = false;
+			int size = accelerationList.size();
+			for(int i =0; (i< accelerationList.size() )&&(!thresholdMet);)
+			{
+				float value = (float) Math.pow((Math.pow(accelerationList.get(i).getAccelerationX(), 2)
+							+Math.pow(accelerationList.get(i).getAccelerationY(), 2)
+							+Math.pow(accelerationList.get(i).getAccelerationZ(), 2)), 0.5);
+				if(value < d)
+				{
+					accelerationList.remove(i);
+				}
+				else
+				{
+					thresholdMet = true;
+				}
+				
+			}
+			int k = accelerationList.size();
+			if(!accelerationList.isEmpty()) {
+				int j = Math.min(50,accelerationList.size());
+			for(;j<accelerationList.size();)
+			{
+				accelerationList.remove(j);
+			}
+			}
+			
 			//Get the list of all the gestures stored in Database
 			savedGestures = gestureDataBase.getAllGestures();
 			
@@ -156,9 +182,10 @@ public class TestGestures extends Activity implements SensorEventListener {
 				addItem(savedGestures.get(i).getName());
 				addItem("" + minDistance);
 			}
+			
 		}
-		else
-			results.setText("Nothing recorded, press Start to record data.");
+//		else
+//			results.setText("Nothing recorded, press Start to record data.");
 	}
 
 	protected void onResume() {

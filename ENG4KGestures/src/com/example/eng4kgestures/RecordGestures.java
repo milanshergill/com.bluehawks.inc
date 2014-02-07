@@ -27,7 +27,6 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	EditText gestureName;
 	private GestureDataBase gestureDataBase;
 	Acceleration acceletationObject;
-	boolean hasPassedThreshold = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +51,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    
 	    
 	    //timer to start recording accelerometer data
-	    timer = new CountDownTimer(1000, 20) {
+	    timer = new CountDownTimer(10000, 20) {
 	    	 public void onTick(long millisUntilFinished) {
 	    		 count++;
 		    	if(startRecording){
@@ -62,13 +61,12 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    	}
 	    	 }
 	    	 public void onFinish() {
-	    		 processData(10.0);
+	    		 processData(14.0);
 	    		 startRecording = false; 
 //	    		 recordingStatus.setText("Stopped");
 	    		 // Clear the old readings from the list
 	    		 accelerationList.clear();
 	    		 count = 0;
-	    		 hasPassedThreshold = false;
 	    	 }
 	    };
     }
@@ -79,7 +77,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 			String name = gestureName.getText().toString();
 			boolean thresholdMet = false;
 			int size = accelerationList.size();
-			for(int i =0; (i< size )&&(!thresholdMet);i++)
+			for(int i =0; (i< accelerationList.size() )&&(!thresholdMet);)
 			{
 				float value = (float) Math.pow((Math.pow(accelerationList.get(i).getAccelerationX(), 2)
 							+Math.pow(accelerationList.get(i).getAccelerationY(), 2)
@@ -94,12 +92,21 @@ public class RecordGestures extends Activity implements SensorEventListener {
 				}
 				
 			}
+			int k = accelerationList.size();
+			if(!accelerationList.isEmpty()) {
+				int j = Math.min(50,accelerationList.size());
+			for(;j<accelerationList.size();)
+			{
+				accelerationList.remove(j);
+			}
+			
 			Gesture gesture = createGesureObject(name, accelerationList);
 			gestureDataBase.insertGesture(gesture);
-			recordingStatus.setText("Gesture saved, the size of accel array is " + accelerationList.size() + "before cleanup the size was " + size );
+			}
+			recordingStatus.setText("Gesture saved, initial size was " +size+ " after cleanup size was "+k+ " the size of accel array is " + accelerationList.size() );
 		}
-		else
-			recordingStatus.setText("Nothing recorded, press Start to record data.");
+//		else
+//			recordingStatus.setText("Nothing recorded, press Start to record data.");
 	}
 	
 	//Service methods for the accelerometer initialization
