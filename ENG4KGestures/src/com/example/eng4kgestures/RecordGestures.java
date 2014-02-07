@@ -52,7 +52,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    
 	    
 	    //timer to start recording accelerometer data
-	    timer = new CountDownTimer(750, 20) {
+	    timer = new CountDownTimer(1000, 20) {
 	    	 public void onTick(long millisUntilFinished) {
 	    		 count++;
 		    	if(startRecording){
@@ -62,7 +62,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 		    	}
 	    	 }
 	    	 public void onFinish() {
-	    		 processData();
+	    		 processData(10.0);
 	    		 startRecording = false; 
 //	    		 recordingStatus.setText("Stopped");
 	    		 // Clear the old readings from the list
@@ -73,14 +73,30 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    };
     }
 	
-	protected void processData() {
+	protected void processData(double d) {
 		// Add this reading to database only if there is something recorded
 		if(!accelerationList.isEmpty()) {
-			// TODO Auto-generated method stub
 			String name = gestureName.getText().toString();
+			boolean thresholdMet = false;
+			int size = accelerationList.size();
+			for(int i =0; (i< size )&&(!thresholdMet);i++)
+			{
+				float value = (float) Math.pow((Math.pow(accelerationList.get(i).getAccelerationX(), 2)
+							+Math.pow(accelerationList.get(i).getAccelerationY(), 2)
+							+Math.pow(accelerationList.get(i).getAccelerationZ(), 2)), 0.5);
+				if(value < d)
+				{
+					accelerationList.remove(i);
+				}
+				else
+				{
+					thresholdMet = true;
+				}
+				
+			}
 			Gesture gesture = createGesureObject(name, accelerationList);
 			gestureDataBase.insertGesture(gesture);
-			recordingStatus.setText("Gesture saved, the size of accel array is " + accelerationList.size() + " Count is " + count);
+			recordingStatus.setText("Gesture saved, the size of accel array is " + accelerationList.size() + "before cleanup the size was " + size );
 		}
 		else
 			recordingStatus.setText("Nothing recorded, press Start to record data.");
@@ -124,7 +140,9 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStartRecording(View v) {
 //		recordingStatus.setText("Waiting for data to be recorded...");
-		recordAfterThreshold((float) 2.0);	
+		startRecording = true;
+		accelerationList.clear();
+		timer.start();
 	}
 	
 	public void onClickStopRecording(View v) {
@@ -196,22 +214,6 @@ public class RecordGestures extends Activity implements SensorEventListener {
             return super.dispatchKeyEvent(event);
         }
 	}
-	
-	public void recordAfterThreshold(float threshold){
-		while(!hasPassedThreshold)
-		{
-			float value = (float) Math.pow((Math.pow(accelX, 2) +Math.pow(accelY, 2) +Math.pow(accelZ, 2)), 0.5);
-			if (value >= threshold + 9.8)
-				
-			{
-				hasPassedThreshold = true;
-			}
-		}
-			startRecording = true;
-			accelerationList.clear();
-			timer.start();
-	}
-	
 	
 }
 	
