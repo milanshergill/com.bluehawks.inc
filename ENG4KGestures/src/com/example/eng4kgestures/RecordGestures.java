@@ -27,6 +27,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	EditText gestureName;
 	private GestureDataBase gestureDataBase;
 	Acceleration acceletationObject;
+	boolean hasPassedThreshold = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,6 +68,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	    		 // Clear the old readings from the list
 	    		 accelerationList.clear();
 	    		 count = 0;
+	    		 hasPassedThreshold = false;
 	    	 }
 	    };
     }
@@ -122,9 +124,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 	
 	public void onClickStartRecording(View v) {
 //		recordingStatus.setText("Waiting for data to be recorded...");
-		startRecording = true;
-		accelerationList.clear();
-		timer.start();
+		recordAfterThreshold((float) 2.0);	
 	}
 	
 	public void onClickStopRecording(View v) {
@@ -196,6 +196,23 @@ public class RecordGestures extends Activity implements SensorEventListener {
             return super.dispatchKeyEvent(event);
         }
 	}
+	
+	public void recordAfterThreshold(float threshold){
+		while(!hasPassedThreshold)
+		{
+			float value = (float) Math.pow((Math.pow(accelX, 2) +Math.pow(accelY, 2) +Math.pow(accelZ, 2)), 0.5);
+			if (value >= threshold + 9.8)
+				
+			{
+				hasPassedThreshold = true;
+			}
+		}
+			startRecording = true;
+			accelerationList.clear();
+			timer.start();
+	}
+	
+	
 }
 	
 	
