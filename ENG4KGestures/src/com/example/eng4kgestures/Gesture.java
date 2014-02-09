@@ -38,8 +38,12 @@ public class Gesture implements Serializable {
 		return accelerationArray;
 	}
 	
-	public void setAccelerationList(Acceleration[] accelerationList) {
-		this.accelerationArray = accelerationList;
+//	public void setAccelerationList(Acceleration[] accelerationList) {
+//		this.accelerationArray = accelerationList;
+//	}
+	
+	public void setAccelerationArray(Acceleration[] accelerationArray) {
+		this.accelerationArray = accelerationArray;
 	}
 	
 	public static byte[] serializeGesture(Gesture gesture) { 

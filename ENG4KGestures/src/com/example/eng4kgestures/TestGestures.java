@@ -176,14 +176,34 @@ public class TestGestures extends Activity implements SensorEventListener {
 				//Create the gesture object for newly recorded gesture
 				String name = "Test Gesture";
 				Gesture testGesture = createGesureObject(name, accelerationList);
+			
+				/*******Before adding Temporal Compression*******/
+//				//Compare the newly gesture object with all saved gestures
+//				for (int i = 0; i < savedGestures.size(); i++)
+//				{
+//					minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
+//					addItem(savedGestures.get(i).getName());
+//					addItem("" + minDistance);
+//				}
+				/*******A adding Temporal Compression*******/
+				
+				/*******After adding Temporal Compression*******/
+				Acceleration[] modifiedTestGesture;
+				modifiedTestGesture = (Acceleration[]) TemporalCompresssion.calculateAverage(testGesture);
+				testGesture.setAccelerationArray(modifiedTestGesture);
+				results.setText("check the logcat for results");
 				
 				//Compare the newly gesture object with all saved gestures
 				for (int i = 0; i < savedGestures.size(); i++)
 				{
+					Acceleration[] modifiedSavedGesture;
+					modifiedSavedGesture = (Acceleration[]) TemporalCompresssion.calculateAverage(savedGestures.get(i));
+					savedGestures.get(i).setAccelerationArray(modifiedSavedGesture);
 					minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
 					addItem(savedGestures.get(i).getName());
 					addItem("" + minDistance);
 				}
+				/*******After adding Temporal Compression*******/
 			}
 			else
 				results.setText("Nothing recorded, press Start to record data.");
