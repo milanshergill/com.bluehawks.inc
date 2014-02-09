@@ -30,8 +30,11 @@ public class DynamicTimeWarping
 
 	static public float calcDistance(Gesture gesture1, Gesture gesture2) 
     {
+		System.out.println("***********distance Matrix*********");
 		float distMatrix[][] = calculateDistanceMatrix(gesture1, gesture2);
+		 System.out.println("***********distance Matrix*********");
 		float costMatrix[][] = calculateCostMatrix(gesture1,gesture2, distMatrix);
+		 
 		
 		// the distance between gesture a and b is the end'th value of the cost matrix
         return costMatrix[gesture1.getAccelerationArray().length-1][gesture2.getAccelerationArray().length-1];
@@ -75,7 +78,7 @@ public class DynamicTimeWarping
                     differenceVector.add((double) (gesture1[i][k] - gesture2[j][k]));
                 }  */ 
                 distMatrix[i][j] = normaliseVector(differenceVector);
-                //System.out.println("distance matrix " + distMatrix[i][j] + " i" + i + " j" + j);
+                System.out.println("distance matrix " + distMatrix[i][j] + " i" + i + " j" + j);
             }
         }
 		return distMatrix;
@@ -118,7 +121,9 @@ public class DynamicTimeWarping
                     	minCost = cost + OFFSET_PENALTY;
                     }
                     costMatrix[i][j] = minCost;
+                   
                     //System.out.println("costMatrix[i][j] " + costMatrix[i][j] + " i= " + i + " j= " + j );
+                   
                 }
             }
         	
