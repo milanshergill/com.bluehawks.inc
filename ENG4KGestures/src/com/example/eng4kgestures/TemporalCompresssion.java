@@ -16,8 +16,8 @@ public class TemporalCompresssion
 		int gestureComponents = 3;
 		
 		// Time is in milliseconds
-		double sampleTime = 25.0;
-		Double AveragingWindow = 75.0;
+		double sampleTime = 20.0;
+		Double AveragingWindow = 80.0;
 		
 		int NumberOfWindows = (int) ((int) gestureLength * sampleTime/ AveragingWindow) ;
 		Acceleration[] gestureArray = gesture.getAccelerationArray();
@@ -42,7 +42,7 @@ public class TemporalCompresssion
 			for(int localTime=0;localTime<AveragingWindow;)
 			{
 				// recording data at 25ms
-				localTime+=25;
+				localTime+=20;
 				AverageX += gestureArray[globalPosition].getAccelerationX();
 				AverageY += gestureArray[globalPosition].getAccelerationY();
 				AverageZ += gestureArray[globalPosition].getAccelerationZ();
