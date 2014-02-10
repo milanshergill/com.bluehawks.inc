@@ -177,7 +177,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 				String name = "Test Gesture";
 				Gesture testGesture = createGesureObject(name, accelerationList);
 			
-				/*******Before adding Temporal Compression*******/
+/*************************************Start Orginal Code***********************************************/
 //				//Compare the newly gesture object with all saved gestures
 //				for (int i = 0; i < savedGestures.size(); i++)
 //				{
@@ -185,25 +185,72 @@ public class TestGestures extends Activity implements SensorEventListener {
 //					addItem(savedGestures.get(i).getName());
 //					addItem("" + minDistance);
 //				}
-				/*******A adding Temporal Compression*******/
+/*************************************End Original Code***********************************************/
 				
-				/*******After adding Temporal Compression*******/
-				Acceleration[] modifiedTestGesture;
-				modifiedTestGesture = (Acceleration[]) TemporalCompresssion.calculateAverage(testGesture);
-				testGesture.setAccelerationArray(modifiedTestGesture);
-				results.setText("check the logcat for results");
-				
-				//Compare the newly gesture object with all saved gestures
-				for (int i = 0; i < savedGestures.size(); i++)
-				{
-					Acceleration[] modifiedSavedGesture;
-					modifiedSavedGesture = (Acceleration[]) TemporalCompresssion.calculateAverage(savedGestures.get(i));
-					savedGestures.get(i).setAccelerationArray(modifiedSavedGesture);
-					minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
-					addItem(savedGestures.get(i).getName());
-					addItem("" + minDistance);
+/*************************************Start Temporal Compression***********************************************/
+//				Acceleration[] modifiedTestGesture;
+//				modifiedTestGesture = (Acceleration[]) TemporalCompresssion.calculateAverage(testGesture);
+//				testGesture.setAccelerationArray(modifiedTestGesture);
+//				results.setText("check the logcat for results");
+//				
+//				//Compare the newly gesture object with all saved gestures
+//				for (int i = 0; i < savedGestures.size(); i++)
+//				{
+//					Acceleration[] modifiedSavedGesture;
+//					modifiedSavedGesture = (Acceleration[]) TemporalCompresssion.calculateAverage(savedGestures.get(i));
+//					savedGestures.get(i).setAccelerationArray(modifiedSavedGesture);
+//					minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
+//					addItem(savedGestures.get(i).getName());
+//					addItem("" + minDistance);
+//				}
+/*************************************Start Temporal Compression***********************************************/
+
+/*************************************Start Average Temporal Compression***********************************************/
+//				try {
+//					Acceleration[] modifiedTestGesture;
+//					modifiedTestGesture = (Acceleration[]) TemporalCompressionAverage .calculateAverage(testGesture);
+//					testGesture.setAccelerationArray(modifiedTestGesture);
+//					results.setText("check the logcat for results");
+//					
+//					//Compare the newly gesture object with all saved gestures
+//					for (int i = 0; i < savedGestures.size(); i++)
+//					{
+//						Acceleration[] modifiedSavedGesture;
+//						modifiedSavedGesture = (Acceleration[]) TemporalCompressionAverage .calculateAverage(savedGestures.get(i));
+//						savedGestures.get(i).setAccelerationArray(modifiedSavedGesture);
+//						minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
+//						addItem(savedGestures.get(i).getName());
+//						addItem("" + minDistance);
+//					}
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+/*************************************End Average Temporal Compression***********************************************/
+/*************************************Start Normalize Average Temporal Compression***********************************************/
+				try {
+					Acceleration[] modifiedTestGesture;
+					modifiedTestGesture = (Acceleration[]) TemporalCompressionAverage .calculateAverage(testGesture);
+					modifiedTestGesture = NormalizeArray.normalizeArray(modifiedTestGesture);
+					testGesture.setAccelerationArray(modifiedTestGesture);
+					results.setText("check the logcat for results");
+					
+					//Compare the newly gesture object with all saved gestures
+					for (int i = 0; i < savedGestures.size(); i++)
+					{
+						Acceleration[] modifiedSavedGesture;
+						modifiedSavedGesture = (Acceleration[]) TemporalCompressionAverage .calculateAverage(savedGestures.get(i));
+						modifiedSavedGesture = NormalizeArray.normalizeArray(modifiedSavedGesture );
+						savedGestures.get(i).setAccelerationArray(modifiedSavedGesture);
+						minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
+						addItem(savedGestures.get(i).getName());
+						addItem("" + minDistance);
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				/*******After adding Temporal Compression*******/
+/*************************************End Normalize Average Temporal Compression***********************************************/
 			}
 			else
 				results.setText("Nothing recorded, press Start to record data.");
