@@ -235,6 +235,8 @@ public class TestGestures extends Activity implements SensorEventListener {
 					testGesture.setAccelerationArray(modifiedTestGesture);
 					results.setText("check the logcat for results");
 					
+					minDistance = 10000;
+					String selectedGestureName = "None Selected";
 					//Compare the newly gesture object with all saved gestures
 					for (int i = 0; i < savedGestures.size(); i++)
 					{
@@ -242,10 +244,14 @@ public class TestGestures extends Activity implements SensorEventListener {
 						modifiedSavedGesture = (Acceleration[]) TemporalCompressionAverage .calculateAverage(savedGestures.get(i));
 						modifiedSavedGesture = NormalizeArray.normalizeArray(modifiedSavedGesture );
 						savedGestures.get(i).setAccelerationArray(modifiedSavedGesture);
-						minDistance = (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture);
-						addItem(savedGestures.get(i).getName());
-						addItem("" + minDistance);
+						if (minDistance != Math.min(minDistance, (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture))) {
+							minDistance = Math.min(minDistance, (double) DynamicTimeWarping.calcDistance(savedGestures.get(i), testGesture));
+							selectedGestureName = savedGestures.get(i).getName();
+						}
 					}
+					addItem(selectedGestureName);
+					addItem("" + minDistance);
+					Toast.makeText(getBaseContext(), "Gesture Selected is: " + selectedGestureName, Toast.LENGTH_SHORT).show();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
