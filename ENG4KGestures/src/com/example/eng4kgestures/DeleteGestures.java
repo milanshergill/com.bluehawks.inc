@@ -78,6 +78,7 @@ public class DeleteGestures extends Activity {
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
 				int position, long id) {
 			gestureToDelete = position;
+			savedGestures = gestureDataBase.getAllGestures();
 			String name = (String) parent.getItemAtPosition(position);
 			for (int i = 0; i < savedGestures.size(); i++) {
         		if(savedGestures.get(i).getName().equals(name)) {
