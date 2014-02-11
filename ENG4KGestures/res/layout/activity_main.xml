@@ -44,4 +44,14 @@
         android:onClick="onClickClearDatabase"
         android:text="Clear Database" />
 
+    <Button
+        android:id="@+id/deleteGestures"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/clearDatabase"
+        android:layout_alignLeft="@+id/clearDatabase"
+        android:onClick="onClickDeleteGestures"
+        android:text="Delete Gestures" />
+
 </RelativeLayout>

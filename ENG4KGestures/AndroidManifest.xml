@@ -25,6 +25,7 @@
         </activity>
         <activity android:name="RecordGestures"></activity>
         <activity android:name="TestGestures"></activity>
+        <activity android:name="DeleteGestures"></activity>
     </application>
 
 </manifest>

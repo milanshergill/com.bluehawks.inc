@@ -55,6 +55,11 @@ public class MainActivity extends Activity {
 		diaBox.show();
 	}
 	
+	public void onClickDeleteGestures(View v) {
+		Intent myIntent = new Intent(MainActivity.this, DeleteGestures.class);
+		MainActivity.this.startActivity(myIntent);
+	}
+	
 	private AlertDialog AskOption(final Context context)
 	{
 		AlertDialog clearDatabaseDialog = new AlertDialog.Builder(this) 
