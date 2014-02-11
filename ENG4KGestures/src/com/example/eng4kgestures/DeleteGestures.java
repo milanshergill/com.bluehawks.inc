@@ -78,6 +78,12 @@ public class DeleteGestures extends Activity {
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
 				int position, long id) {
 			gestureToDelete = position;
+			String name = (String) parent.getItemAtPosition(position);
+			for (int i = 0; i < savedGestures.size(); i++) {
+        		if(savedGestures.get(i).getName().equals(name)) {
+        			gestureIDDelete = savedGestures.get(i).getID();
+        		}
+			}
 			AlertDialog diaBox = AskOption();
 			diaBox.show();
 			return true;
@@ -94,7 +100,8 @@ public class DeleteGestures extends Activity {
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				removeItem(gestureToDelete);
-			    dialog.dismiss();
+				gestureDataBase.deleteGesture(gestureIDDelete);
+				dialog.dismiss();
 		    }
 		})
 		

@@ -17,6 +17,7 @@ public class Gesture implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	String name;
+	int id = -1;
 	private Acceleration[] accelerationArray;
 	
 	public Gesture(String name, Acceleration [] accelerationArray)
@@ -32,6 +33,14 @@ public class Gesture implements Serializable {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int id) {
+		this.id = id;
 	}
 	
 	public Acceleration[] getAccelerationArray() {

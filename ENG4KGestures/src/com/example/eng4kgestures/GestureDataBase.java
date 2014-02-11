@@ -64,7 +64,10 @@ public class GestureDataBase {
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {
 			byte[] gestureBlob = cur.getBlob(cur.getColumnIndex(MySQLiteHelper.COLUMN_GESTURE));
-			gestureList.add(Gesture.deserializeGesture(gestureBlob));
+			int id = cur.getInt(cur.getColumnIndex(MySQLiteHelper.COLUMN_ID));
+			Gesture gesture = Gesture.deserializeGesture(gestureBlob);
+			gesture.setID(id);
+			gestureList.add(gesture);
 			cur.moveToNext();
 		}
 		// make sure to close the cursor
