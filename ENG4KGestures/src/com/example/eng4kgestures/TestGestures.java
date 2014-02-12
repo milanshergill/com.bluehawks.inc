@@ -251,7 +251,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 					}
 					addItem(selectedGestureName);
 					addItem("" + minDistance);
-					Toast.makeText(getBaseContext(), "Gesture Selected is: " + selectedGestureName, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "Gesture Selected is: " + selectedGestureName, Toast.LENGTH_LONG).show();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
