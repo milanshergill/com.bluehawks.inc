@@ -23,15 +23,16 @@ import android.widget.Button;
 public class CircleOf6 extends Activity {
 
 	final int PICK_CONTACT = 0;
-	Button addContact1, addContact2, addContact3, addContact4, addContact5, addContact6;
-	
+	Button addContact1, addContact2, addContact3, addContact4, addContact5,
+			addContact6;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_circle_of6);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+
 		addContact1 = (Button) findViewById(R.id.Button01);
 		addContact2 = (Button) findViewById(R.id.Button02);
 		addContact3 = (Button) findViewById(R.id.Button03);
@@ -73,57 +74,69 @@ public class CircleOf6 extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void addContact(View v) {
-		Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT);
-	}
-	
-	@SuppressLint("NewApi")
-	@Override 
-	public void onActivityResult(int reqCode, int resultCode, Intent data){
-		
-		super.onActivityResult(reqCode, resultCode, data);
-	
-		switch(reqCode)
-		{
-		   case (PICK_CONTACT):
-		     if (resultCode == Activity.RESULT_OK)
-		     {
-		    	 Uri contactData = data.getData();
-		         Cursor c = managedQuery(contactData, null, null, null, null);
-		         if (c.moveToFirst()) {
-		        	 String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-		        	 String photoURI = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-		        
-		        	 Uri uri = Uri.parse(photoURI);
-		        	 Drawable photo;
-		        	 try {
-		        		    InputStream inputStream = getContentResolver().openInputStream(uri);
-		        		    photo = Drawable.createFromStream(inputStream, photoURI.toString() );
-		        		} catch (FileNotFoundException e) {
-		        		    photo = getResources().getDrawable(R.drawable.ic_launcher);
-		        		}
-		        	  
-		        	 if (photoURI != null) {
-		        		 addContact1.setBackground(photo);
-		        	 }
-				
-				     String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-				
-				     if (hasPhone.equalsIgnoreCase("1")) 
-				     {
-				    	 Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, 
-				    			 ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id, null, null);
-				    	 phones.moveToFirst();
-				    	 String cNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-				    	 // Toast.makeText(getApplicationContext(), cNumber, Toast.LENGTH_SHORT).show();
-				    	 Log.e("Phone number recorded", cNumber);
-				     }
-			    }
-		    }
-		}
+		Intent intent = new Intent(Intent.ACTION_PICK,
+				ContactsContract.Contacts.CONTENT_URI);
+		startActivityForResult(intent, PICK_CONTACT);
 	}
 
+	@SuppressLint("NewApi")
+	@Override
+	public void onActivityResult(int reqCode, int resultCode, Intent data) {
+
+		super.onActivityResult(reqCode, resultCode, data);
+
+		switch (reqCode) {
+		case (PICK_CONTACT):
+			if (resultCode == Activity.RESULT_OK) {
+				Uri contactData = data.getData();
+				Cursor c = managedQuery(contactData, null, null, null, null);
+				if (c.moveToFirst()) {
+					String id = c
+							.getString(c
+									.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+					String photoURI = c
+							.getString(c
+									.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+
+					Uri uri = Uri.parse(photoURI);
+					Drawable photo;
+					try {
+						InputStream inputStream = getContentResolver()
+								.openInputStream(uri);
+						photo = Drawable.createFromStream(inputStream,
+								photoURI.toString());
+					} catch (FileNotFoundException e) {
+						photo = getResources().getDrawable(
+								R.drawable.ic_launcher);
+					}
+
+					if (photoURI != null) {
+						addContact1.setBackground(photo);
+					}
+
+					String hasPhone = c
+							.getString(c
+									.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+					if (hasPhone.equalsIgnoreCase("1")) {
+						Cursor phones = getContentResolver()
+								.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+										null,
+										ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+												+ " = " + id, null, null);
+						phones.moveToFirst();
+						String cNumber = phones
+								.getString(phones
+										.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+						// Toast.makeText(getApplicationContext(), cNumber,
+						// Toast.LENGTH_SHORT).show();
+						Log.e("Phone number recorded", cNumber);
+					}
+				}
+			}
+		}
+	}
 
 }

@@ -32,6 +32,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.circleof6.MainActivity" />
         </activity>
+        <activity android:name="com.example.circleof6.setTimer" >
+        </activity>
+        <activity
+            android:name="com.example.circleof6.SetTimer"
+            android:label="@string/title_activity_set_timer" >
+        </activity>
     </application>
 
 </manifest>
