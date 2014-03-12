@@ -2,11 +2,16 @@ package com.example.circleof6;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,10 +30,14 @@ import android.widget.Toast;
 
 public class CircleOf6 extends Activity {
 
+	private static final int MAX_SMS_MESSAGE_LENGTH = 160;
+	private static final String SMS_SENT = "circle.of.6.sentsms";
+	private static final String SMS_DELIVERED = "circle.of.6.smsdelivered";
 	Button addContact1, addContact2, addContact3, addContact4, addContact5,
 			addContact6;
 	TextView textContact1, textContact2, textContact3, textContact4,
 			textContact5, textContact6;
+	int[] buttonIDs = new int[6];
 	HashMap<Integer, String> contactList;
 
 	@Override
@@ -36,6 +46,8 @@ public class CircleOf6 extends Activity {
 		setContentView(R.layout.activity_circle_of_6);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
+		registerReceiver(receiver, new IntentFilter(SMS_SENT));  // SMS_SENT is a constant
 
 		contactList = new HashMap<Integer, String>();
 
@@ -45,6 +57,13 @@ public class CircleOf6 extends Activity {
 		addContact4 = (Button) findViewById(R.id.Button3);
 		addContact5 = (Button) findViewById(R.id.Button5);
 		addContact6 = (Button) findViewById(R.id.Button4);
+		
+		buttonIDs[0] = addContact1.getId();
+		buttonIDs[1] = addContact2.getId();
+		buttonIDs[2] = addContact3.getId();
+		buttonIDs[3] = addContact4.getId();
+		buttonIDs[4] = addContact5.getId();
+		buttonIDs[5] = addContact6.getId();
 
 		textContact1 = (TextView) findViewById(R.id.textView01);
 		textContact2 = (TextView) findViewById(R.id.textView02);
@@ -87,9 +106,19 @@ public class CircleOf6 extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	protected void onDestroy() {
+	    unregisterReceiver(receiver);
+	    super.onDestroy();
+	}
 
 	public void activateFeature(View v) {
-
+		for (int i = 0; i < 6; i++) {
+			String phoneNumber = contactList.get(buttonIDs[i]);
+			if (phoneNumber != null)
+				sendSMS(phoneNumber, "Hello this message is from Circle of 6");
+		}
 	}
 
 	public void addContact(View v) {
@@ -237,4 +266,54 @@ public class CircleOf6 extends Activity {
 
 		return photo;
 	}
+
+	private void sendSMS(String phonenumber, String message) {
+		SmsManager manager = SmsManager.getDefault();
+
+		PendingIntent piSend = PendingIntent.getBroadcast(this, 0, new Intent(
+				SMS_SENT), 0);
+		PendingIntent piDelivered = PendingIntent.getBroadcast(this, 0,
+				new Intent(SMS_DELIVERED), 0);
+
+		int length = message.length();
+
+		if (length > MAX_SMS_MESSAGE_LENGTH) {
+			ArrayList<String> messagelist = manager.divideMessage(message);
+
+			manager.sendMultipartTextMessage(phonenumber, null,
+					messagelist, null, null);
+		} else {
+			manager.sendTextMessage(phonenumber, null, message, piSend,
+					piDelivered);
+		}
+	}
+
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String message = null;
+
+			switch (getResultCode()) {
+			case Activity.RESULT_OK:
+				message = "Message sent!";
+				break;
+			case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+				message = "Error. Message not sent.";
+				break;
+			case SmsManager.RESULT_ERROR_NO_SERVICE:
+				message = "Error: No service.";
+				break;
+			case SmsManager.RESULT_ERROR_NULL_PDU:
+				message = "Error: Null PDU.";
+				break;
+			case SmsManager.RESULT_ERROR_RADIO_OFF:
+				message = "Error: Radio off.";
+				break;
+			}
+
+			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG)
+					.show();
+		}
+	};
 }
