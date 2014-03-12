@@ -10,6 +10,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	Button circleOf6;
+	Button setTimer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		circleOf6 = (Button) findViewById(R.id.startCirleOf6);
+		setTimer = (Button) findViewById(R.id.setTimer);
 	}
 
 	@Override
@@ -29,6 +31,10 @@ public class MainActivity extends Activity {
 	public void startCircleOf6Activity(View v) {
 		Intent circleOf6 = new Intent(this, CircleOf6.class);
 		startActivity(circleOf6);
+	}
+	public void startsetTimerActivity(View v) {
+		Intent timerActivity = new Intent(this, SetTimer.class);
+		startActivity(timerActivity);
 	}
 	
 }

@@ -5,5 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_circle_of6">CircleOf6</string>
+    <string name="title_activity_set_timer">SetTimer</string>
 
 </resources>
