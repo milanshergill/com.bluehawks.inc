@@ -21,16 +21,19 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class SetTimer extends Activity implements LoginDialogFragment.NoticeDialogListener {
+public class SetTimer extends Activity implements
+		LoginDialogFragment.NoticeLoginDialogListener,
+		TimePickerDialogFragment.NoticeTimePickerDialogListener {
 	private static TextView tvDisplayTime;
 	private static TextView timerView;
 	private static TextView timeView;
-	private Button btnChangeTime;
+	// private Button btnChangeTime;
 	int n;
 
 	TimerTask timerTask;
@@ -42,7 +45,7 @@ public class SetTimer extends Activity implements LoginDialogFragment.NoticeDial
 		tvDisplayTime = (TextView) findViewById(R.id.tvDisplayTime);
 		timerView = (TextView) findViewById(R.id.timerView);
 		timeView = (TextView) findViewById(R.id.timeView);
-		setCurrentTimeOnView(7, 7);
+		setCurrentTimeOnView(0);
 		n = 0;
 	}
 
@@ -54,25 +57,23 @@ public class SetTimer extends Activity implements LoginDialogFragment.NoticeDial
 
 	}
 
-	@SuppressLint("NewApi")
-	public void showTimePickerDialog(View v) {
-		DialogFragment newFragment = new TimePickerFragment();
-		newFragment.show(getFragmentManager(), "timePicker");
-	}
+	// @SuppressLint("NewApi")
+	// public void showTimePickerDialog(View v) {
+	// DialogFragment newFragment = new TimePickerFragment();
+	// newFragment.show(getFragmentManager(), "timePicker");
+	// }
 
 	// display current time
-	public static void setCurrentTimeOnView(int hour, int minute) {
-		// set current time into textview
-		tvDisplayTime.setText(new StringBuilder().append(padding_str(hour))
-				.append(":").append(padding_str(minute)));
+	public static void setCurrentTimeOnView(int minute) {
+
+		tvDisplayTime.setText("Timer set for " + minute + " minutes");
 
 	}
 
 	public void onClickSetTimer(View v) {
-		
+
 		stopTimer();
 		startTimer();
-		n=10;
 		timerView.setText("Timer has started");
 	}
 
@@ -96,26 +97,24 @@ public class SetTimer extends Activity implements LoginDialogFragment.NoticeDial
 			public void run() {
 				handler.post(new Runnable() {
 					public void run() {
-						if(n==0)
-						{
+						if (n == 0) {
 							timerTask.cancel();
 							timerView.setText("Timer Finished");
-							Toast.makeText(getApplicationContext(), "Timer Finished!",
-									   Toast.LENGTH_LONG).show();
-							showNoticeDialog();
-							
-							
+							Toast.makeText(getApplicationContext(),
+									"Timer Finished!", Toast.LENGTH_LONG)
+									.show();
+							showPasswordDialog();
+
 						}
-						timeView.setText("Time left "+ n + " Seconds");
+						timeView.setText("Time left " + n + " Seconds");
 						n--;
-					
+
 					}
 				});
 			}
 		};
 
 		ourtimer.schedule(timerTask, 0, 1000);
-
 
 	}
 
@@ -127,126 +126,251 @@ public class SetTimer extends Activity implements LoginDialogFragment.NoticeDial
 			n = 0;
 		}
 	}
-	 public void showNoticeDialog() {
-	        // Create an instance of the dialog fragment and show it
-		 LoginDialogFragment dialog = new LoginDialogFragment();
-	        dialog.show(getFragmentManager(), "Password Fragment");
-	    }
+
+	public void showPasswordDialog() {
+		// Create an instance of the dialog fragment and show it
+		LoginDialogFragment dialog = new LoginDialogFragment();
+		dialog.show(getFragmentManager(), "Password Fragment");
+
+	}
 
 	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
+	public void onLoginSignInClick(DialogFragment dialog) {
 		// TODO Auto-generated method stub
 		Toast.makeText(getApplicationContext(), "Password Correct",
-				   Toast.LENGTH_LONG).show();	
+				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
+	public void onLoginCancelClick(DialogFragment dialog) {
 		// TODO Auto-generated method stub
 		Toast.makeText(getApplicationContext(), "No password entered",
-				   Toast.LENGTH_LONG).show();
-		
+				Toast.LENGTH_LONG).show();
+		showPasswordDialog();
+
 	}
 
-	public void onWrongPassowrdClick(DialogFragment dialog) {
+	public void onLoginWrongPasswordClick(DialogFragment dialog) {
 		// TODO Auto-generated method stub
 		Toast.makeText(getApplicationContext(), "Wrong password",
-				   Toast.LENGTH_LONG).show();
-		
+				Toast.LENGTH_LONG).show();
+		showPasswordDialog();
+
 	}
 
-	    // The dialog fragment receives a reference to this Activity through the
-	    // Fragment.onAttach() callback, which it uses to call the following methods
-	    // defined by the NoticeDialogFragment.NoticeDialogListener interface
-
-	
-
-
-}
-
-class TimePickerFragment extends DialogFragment implements
-		TimePickerDialog.OnTimeSetListener {
+	public void showTimerPickerDialog(View v) {
+		// Create an instance of the dialog fragment and show it
+		TimePickerDialogFragment dialog = new TimePickerDialogFragment();
+		dialog.show(getFragmentManager(), "TimePickerFragment");
+	}
 
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		// Use the current time as the default values for the picker
-		final Calendar c = Calendar.getInstance();
-		int hour = c.get(Calendar.HOUR_OF_DAY);
-		int minute = c.get(Calendar.MINUTE);
+	public void onTimePickerTimeSetClick(DialogFragment dialog, int hour,
+			int min) {
+		// TODO Auto-generated method stub
+		int mins = hour * 60 + min;
+		n = mins *60;
+		setCurrentTimeOnView(mins);
+		stopTimer();
 
-		// Create a new instance of TimePickerDialog and return it
-		return new TimePickerDialog(getActivity(), this, hour, minute,
-				DateFormat.is24HourFormat(getActivity()));
 	}
 
-	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		// Do something with the time chosen by the user
-		SetTimer.setCurrentTimeOnView(hourOfDay, minute);
+	@Override
+	public void onTimePickerCancelClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getApplicationContext(), "Time Cancelled",
+				Toast.LENGTH_LONG).show();
 	}
+
 }
 
+// /*
+// * time picker dialog
+// */
+//
+// class TimePickerFragment extends DialogFragment implements
+// TimePickerDialog.OnTimeSetListener {
+//
+// @Override
+// public Dialog onCreateDialog(Bundle savedInstanceState) {
+// // Use the current time as the default values for the picker
+// final Calendar c = Calendar.getInstance();
+// int hour = c.get(Calendar.HOUR_OF_DAY);
+// int minute = c.get(Calendar.MINUTE);
+//
+// // Create a new instance of TimePickerDialog and return it
+// // return new TimePickerDialog(getActivity(), this, hour, minute,
+// // DateFormat.is24HourFormat(getActivity()));
+// return new TimePickerDialog(getActivity(), this, hour, minute, true);
+// }
+//
+// public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+// // Do something with the time chosen by the user
+// SetTimer.timePickedFromDialog(hourOfDay, minute);
+// }
+// }
+
+/*
+ * login dialog
+ */
 class LoginDialogFragment extends DialogFragment {
-	 /* The activity that creates an instance of this dialog fragment must
-     * implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it. */
-    public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
-        public void onWrongPassowrdClick(DialogFragment dialog);
-    }
-    
-    // Use this instance of the interface to deliver action events
-    NoticeDialogListener mListener;
-    
-    // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (NoticeDialogListener) activity;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
-                    + " must implement NoticeDialogListener");
-        }
-    }
+	/*
+	 * The activity that creates an instance of this dialog fragment must
+	 * implement this interface in order to receive event callbacks. Each method
+	 * passes the DialogFragment in case the host needs to query it.
+	 */
+	public interface NoticeLoginDialogListener {
+		public void onLoginSignInClick(DialogFragment dialog);
+
+		public void onLoginCancelClick(DialogFragment dialog);
+
+		public void onLoginWrongPasswordClick(DialogFragment dialog);
+	}
+
+	// Use this instance of the interface to deliver action events
+	NoticeLoginDialogListener mListener;
+
+	// Override the Fragment.onAttach() method to instantiate the
+	// NoticeDialogListener
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// Verify that the host activity implements the callback interface
+		try {
+			// Instantiate the NoticeDialogListener so we can send events to the
+			// host
+			mListener = (NoticeLoginDialogListener) activity;
+		} catch (ClassCastException e) {
+			// The activity doesn't implement the interface, throw exception
+			throw new ClassCastException(activity.toString()
+					+ " must implement NoticeDialogListener");
+		}
+	}
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-	    LayoutInflater inflater = getActivity().getLayoutInflater();
-	    View promptsView = inflater.inflate(R.layout.activity_ask_for_password, null);
-        final EditText username = (EditText) promptsView
-                .findViewById(R.id.username);
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		// View promptsView =
+		// inflater.inflate(R.layout.activity_ask_for_password,
+		// null);
+		View promptsView = inflater.inflate(R.layout.activity_ask_for_password,
+				null);
+		final EditText username = (EditText) promptsView
+				.findViewById(R.id.username);
 
-	    // Inflate and set the layout for the dialog
-	    // Pass null as the parent view because its going in the dialog layout
-	   // builder.setView(inflater.inflate(R.layout.activity_ask_for_password, null))
-        builder.setView(promptsView)
-	    // Add action buttons
-	           .setPositiveButton("Sign In", new DialogInterface.OnClickListener() {
-	               @Override
-	               public void onClick(DialogInterface dialog, int id) {
-	                   // sign in the user ...
-	            	   String text = username.getText().toString();
-	            	   if(username.getText().toString().equals("jatin"))
-	            	   {
-	            		   mListener.onDialogPositiveClick(LoginDialogFragment.this);
-	            	   }
-	            	   else{
-	            		   mListener.onWrongPassowrdClick(LoginDialogFragment.this);
-	            		   
-	            	   }
-	               }
-	           })
-	           .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	               public void onClick(DialogInterface dialog, int id) {
-	            	   mListener.onDialogNegativeClick(LoginDialogFragment.this);
-	               }
-	           });      
-	    return builder.create();
-	}	
+		// Inflate and set the layout for the dialog
+		// Pass null as the parent view because its going in the dialog layout
+		// builder.setView(inflater.inflate(R.layout.activity_ask_for_password,
+		// null))
+		builder.setView(promptsView)
+				// Add action buttons
+				.setPositiveButton("Sign In",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								// sign in the user ...
+								String text = username.getText().toString();
+								if (username.getText().toString()
+										.equals("jatin")) {
+									mListener
+											.onLoginSignInClick(LoginDialogFragment.this);
+								} else {
+									mListener
+											.onLoginWrongPasswordClick(LoginDialogFragment.this);
+
+								}
+							}
+						})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								mListener
+										.onLoginCancelClick(LoginDialogFragment.this);
+							}
+						});
+		return builder.create();
+	}
 }
 
+/*
+ * login dialog
+ */
+class TimePickerDialogFragment extends DialogFragment {
+	/*
+	 * The activity that creates an instance of this dialog fragment must
+	 * implement this interface in order to receive event callbacks. Each method
+	 * passes the DialogFragment in case the host needs to query it.
+	 */
+	public interface NoticeTimePickerDialogListener {
+		public void onTimePickerTimeSetClick(DialogFragment dialog, int hour,
+				int min);
+
+		public void onTimePickerCancelClick(DialogFragment dialog);
+
+	}
+
+	// Use this instance of the interface to deliver action events
+	NoticeTimePickerDialogListener mListener;
+
+	// Override the Fragment.onAttach() method to instantiate the
+	// NoticeDialogListener
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// Verify that the host activity implements the callback interface
+		try {
+			// Instantiate the NoticeDialogListener so we can send events to the
+			// host
+			mListener = (NoticeTimePickerDialogListener) activity;
+		} catch (ClassCastException e) {
+			// The activity doesn't implement the interface, throw exception
+			throw new ClassCastException(activity.toString()
+					+ " must implement NoticeTimePickerDialogListener");
+		}
+	}
+
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		View promptsView = inflater.inflate(R.layout.activity_pick_time, null);
+		final NumberPicker hourPicker = (NumberPicker) promptsView
+				.findViewById(R.id.hourPicker);
+		hourPicker.setMinValue(0);
+		hourPicker.setMaxValue(20);
+		final NumberPicker minPicker = (NumberPicker) promptsView
+				.findViewById(R.id.minPicker);
+		minPicker.setMinValue(0);
+		minPicker.setMaxValue(59);
+
+		// Inflate and set the layout for the dialog
+		// Pass null as the parent view because its going in the dialog layout
+		// builder.setView(inflater.inflate(R.layout.activity_ask_for_password,
+		// null))
+		builder.setView(promptsView)
+				// Add action buttons
+				.setPositiveButton("Set Timer",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								// sign in the user ...
+								// String text = username.getText().toString();
+								mListener.onTimePickerTimeSetClick(
+										TimePickerDialogFragment.this,
+										hourPicker.getValue(),
+										minPicker.getValue());
+							}
+						})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								mListener
+										.onTimePickerCancelClick(TimePickerDialogFragment.this);
+							}
+						});
+		return builder.create();
+	}
+}

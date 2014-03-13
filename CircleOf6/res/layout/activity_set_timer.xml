@@ -23,7 +23,7 @@
         android:layout_below="@+id/tvDisplayTime"
         android:layout_marginLeft="34dp"
         android:layout_marginTop="54dp"
-        android:onClick="showTimePickerDialog"
+        android:onClick="showTimerPickerDialog"
         android:text="btnChangeTime" />
 
     <TextView
