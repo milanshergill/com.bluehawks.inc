@@ -65,6 +65,11 @@ public class MainActivity extends Activity {
    
     }
     
+    
+    
+    
+    
+    
  // Acquire a reference to the system Location Manager
     //LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     
