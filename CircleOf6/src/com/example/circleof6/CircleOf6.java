@@ -1,10 +1,12 @@
 package com.example.circleof6;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -12,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -38,26 +41,28 @@ public class CircleOf6 extends Activity {
 	TextView textContact1, textContact2, textContact3, textContact4,
 			textContact5, textContact6;
 	int[] buttonIDs = new int[6];
-	HashMap<Integer, String> contactList;
+	HashMap<Integer, CircleFriend> contactList;
 
+	@SuppressLint("UseSparseArrays")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_circle_of_6);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
-		registerReceiver(receiver, new IntentFilter(SMS_SENT));  // SMS_SENT is a constant
 
-		contactList = new HashMap<Integer, String>();
+		registerReceiver(receiver, new IntentFilter(SMS_SENT)); // SMS_SENT is a
+																// constant
 
-		addContact1 = (Button) findViewById(R.id.Button6);
+		contactList = new HashMap<Integer, CircleFriend>();
+
+		addContact1 = (Button) findViewById(R.id.Button1);
 		addContact2 = (Button) findViewById(R.id.Button2);
-		addContact3 = (Button) findViewById(R.id.Button1);
-		addContact4 = (Button) findViewById(R.id.Button3);
+		addContact3 = (Button) findViewById(R.id.Button3);
+		addContact4 = (Button) findViewById(R.id.Button4);
 		addContact5 = (Button) findViewById(R.id.Button5);
-		addContact6 = (Button) findViewById(R.id.Button4);
-		
+		addContact6 = (Button) findViewById(R.id.Button6);
+
 		buttonIDs[0] = addContact1.getId();
 		buttonIDs[1] = addContact2.getId();
 		buttonIDs[2] = addContact3.getId();
@@ -71,6 +76,8 @@ public class CircleOf6 extends Activity {
 		textContact4 = (TextView) findViewById(R.id.textView04);
 		textContact5 = (TextView) findViewById(R.id.textView05);
 		textContact6 = (TextView) findViewById(R.id.textView06);
+		
+//		clearData();
 	}
 
 	/**
@@ -108,16 +115,142 @@ public class CircleOf6 extends Activity {
 	}
 	
 	@Override
+	public void onStop() {
+		super.onStop(); // Always call the superclass method first
+		
+		// Save the data before stopping
+		try {
+			saveToSharedFile(0, true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart(); // Always call the superclass method first
+		
+		// Set the data back before starting
+		SharedPreferences sharedPref = getPreferences(
+				Context.MODE_PRIVATE);
+		for (int i = 0; i < 6; i++) {
+			String buttonStr = Integer.toString(buttonIDs[i]);
+			String friendInfo = sharedPref.getString(buttonStr, null);
+			if (friendInfo != null) {
+				CircleFriend friend = null;
+				try {
+					friend = (CircleFriend) ObjectSerializer.deserialize(friendInfo);
+					Log.i("SharedPreference", "Key: " + i + " " + friend.getName());
+					Log.i("SharedPreference", "Value: " + i + " " + friend.getPhotoURI());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				contactList.put(buttonIDs[i], friend);
+			}
+		}
+		updateCircles();
+	}
+
+	@Override
 	protected void onDestroy() {
-	    unregisterReceiver(receiver);
-	    super.onDestroy();
+		unregisterReceiver(receiver);
+		super.onDestroy();
+	}
+	
+	private void saveToSharedFile(int buttonID, boolean checkAll) throws IOException {
+		// Save the circle of 6 data
+		SharedPreferences sharedPref = getPreferences(
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		
+		if (!checkAll) {
+			String buttonStr = Integer.toString(buttonID);
+			String data = ObjectSerializer.serialize(contactList.get(buttonID));
+			editor.putString(buttonStr, data);
+		}
+		else {
+			for (int i = 0; i < 6; i++) {
+				if (contactList.get(buttonIDs[i]) != null) {
+					String buttonStr = Integer.toString(buttonIDs[i]);
+					String data = ObjectSerializer.serialize(contactList.get(buttonIDs[i]));
+					editor.putString(buttonStr, data);
+				}
+			}
+		}
+		editor.commit();
+	}
+	
+	private void clearData() {
+		// Clear all the preferences in the shared preference file
+		SharedPreferences sharedPref = getPreferences(
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+
+		for (int i = 0; i < 6; i++) {
+			String buttonStr = Integer.toString(buttonIDs[i]);
+			editor.remove(buttonStr);
+		}
+		editor.commit();
+	}
+
+	@SuppressLint("NewApi")
+	private void updateCircles() {
+		for (int i = 0; i < 6; i++) {
+			if (contactList.get(buttonIDs[i]) != null && contactList.get(buttonIDs[i]).getPhoneNumber() != null) {
+				if(buttonIDs[i] == buttonIDs[0]){
+					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
+						addContact1.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
+								.getPhotoURI()));
+					if (contactList.get(buttonIDs[i]).getName() != null)
+						textContact1.setText(contactList.get(buttonIDs[i]).getName());
+				}
+				else if(buttonIDs[i] == buttonIDs[1]){ 
+					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
+						addContact2.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
+								.getPhotoURI()));
+					if (contactList.get(buttonIDs[i]).getName() != null)
+						textContact2.setText(contactList.get(buttonIDs[i]).getName());
+				}
+				else if(buttonIDs[i] == buttonIDs[2]){ 
+					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
+						addContact3.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
+								.getPhotoURI()));
+					if (contactList.get(buttonIDs[i]).getName() != null)
+						textContact3.setText(contactList.get(buttonIDs[i]).getName());
+				}
+				else if(buttonIDs[i] == buttonIDs[3]){ 
+					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
+						addContact4.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
+								.getPhotoURI()));
+					if (contactList.get(buttonIDs[i]).getName() != null)
+						textContact4.setText(contactList.get(buttonIDs[i]).getName());
+				}
+				else if(buttonIDs[i] == buttonIDs[4]){ 
+					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
+						addContact5.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
+								.getPhotoURI()));
+					if (contactList.get(buttonIDs[i]).getName() != null)
+						textContact5.setText(contactList.get(buttonIDs[i]).getName());
+				}
+				else if(buttonIDs[i] == buttonIDs[5]){ 
+					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
+						addContact6.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
+								.getPhotoURI()));
+					if (contactList.get(buttonIDs[i]).getName() != null)
+						textContact6.setText(contactList.get(buttonIDs[i]).getName());
+				}
+			}
+		}
 	}
 
 	public void activateFeature(View v) {
 		for (int i = 0; i < 6; i++) {
-			String phoneNumber = contactList.get(buttonIDs[i]);
-			if (phoneNumber != null)
-				sendSMS(phoneNumber, "Hello this message is from Circle of 6");
+			CircleFriend friend = contactList.get(buttonIDs[i]);
+			if (friend != null && friend.getPhoneNumber() != null)
+				sendSMS(friend.getPhoneNumber(),
+						"Hello this message is from Circle of 6");
 		}
 	}
 
@@ -132,45 +265,45 @@ public class CircleOf6 extends Activity {
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
 		super.onActivityResult(reqCode, resultCode, data);
 		switch (reqCode) {
-		case (R.id.Button6):
+		case (R.id.Button1):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact1, textContact1,
-						retrieveContactName(data), retrieveContactPhoto(data),
+						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
 						retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button2):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact2, textContact2,
-						retrieveContactName(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
-			}
-			break;
-		case (R.id.Button1):
-			if (resultCode == Activity.RESULT_OK) {
-				saveContact(addContact3, textContact3,
-						retrieveContactName(data), retrieveContactPhoto(data),
+						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
 						retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button3):
 			if (resultCode == Activity.RESULT_OK) {
+				saveContact(addContact3, textContact3,
+						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
+						retrievePhoneNumber(data));
+			}
+			break;
+		case (R.id.Button4):
+			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact4, textContact4,
-						retrieveContactName(data), retrieveContactPhoto(data),
+						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
 						retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button5):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact5, textContact5,
-						retrieveContactName(data), retrieveContactPhoto(data),
+						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
 						retrievePhoneNumber(data));
 			}
 			break;
-		case (R.id.Button4):
+		case (R.id.Button6):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact6, textContact6,
-						retrieveContactName(data), retrieveContactPhoto(data),
+						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
 						retrievePhoneNumber(data));
 			}
 			break;
@@ -178,14 +311,24 @@ public class CircleOf6 extends Activity {
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	private void saveContact(Button button, TextView textView, String name,
+	private void saveContact(Button button, TextView textView, String name, String photoURI,
 			Drawable contactPhoto, String contactNumber) {
 		if (contactNumber != null) {
-			if (contactPhoto != null)
-				button.setBackground(contactPhoto);
-			if (name != null)
-				textView.setText(name);
-			contactList.put(button.getId(), contactNumber);
+			CircleFriend newFriend = new CircleFriend(name, contactNumber,
+					photoURI);
+			if (photoURI != null && contactPhoto != null)
+				button.setBackground(getContactPhoto(newFriend.getPhotoURI()));
+			if (newFriend.getName() != null)
+				textView.setText(newFriend.getName());
+			int id = button.getId();
+			contactList.put(id, newFriend);
+			try {
+				int id1 = button.getId();
+				saveToSharedFile(id1, false);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else
 			Toast.makeText(
 					getApplicationContext(),
@@ -193,6 +336,7 @@ public class CircleOf6 extends Activity {
 					Toast.LENGTH_LONG).show();
 	}
 
+	@SuppressWarnings("deprecation")
 	private String retrievePhoneNumber(Intent data) {
 
 		String phoneNumber = null;
@@ -223,6 +367,7 @@ public class CircleOf6 extends Activity {
 		return phoneNumber;
 	}
 
+	@SuppressWarnings("deprecation")
 	private String retrieveContactName(Intent data) {
 
 		String name = null;
@@ -230,8 +375,6 @@ public class CircleOf6 extends Activity {
 		Uri contactData = data.getData();
 		Cursor c = managedQuery(contactData, null, null, null, null);
 		if (c.moveToFirst()) {
-			String id = c.getString(c
-					.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
 			name = c.getString(c
 					.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 		}
@@ -239,6 +382,8 @@ public class CircleOf6 extends Activity {
 		return name;
 	}
 
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private Drawable retrieveContactPhoto(Intent data) {
 		Drawable photo = null;
 
@@ -248,23 +393,47 @@ public class CircleOf6 extends Activity {
 			String photoURI = c
 					.getString(c
 							.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-			Uri uri = null;
-
-			if (photoURI != null) {
-				uri = Uri.parse(photoURI);
-				try {
-					InputStream inputStream = getContentResolver()
-							.openInputStream(uri);
-					photo = Drawable.createFromStream(inputStream,
-							photoURI.toString());
-				} catch (FileNotFoundException e) {
-					photo = getResources().getDrawable(R.drawable.ic_launcher);
-				}
-			} else
-				photo = getResources().getDrawable(R.drawable.ic_launcher);
+			
+			photo = getContactPhoto(photoURI);
 		}
 
 		return photo;
+	}
+	
+	
+	
+	private Drawable getContactPhoto(String photoURI) {
+		Drawable photo = null;
+		
+		Uri uri = null;
+		if (photoURI != null) {
+			uri = Uri.parse(photoURI);
+			try {
+				InputStream inputStream = getContentResolver()
+						.openInputStream(uri);
+				photo = Drawable.createFromStream(inputStream,
+						photoURI.toString());
+			} catch (FileNotFoundException e) {
+				photo = getResources().getDrawable(R.drawable.ic_launcher);
+			}
+		} else
+			photo = getResources().getDrawable(R.drawable.ic_launcher);
+		
+		return photo;
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@SuppressWarnings("deprecation")
+	private String retrievePhotoURI(Intent data) {
+		String photoURI = null;
+		Uri contactData = data.getData();
+		Cursor c = managedQuery(contactData, null, null, null, null);
+		if (c.moveToFirst()) {
+			photoURI = c
+					.getString(c
+							.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+		}
+		return photoURI;
 	}
 
 	private void sendSMS(String phonenumber, String message) {
@@ -280,8 +449,8 @@ public class CircleOf6 extends Activity {
 		if (length > MAX_SMS_MESSAGE_LENGTH) {
 			ArrayList<String> messagelist = manager.divideMessage(message);
 
-			manager.sendMultipartTextMessage(phonenumber, null,
-					messagelist, null, null);
+			manager.sendMultipartTextMessage(phonenumber, null, messagelist,
+					null, null);
 		} else {
 			manager.sendTextMessage(phonenumber, null, message, piSend,
 					piDelivered);
