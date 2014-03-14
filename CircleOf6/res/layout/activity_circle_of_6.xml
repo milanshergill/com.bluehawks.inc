@@ -136,6 +136,6 @@
         android:layout_alignRight="@+id/Button6"
         android:layout_below="@+id/Button6"
         android:maxLength="7"
-        android:text="Milan" />
+        android:text="TextView" />
 
 </RelativeLayout>
