@@ -6,7 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_circle_of6">CircleOf6</string>
     <string name="title_activity_set_timer">SetTimer</string>
-
-    
+    <string name="title_activity_send_data_to_server">SendDataToServer</string>
 
 </resources>
