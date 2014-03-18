@@ -31,6 +31,7 @@ public class SendDataToServer extends Activity {
 		setContentView(R.layout.activity_send_data_to_server);
 		dataStatus = (TextView)findViewById(R.id.dataStatus);
 		dataStatus.setText("Initialized");
+		//Parse.initialize(this, "aiizf8TiGbMBXOuqChsatoDvaD0MpWyjaz5tuiQs", "qVha5rt4cvvxb32060SZfiRF9YfNRvXB8Nz9Bhhl");
 	}
 
 	public void onClickSendData(View v){

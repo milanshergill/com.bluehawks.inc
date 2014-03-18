@@ -1,5 +1,9 @@
 package com.example.safetyproject;
 
+import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
+import com.parse.PushService;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
@@ -13,6 +17,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		// To track statistics around application
+//        ParseAnalytics.trackAppOpened(getIntent());
+// 
+//        // inform the Parse Cloud that it is ready for notifications
+//        PushService.setDefaultPushCallback(this,  MainActivity.class);
+//        ParseInstallation.getCurrentInstallation().saveInBackground();
 	}
 
 	@Override

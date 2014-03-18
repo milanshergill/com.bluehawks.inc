@@ -17,8 +17,8 @@ import android.widget.TextView;
 public class SendDataToServer extends Activity {
     private ProgressDialog pDialog;
 	// URL to get contacts JSON
-	private static String url = "http://10.24.2.26:8080/GoogleMap/helpMe";
-	private static String url1 = "http://10.24.2.26:8080/GoogleMap/ctrl";
+	//private static String url = "http://10.24.2.26:8080/GoogleMap/helpMe";
+	private static String url = "http://107.170.96.216:8080/NewGoogleMap/ctrl";
 	private static final String TAG_NAME = "name";
 	private static final String TAG_AGE = "age";
 
