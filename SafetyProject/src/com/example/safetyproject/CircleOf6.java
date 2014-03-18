@@ -1,4 +1,4 @@
-package com.example.circleof6;
+package com.example.safetyproject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

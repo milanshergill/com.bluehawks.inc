@@ -36,5 +36,9 @@ public class MainActivity extends Activity {
 		Intent timerActivity = new Intent(this, SetTimer.class);
 		startActivity(timerActivity);
 	}
+	public void startSendDataToServerActivity(View v) {
+		Intent SendDataToServerActivity = new Intent(this, SendDataToServer.class);
+		startActivity(SendDataToServerActivity);
+	}
 	
 }
