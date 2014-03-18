@@ -1,5 +1,6 @@
 package com.example.safetyproject;
 
+import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
@@ -23,7 +24,12 @@ public class MainActivity extends Activity {
 //        // inform the Parse Cloud that it is ready for notifications
 //        PushService.setDefaultPushCallback(this,  MainActivity.class);
 //        ParseInstallation.getCurrentInstallation().saveInBackground();
+		
+		 Parse.initialize(this, "aiizf8TiGbMBXOuqChsatoDvaD0MpWyjaz5tuiQs", "qVha5rt4cvvxb32060SZfiRF9YfNRvXB8Nz9Bhhl");
+		 PushService.setDefaultPushCallback(this, MainActivity.class);
+		 ParseAnalytics.trackAppOpened(getIntent());
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
