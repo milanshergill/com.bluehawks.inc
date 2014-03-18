@@ -7,76 +7,49 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-    
+
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/mytext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Safety First" />
+
+        <Button
+            android:id="@+id/updateLocation"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_weight="0.69"
+            android:onClick="onClickUpdateLocation"
+            android:text="Update First Response Info" />
+
+        <Button
+            android:id="@+id/feature1"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:text="Alert" />
         
-     <Button
-        android:id="@+id/updateLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:onClick="onClickUpdateLocation"
-        android:text="Update Location and Emergency Info" />
+		<Button
+	        android:id="@+id/Button01"
+	        android:layout_width="match_parent"
+	        android:layout_height="72dp"
+	        android:text="Watch My Back" />
 
-    <TextView
-        android:id="@+id/mytext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Safety First" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please enter your name" />
-    
-    <EditText
-        android:id="@+id/EditTextName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" >
-
-        <requestFocus />
-    </EditText>
-
-   
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:text="Age?" />
-
-    <EditText
-        android:id="@+id/EditTextAge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
-
-    
-  	<TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:text="Immediate Health Needs?" />
-    
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine" />
-
-  
-
+	    <Button
+	        android:id="@+id/Button02"
+	        android:layout_width="match_parent"
+	        android:layout_height="72dp"
+	        android:text="I am here" />     
+	           
     </LinearLayout>
+
+
 
 </RelativeLayout>
