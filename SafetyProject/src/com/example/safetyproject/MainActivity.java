@@ -1,5 +1,7 @@
 package com.example.safetyproject;
 
+import com.example.eng4kgestures.GestureActivity;
+import com.example.eng4kgestures.TestGestures;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
@@ -64,5 +66,14 @@ public class MainActivity extends Activity {
 		Intent addInformation = new Intent(this, LocationActivity.class);
 		startActivity(addInformation);
 	}
-
+	
+	public void startGestureRecognition(View v) {
+		Intent gestureRecoginition = new Intent(this, GestureActivity.class);
+		startActivity(gestureRecoginition);
+	}
+	
+	public void activateGestures(View v) {
+		Intent activateGestures = new Intent(this, TestGestures.class);
+		startActivity(activateGestures);
+	}
 }

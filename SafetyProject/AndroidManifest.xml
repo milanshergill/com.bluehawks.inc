@@ -42,6 +42,10 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+        <activity android:name="com.example.eng4kgestures.GestureActivity"></activity>
+        <activity android:name="com.example.eng4kgestures.DeleteGestures"></activity>
+        <activity android:name="com.example.eng4kgestures.RecordGestures"></activity>
+        <activity android:name="com.example.eng4kgestures.TestGestures"></activity>
     </application>
 
 </manifest>
