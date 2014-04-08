@@ -61,7 +61,13 @@
             android:name="com.example.safetyproject.NewLocationActivity"
             android:label="@string/title_activity_new_location" >
         </activity>
-        <activity android:name="NewLocationActivity"></activity>
+        <activity android:name="com.example.safetyproject.NewLocationActivity" >
+        </activity>
+        <activity
+            android:name="com.example.safetyproject.UserProfileActivity"
+            android:label="@string/title_activity_user_profile" >
+        </activity>
+        <activity android:name="UserProfile"></activity>
     </application>
 
 </manifest>
