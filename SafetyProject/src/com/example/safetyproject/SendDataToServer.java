@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-
-import android.net.MailTo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -46,7 +43,8 @@ public class SendDataToServer extends Activity {
 
 	public void onClickSendData(View v) {
 		// Retrieve all the latest user information
-		SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		String nameFieldID = Integer.toString(R.id.nameText);
 		String emailFieldID = Integer.toString(R.id.emailText);
 		String healthFieldID = Integer.toString(R.id.healthText);
@@ -114,8 +112,8 @@ public class SendDataToServer extends Activity {
 			dataStatus.setText("Data Sent");
 			serverResponse.setText(jsonStr);
 			informationSent.setText("Name: " + userName + "\nEmail: "
-					+ userEmail + "\nHealth: " + userEmail + "Location: "
-					+ userLocation);
+					+ userEmail + "\nHealth: " + userHealthNeeds
+					+ "\nLocation: " + userLocation);
 		}
 	}
 

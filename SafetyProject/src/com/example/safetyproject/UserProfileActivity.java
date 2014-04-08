@@ -24,6 +24,9 @@ public class UserProfileActivity extends Activity {
 		nameText = (EditText) findViewById(R.id.nameText);
 		emailText = (EditText) findViewById(R.id.emailText);
 		healthText = (EditText) findViewById(R.id.healthText);
+		
+		// Enable this to clear user data
+//		clearData();
 	}
 
 	@Override
@@ -91,7 +94,8 @@ public class UserProfileActivity extends Activity {
 
 	private void saveToSharedFile() throws IOException {
 		// Save user profile data
-		SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 
 		// Save user name
@@ -118,7 +122,8 @@ public class UserProfileActivity extends Activity {
 
 	private void loadFromSharedFile() {
 		// Load user profile data
-		SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		String nameFieldID = Integer.toString(nameText.getId());
 		String emailFieldID = Integer.toString(emailText.getId());
 		String healthFieldID = Integer.toString(healthText.getId());
@@ -137,7 +142,8 @@ public class UserProfileActivity extends Activity {
 
 	private void clearData() {
 		// Clear all the preferences in the shared preference file
-		SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 
 		editor.remove(Integer.toString(nameText.getId()));

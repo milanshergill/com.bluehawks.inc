@@ -132,8 +132,8 @@ public class CircleOf6 extends Activity {
 		super.onStart(); // Always call the superclass method first
 		
 		// Set the data back before starting
-		SharedPreferences sharedPref = getPreferences(
-				Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		for (int i = 0; i < 6; i++) {
 			String buttonStr = Integer.toString(buttonIDs[i]);
 			String friendInfo = sharedPref.getString(buttonStr, null);
@@ -161,8 +161,8 @@ public class CircleOf6 extends Activity {
 	
 	private void saveToSharedFile(int buttonID, boolean checkAll) throws IOException {
 		// Save the circle of 6 data
-		SharedPreferences sharedPref = getPreferences(
-				Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 		
 		if (!checkAll) {
@@ -184,8 +184,8 @@ public class CircleOf6 extends Activity {
 	
 	private void clearData() {
 		// Clear all the preferences in the shared preference file
-		SharedPreferences sharedPref = getPreferences(
-				Context.MODE_PRIVATE);
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 
 		for (int i = 0; i < 6; i++) {
