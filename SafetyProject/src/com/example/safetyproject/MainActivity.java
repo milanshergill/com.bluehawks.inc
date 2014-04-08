@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void startAddInformationActivity(View v) {
-		Intent addInformation = new Intent(this, LocationActivity.class);
+		Intent addInformation = new Intent(this, NewLocationActivity.class);
 		startActivity(addInformation);
 	}
 	
