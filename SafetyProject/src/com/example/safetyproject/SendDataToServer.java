@@ -41,8 +41,6 @@ public class SendDataToServer extends Activity {
 	 * Async task class to get json by making HTTP call
 	 * */
 	private class SendDataToServerHelper extends AsyncTask<Void, Void, Void> {
-
-		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
