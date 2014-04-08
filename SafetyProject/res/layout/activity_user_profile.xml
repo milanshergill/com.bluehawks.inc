@@ -27,6 +27,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="25dp"
         android:textSize="16dp"
+        android:textStyle="bold"
         android:text="Name" />
 
     <TextView
@@ -37,6 +38,7 @@
         android:layout_below="@+id/nameText"
         android:layout_marginTop="25dp"
         android:textSize="16dp"
+        android:textStyle="bold"
         android:text="Email Address" />
     
      <TextView
@@ -47,6 +49,7 @@
         android:layout_below="@+id/emailText"
         android:layout_marginTop="25dp"
         android:textSize="16dp"
+        android:textStyle="bold"
         android:text="Mention any health/emergency needs" />
 
     <EditText

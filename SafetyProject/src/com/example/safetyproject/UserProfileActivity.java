@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class UserProfileActivity extends Activity {
 
@@ -57,9 +58,12 @@ public class UserProfileActivity extends Activity {
 			userName = nameText.getText().toString();
 			userEmail = emailText.getText().toString();
 			userHealthNeeds = healthText.getText().toString();
+
+			Toast.makeText(getApplicationContext(),
+					"Profile saved successfully.", Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	private void updateFields() {
 		if (userName != null && !userName.isEmpty())
 			nameText.setText(userName);

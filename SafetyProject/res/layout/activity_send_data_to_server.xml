@@ -26,4 +26,22 @@
         android:text="sendData" 
         android:onClick="onClickSendData"/>
 
+    <TextView
+        android:id="@+id/serverResponse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sendData"
+        android:layout_below="@+id/sendData"
+        android:layout_marginTop="39dp"
+        android:text="Server Response:" />
+
+    <TextView
+        android:id="@+id/infoSent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/serverResponse"
+        android:layout_below="@+id/serverResponse"
+        android:layout_marginTop="26dp"
+        android:text="Information Sent is:" />
+
 </RelativeLayout>
