@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -42,10 +43,15 @@ public class IAmHereActivity extends Activity implements
 	private boolean blink; // controls the blinking .. on and off
 	CountDownTimer countDownTimer;
 
+	LoginDialogFragment passwordDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iam_here);
+
+		registerReceiver(receiver, new IntentFilter(SMS_SENT)); // SMS_SENT is a
+																// constant
 
 		timerText = (TextView) findViewById(R.id.timerText);
 		eventInfoText = (TextView) findViewById(R.id.eventText);
@@ -69,54 +75,66 @@ public class IAmHereActivity extends Activity implements
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(receiver);
+		super.onDestroy();
+	}
+
+	/******
+	 * 
+	 * Password Dialog Box Code
+	 * 
+	 * ******/
 	public void showPasswordDialog() {
 		// Create an instance of the dialog fragment and show it
-		LoginDialogFragment dialog = new LoginDialogFragment();
-		dialog.show(getFragmentManager(), "Password Fragment");
+		passwordDialog = new LoginDialogFragment();
+		passwordDialog.show(getFragmentManager(), "Password Fragment");
 	}
 
 	public void showUnCanceleablePasswordDialog() {
+		// Dismiss any previous dialog
+		if (passwordDialog != null)
+			passwordDialog.dismiss();
+
 		// Create an instance of the dialog fragment and show it
-		LoginDialogFragment dialog = new LoginDialogFragment();
-		dialog.setCancelable(false);
-		dialog.show(getFragmentManager(), "Password Fragment");
+		passwordDialog = new LoginDialogFragment();
+		passwordDialog.setCancelable(false);
+		passwordDialog.startPasswordTimer = true;
+		passwordDialog.show(getFragmentManager(), "Password Fragment");
 	}
 
-	/*
-	 * login pop up intent
-	 */
 	@Override
-	public void onLoginSignInClick(DialogFragment dialog) {
+	public void onLoginSuccessful(DialogFragment dialog) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getApplicationContext(), "Password Correct",
-				Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(),
+				"Password Correct, Timer Cancelled!", Toast.LENGTH_SHORT)
+				.show();
 
 		// Cancel the timer and reset the textView
 		if (countDownTimer != null)
 			countDownTimer.cancel();
 
 		timerText.setText(defaultTimerText);
+		timerText
+				.setTextAppearance(getApplicationContext(), R.style.normalText);
 		timerButton.setText(START_TIMER);
 	}
 
 	@Override
 	public void onLoginCancelClick(DialogFragment dialog) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getApplicationContext(), "No password entered",
-				Toast.LENGTH_SHORT).show();
-		// showPasswordDialog();
 	}
 
-	public void onLoginWrongPasswordClick(DialogFragment dialog) {
+	public void onLoginWrongPassword(DialogFragment dialog) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getApplicationContext(), "Wrong password",
-				Toast.LENGTH_SHORT).show();
-		// showPasswordDialog();
 	}
 
-	/*
-	 * timer picker popup
-	 */
+	/*****
+	 * 
+	 * Time Selector Dialog Box Code
+	 * 
+	 * ******/
 	public void showTimerPickerDialog(View v) {
 		// Create an instance of the dialog fragment and show it
 		TimePickerDialogFragment dialog = new TimePickerDialogFragment();
@@ -139,14 +157,10 @@ public class IAmHereActivity extends Activity implements
 	@Override
 	public void onTimePickerCancelClick(DialogFragment dialog) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getApplicationContext(), "Time Cancelled",
-				Toast.LENGTH_SHORT).show();
 	}
 
 	private void startTimer() {
 		countDownTimer = new CountDownTimer(totalTimeCountInMilliseconds, 500) {
-			// 1000 means, onTick function will be called at every 1000
-			// milliseconds
 
 			@Override
 			public void onTick(long leftTimeInMilliseconds) {
@@ -155,12 +169,9 @@ public class IAmHereActivity extends Activity implements
 				if (leftTimeInMilliseconds < timeBlinkInMilliseconds) {
 					timerText.setTextAppearance(getApplicationContext(),
 							R.style.blinkText);
-					// change the style of the textview .. giving a red
-					// alert style
 
 					if (blink) {
 						timerText.setVisibility(View.VISIBLE);
-						// if blink is true, textview will be visible
 					} else {
 						timerText.setVisibility(View.INVISIBLE);
 					}
@@ -170,19 +181,12 @@ public class IAmHereActivity extends Activity implements
 
 				timerText.setText(String.format("%02d", seconds / 60) + ":"
 						+ String.format("%02d", seconds % 60));
-				// format the textview to show the easily readable format
 			}
 
 			@Override
 			public void onFinish() {
-				// this function will be called when the timecount is finished
 				timerText.setText("Time up!");
 				timerText.setVisibility(View.VISIBLE);
-				Uri notification = RingtoneManager
-						.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-				Ringtone r = RingtoneManager.getRingtone(
-						getApplicationContext(), notification);
-				r.play();
 				showUnCanceleablePasswordDialog();
 			}
 		}.start();
@@ -190,6 +194,9 @@ public class IAmHereActivity extends Activity implements
 
 	// Activate the feature to send messages to all the friends
 	public void activateFeature() {
+		Toast.makeText(getApplicationContext(),
+				"Messages to friends and security sent...", Toast.LENGTH_SHORT)
+				.show();
 		String manualMsg = eventInfoText.getText().toString();
 		if (CircleOf6.contactList != null && CircleOf6.buttonIDs != null) {
 			for (int i = 0; i < 6; i++) {
@@ -257,11 +264,17 @@ public class IAmHereActivity extends Activity implements
 	public void passwordTimerEnded() {
 		// Timer Ended so activate feature
 		activateFeature();
+
+		// Change appearance to default state
+		timerText.setText(defaultTimerText);
+		timerText
+				.setTextAppearance(getApplicationContext(), R.style.normalText);
+		timerButton.setText(START_TIMER);
 	}
 
 	@Override
 	public void playAlertSound() {
-		// Ring a alert at every second
+		// Ring a alert
 		Uri notification = RingtoneManager
 				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		Ringtone r = RingtoneManager.getRingtone(getApplicationContext(),

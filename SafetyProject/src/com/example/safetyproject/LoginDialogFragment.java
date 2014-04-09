@@ -20,18 +20,21 @@ public class LoginDialogFragment extends DialogFragment {
 
 	CountDownTimer passwordCountDownTimer;
 	TextView passwordTimer;
-	EditText usernameField, passwordField;
+	EditText passwordField;
+	boolean playSound = true;
+	boolean startPasswordTimer = false;
+
 	/*
 	 * The activity that creates an instance of this dialog fragment must
 	 * implement this interface in order to receive event callbacks. Each method
 	 * passes the DialogFragment in case the host needs to query it.
 	 */
 	public interface NoticeLoginDialogListener {
-		public void onLoginSignInClick(DialogFragment dialog);
+		public void onLoginSuccessful(DialogFragment dialog);
 
 		public void onLoginCancelClick(DialogFragment dialog);
 
-		public void onLoginWrongPasswordClick(DialogFragment dialog);
+		public void onLoginWrongPassword(DialogFragment dialog);
 
 		public void passwordTimerEnded();
 
@@ -65,60 +68,46 @@ public class LoginDialogFragment extends DialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View promptsView = inflater.inflate(R.layout.activity_ask_for_password,
 				null);
-		usernameField = (EditText) promptsView.findViewById(R.id.username);
 		passwordField = (EditText) promptsView.findViewById(R.id.password);
 
 		passwordTimer = (TextView) promptsView.findViewById(R.id.passwordTimer);
-		builder.setView(promptsView)
-		// Add action buttons
-				.setNeutralButton("LogIn",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								// Do nothing here but perform actions in
-								// over-ridden method
-							}
-						});
-		// .setNegativeButton("Cancel",
-		// new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialog, int id) {
-		// mListener
-		// .onLoginCancelClick(LoginDialogFragment.this);
-		// }
-		// });
+		builder.setView(promptsView).setNeutralButton("LogIn",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						// Do nothing here but perform actions in
+						// over-ridden method
+					}
+				});
 		return builder.create();
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart(); // super.onStart() is where dialog.show() is actually
-							// called on the underlying dialog, so we have to do
-							// it after this point
-		
+						 // called on the underlying dialog, so we have to do
+						 // it after this point
+
 		// Start the password timer
-		startPassowrdTimer();
-		
+		if (startPasswordTimer)
+			startPassowrdTimer();
+
 		AlertDialog d = (AlertDialog) getDialog();
 		if (d != null) {
 			Button neutralButton = (Button) d.getButton(Dialog.BUTTON_NEUTRAL);
 			neutralButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// Verify the username and password
-					if (usernameField.getText().toString().equals("j")) {
-						if (passwordField.getText().toString().equals("0")) {
-							mListener
-									.onLoginSignInClick(LoginDialogFragment.this);
-							// Cancel the timer
-							if (passwordCountDownTimer != null) {
-								passwordCountDownTimer.cancel();
-								dismiss(); // dismiss the dialog
-							}
-						} else {
-							passwordField.setError("Wrong Password!");
+					// Verify the password
+					if (passwordField.getText().toString().equals("0")) {
+						mListener.onLoginSuccessful(LoginDialogFragment.this);
+						// Cancel the timer
+						if (passwordCountDownTimer != null) {
+							passwordCountDownTimer.cancel();
 						}
+						dismiss(); // dismiss the dialog
 					} else {
-						usernameField.setError("Wrong Username!");
+						passwordField.setError("Wrong Password!");
 					}
 				}
 			});
@@ -128,6 +117,9 @@ public class LoginDialogFragment extends DialogFragment {
 	private void startPassowrdTimer() {
 
 		long totalTimeInMillis = 10 * 1000; // 10 secs
+		
+		// make the passtimer field visible
+		passwordTimer.setVisibility(View.VISIBLE);
 		passwordCountDownTimer = new CountDownTimer(totalTimeInMillis, 1000) {
 
 			@Override
@@ -137,14 +129,19 @@ public class LoginDialogFragment extends DialogFragment {
 				// format the textview to show the easily readable format
 				passwordTimer.setText(String.format("%02d", seconds / 60) + ":"
 						+ String.format("%02d", seconds % 60));
-
-				mListener.playAlertSound();
+				
+				if (playSound) {
+					mListener.playAlertSound();
+				}
+				playSound = !playSound; // toggle to play alert every other tick
 			}
 
 			@Override
 			public void onFinish() {
 				// this function will be called when the timecount is finished
 				mListener.passwordTimerEnded();
+				dismiss(); // dismiss the dialog
+				
 			}
 		}.start();
 	}

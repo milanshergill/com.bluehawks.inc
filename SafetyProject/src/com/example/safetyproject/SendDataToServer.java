@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SendDataToServer extends Activity {
 	private ProgressDialog pDialog;
@@ -27,7 +28,7 @@ public class SendDataToServer extends Activity {
 	private static final String TAG_LATITUDE = "latitude";
 	private static final String TAG_LONGITUDE = "longitude";
 
-	String userName, userEmail, userHealthNeeds, latitude,longitude;
+	String userName, userEmail, userHealthNeeds, latitude, longitude;
 	TextView dataStatus, serverResponse, informationSent;
 	String jsonStr = "No Reply";
 
@@ -57,10 +58,15 @@ public class SendDataToServer extends Activity {
 		userName = "No Name";
 		userEmail = "No Email";
 		userHealthNeeds = "No Health Information";
-		// userLocation = "";
 
-		latitude = "" + MainActivity.currentKnownLocation.getLatitude() ;
-		longitude	= ""+ MainActivity.currentKnownLocation.getLongitude();
+		// User Location
+		latitude = "No Location Found";
+		longitude = "No Location Found";
+
+		if (MainActivity.currentKnownLocation != null) {
+			latitude = "" + MainActivity.currentKnownLocation.getLatitude();
+			longitude = "" + MainActivity.currentKnownLocation.getLongitude();
+		}
 
 		if (storedName != null)
 			userName = storedName;
@@ -98,9 +104,16 @@ public class SendDataToServer extends Activity {
 			params.add(new BasicNameValuePair(TAG_LATITUDE, latitude));
 			params.add(new BasicNameValuePair(TAG_LONGITUDE, longitude));
 
-			// Making a request to url and getting response
-			jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
-			// String jsonStr = sh.makeServiceCall(url1, ServiceHandler.GET);
+			try {
+				// Making a request to url and getting response
+				jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
+				// String jsonStr = sh.makeServiceCall(url1,
+				// ServiceHandler.GET);
+			} catch (Exception e) {
+				Toast.makeText(getApplicationContext(),
+						"Server not responding!\n" + e.getMessage(),
+						Toast.LENGTH_SHORT).show();
+			}
 
 			return null;
 		}
@@ -115,7 +128,7 @@ public class SendDataToServer extends Activity {
 			serverResponse.setText(jsonStr);
 			informationSent.setText("Name: " + userName + "\nEmail: "
 					+ userEmail + "\nHealth: " + userHealthNeeds
-					+ "\nlatitude: " + latitude+ "\nlongitude: " + longitude);
+					+ "\nlatitude: " + latitude + "\nlongitude: " + longitude);
 		}
 	}
 

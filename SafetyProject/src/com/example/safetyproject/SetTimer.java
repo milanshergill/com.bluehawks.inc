@@ -122,7 +122,7 @@ public class SetTimer extends Activity implements
 	 * login pop up intent
 	 */
 	@Override
-	public void onLoginSignInClick(DialogFragment dialog) {
+	public void onLoginSuccessful(DialogFragment dialog) {
 		// TODO Auto-generated method stub
 		Toast.makeText(getApplicationContext(), "Password Correct",
 				Toast.LENGTH_LONG).show();
@@ -137,7 +137,7 @@ public class SetTimer extends Activity implements
 
 	}
 
-	public void onLoginWrongPasswordClick(DialogFragment dialog) {
+	public void onLoginWrongPassword(DialogFragment dialog) {
 		// TODO Auto-generated method stub
 		Toast.makeText(getApplicationContext(), "Wrong password",
 				Toast.LENGTH_LONG).show();

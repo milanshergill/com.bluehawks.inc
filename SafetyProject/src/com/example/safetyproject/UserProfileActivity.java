@@ -64,6 +64,8 @@ public class UserProfileActivity extends Activity {
 
 			Toast.makeText(getApplicationContext(),
 					"Profile saved successfully.", Toast.LENGTH_SHORT).show();
+			
+			finish();
 		}
 	}
 
