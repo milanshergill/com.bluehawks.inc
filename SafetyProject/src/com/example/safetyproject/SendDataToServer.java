@@ -1,7 +1,6 @@
 package com.example.safetyproject;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -15,7 +14,6 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SendDataToServer extends Activity {
 	private ProgressDialog pDialog;
@@ -26,9 +24,10 @@ public class SendDataToServer extends Activity {
 	private static final String TAG_AGE = "age";
 	private static final String TAG_HEALTH = "health";
 
-	private static final String TAG_LOCATION = "location";
+	private static final String TAG_LATITUDE = "latitude";
+	private static final String TAG_LONGITUDE = "longitude";
 
-	String userName, userEmail, userHealthNeeds, userLocation;
+	String userName, userEmail, userHealthNeeds, latitude,longitude;
 	TextView dataStatus, serverResponse, informationSent;
 	String jsonStr = "No Reply";
 
@@ -60,12 +59,8 @@ public class SendDataToServer extends Activity {
 		userHealthNeeds = "No Health Information";
 		// userLocation = "";
 
-		if (MainActivity.currentKnownLocation != null) {
-			userLocation = MainActivity.currentKnownLocation.getLatitude()
-					+ ":" + MainActivity.currentKnownLocation.getLongitude();
-		} else {
-			userLocation = "No Location Found";
-		}
+		latitude = "" + MainActivity.currentKnownLocation.getLatitude() ;
+		longitude	= ""+ MainActivity.currentKnownLocation.getLongitude();
 
 		if (storedName != null)
 			userName = storedName;
@@ -100,17 +95,12 @@ public class SendDataToServer extends Activity {
 			params.add(new BasicNameValuePair(TAG_NAME, userName));
 			params.add(new BasicNameValuePair(TAG_AGE, userEmail));
 			params.add(new BasicNameValuePair(TAG_HEALTH, userHealthNeeds));
-			params.add(new BasicNameValuePair(TAG_LOCATION, userLocation));
+			params.add(new BasicNameValuePair(TAG_LATITUDE, latitude));
+			params.add(new BasicNameValuePair(TAG_LONGITUDE, longitude));
 
-			try {
-				// Making a request to url and getting response
-				jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
-				// String jsonStr = sh.makeServiceCall(url1,
-				// ServiceHandler.GET);
-			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), "Data Sending Error",
-						Toast.LENGTH_SHORT).show();
-			}
+			// Making a request to url and getting response
+			jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
+			// String jsonStr = sh.makeServiceCall(url1, ServiceHandler.GET);
 
 			return null;
 		}
@@ -125,7 +115,7 @@ public class SendDataToServer extends Activity {
 			serverResponse.setText(jsonStr);
 			informationSent.setText("Name: " + userName + "\nEmail: "
 					+ userEmail + "\nHealth: " + userHealthNeeds
-					+ "\nLocation: " + userLocation);
+					+ "\nlatitude: " + latitude+ "\nlongitude: " + longitude);
 		}
 	}
 
