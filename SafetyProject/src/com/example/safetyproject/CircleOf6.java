@@ -40,8 +40,8 @@ public class CircleOf6 extends Activity {
 			addContact6;
 	TextView textContact1, textContact2, textContact3, textContact4,
 			textContact5, textContact6;
-	int[] buttonIDs = new int[6];
-	HashMap<Integer, CircleFriend> contactList;
+	static int[] buttonIDs = new int[6];
+	static HashMap<Integer, CircleFriend> contactList;
 
 	@SuppressLint("UseSparseArrays")
 	@Override

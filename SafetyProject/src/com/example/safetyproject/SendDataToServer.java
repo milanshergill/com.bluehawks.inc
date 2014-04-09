@@ -1,6 +1,7 @@
 package com.example.safetyproject;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SendDataToServer extends Activity {
 	private ProgressDialog pDialog;
@@ -58,8 +60,12 @@ public class SendDataToServer extends Activity {
 		userHealthNeeds = "No Health Information";
 		// userLocation = "";
 
-		userLocation = MainActivity.currentKnownLocation.getLatitude() + ":"
-				+ MainActivity.currentKnownLocation.getLongitude();
+		if (MainActivity.currentKnownLocation != null) {
+			userLocation = MainActivity.currentKnownLocation.getLatitude()
+					+ ":" + MainActivity.currentKnownLocation.getLongitude();
+		} else {
+			userLocation = "No Location Found";
+		}
 
 		if (storedName != null)
 			userName = storedName;
@@ -96,9 +102,15 @@ public class SendDataToServer extends Activity {
 			params.add(new BasicNameValuePair(TAG_HEALTH, userHealthNeeds));
 			params.add(new BasicNameValuePair(TAG_LOCATION, userLocation));
 
-			// Making a request to url and getting response
-			jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
-			// String jsonStr = sh.makeServiceCall(url1, ServiceHandler.GET);
+			try {
+				// Making a request to url and getting response
+				jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
+				// String jsonStr = sh.makeServiceCall(url1,
+				// ServiceHandler.GET);
+			} catch (Exception e) {
+				Toast.makeText(getApplicationContext(), "Data Sending Error",
+						Toast.LENGTH_SHORT).show();
+			}
 
 			return null;
 		}

@@ -170,4 +170,16 @@ public class SetTimer extends Activity implements
 		Toast.makeText(getApplicationContext(), "Time Cancelled",
 				Toast.LENGTH_LONG).show();
 	}
+
+	@Override
+	public void passwordTimerEnded() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void playAlertSound() {
+		// TODO Auto-generated method stub
+		
+	}
 }

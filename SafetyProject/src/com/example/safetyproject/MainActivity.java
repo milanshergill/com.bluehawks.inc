@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void startsetTimerActivity(View v) {
-		Intent timerActivity = new Intent(this, SetTimer.class);
+		Intent timerActivity = new Intent(this, IAmHereActivity.class);
 		startActivity(timerActivity);
 	}
 

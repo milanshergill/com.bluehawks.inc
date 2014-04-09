@@ -24,9 +24,9 @@ public class UserProfileActivity extends Activity {
 		nameText = (EditText) findViewById(R.id.nameText);
 		emailText = (EditText) findViewById(R.id.emailText);
 		healthText = (EditText) findViewById(R.id.healthText);
-		
+
 		// Enable this to clear user data
-//		clearData();
+		// clearData();
 	}
 
 	@Override
@@ -98,22 +98,26 @@ public class UserProfileActivity extends Activity {
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 
-		// Save user name
-		if (!userName.isEmpty()) {
-			String nameFieldID = Integer.toString(nameText.getId());
-			editor.putString(nameFieldID, userName);
-		}
+		if (userName != null && userEmail != null) {
+			// Save user name
+			if (!userName.isEmpty()) {
+				String nameFieldID = Integer.toString(nameText.getId());
+				editor.putString(nameFieldID, userName);
+			}
 
-		// Save user email
-		if (!userEmail.isEmpty()) {
-			String emailFieldID = Integer.toString(emailText.getId());
-			editor.putString(emailFieldID, userEmail);
-		}
+			// Save user email
+			if (!userEmail.isEmpty()) {
+				String emailFieldID = Integer.toString(emailText.getId());
+				editor.putString(emailFieldID, userEmail);
+			}
 
-		// Save user health or emergency needs
-		if (!userHealthNeeds.isEmpty()) {
-			String healthFieldID = Integer.toString(healthText.getId());
-			editor.putString(healthFieldID, userHealthNeeds);
+			if (userHealthNeeds != null) {
+				// Save user health or emergency needs
+				if (!userHealthNeeds.isEmpty()) {
+					String healthFieldID = Integer.toString(healthText.getId());
+					editor.putString(healthFieldID, userHealthNeeds);
+				}
+			}
 		}
 
 		// Commit Changes

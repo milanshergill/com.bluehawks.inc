@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
 
     <application
         android:allowBackup="true"
@@ -67,7 +68,13 @@
             android:name="com.example.safetyproject.UserProfileActivity"
             android:label="@string/title_activity_user_profile" >
         </activity>
-        <activity android:name="UserProfile"></activity>
+        <activity android:name="com.example.safetyproject.UserProfile" >
+        </activity>
+        <activity
+            android:name="com.example.safetyproject.IAmHereActivity"
+            android:label="@string/title_activity_iam_here" >
+        </activity>
+        <activity android:name="IAmHereActivity"></activity>
     </application>
 
 </manifest>
