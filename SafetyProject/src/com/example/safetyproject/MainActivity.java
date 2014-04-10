@@ -1,22 +1,29 @@
 package com.example.safetyproject;
 
-import com.example.eng4kgestures.GestureActivity;
-import com.example.eng4kgestures.TestGestures;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
-import com.parse.ParseInstallation;
-import com.parse.PushService;
+import java.io.IOException;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import com.example.eng4kgestures.GestureActivity;
+import com.example.eng4kgestures.GestureRecognitionService;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.PushService;
 
 public class MainActivity extends Activity {
 
@@ -26,6 +33,9 @@ public class MainActivity extends Activity {
 	LocationManager locationManager;
 	LocationListener locationListener;
 	String locationProvider;
+	boolean serviceBounded = false, serviceStarted = false;
+	Intent gestureServiceIntent;
+	ToggleButton gestureToggleButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,14 @@ public class MainActivity extends Activity {
 				"qVha5rt4cvvxb32060SZfiRF9YfNRvXB8Nz9Bhhl");
 		PushService.setDefaultPushCallback(this, MainActivity.class);
 		ParseAnalytics.trackAppOpened(getIntent());
+
+		gestureToggleButton = (ToggleButton) findViewById(R.id.gestureToggleButton);
+		
+		// start the gesture recognition service
+		gestureServiceIntent = new Intent(this,
+				GestureRecognitionService.class);
+		startService(gestureServiceIntent);
+		serviceStarted = true;
 
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this
@@ -111,8 +129,30 @@ public class MainActivity extends Activity {
 	}
 
 	public void activateGestures(View v) {
-		Intent activateGestures = new Intent(this, TestGestures.class);
-		startActivity(activateGestures);
+		// Intent activateGestures = new Intent(this, TestGestures.class);
+		// startActivity(activateGestures);
+
+		if (gestureToggleButton.isChecked()) {
+			if (!serviceBounded && serviceStarted) {
+				ServiceConnection conn = new ServiceConnection() {
+					
+					@Override
+					public void onServiceDisconnected(ComponentName name) {
+						Toast.makeText(getApplicationContext(), "Service Disconnected", Toast.LENGTH_SHORT).show();
+					}
+					
+					@Override
+					public void onServiceConnected(ComponentName name, IBinder service) {
+						Toast.makeText(getApplicationContext(), "Service Bound", Toast.LENGTH_SHORT).show();
+					}
+				};
+				bindService(gestureServiceIntent, conn, BIND_AUTO_CREATE);
+				serviceBounded = true;
+			}
+		} else {
+			if (gestureServiceIntent != null)
+				stopService(gestureServiceIntent);
+		}
 	}
 
 	/***********************************************
@@ -125,6 +165,8 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+
+		loadFromSharedFile();
 
 		if (locationManager != null) {
 
@@ -153,10 +195,44 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onPause();
 
+		try {
+			saveToSharedFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		if (locationManager != null) {
 			// Remove the listener you previously added
 			locationManager.removeUpdates(locationListener);
 		}
+	}
+
+	private void saveToSharedFile() throws IOException {
+		// Save toggle button status
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+
+		if (gestureToggleButton != null) {
+			// Save toggle button status
+			String buttonID = Integer.toString(gestureToggleButton.getId());
+			editor.putBoolean(buttonID, gestureToggleButton.isChecked());
+		}
+
+		// Commit Changes
+		editor.commit();
+	}
+
+	private void loadFromSharedFile() {
+		// Load user profile data
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		String buttonID = Integer.toString(gestureToggleButton.getId());
+
+		boolean buttonStatus = sharedPref.getBoolean(buttonID, false);
+		if (gestureToggleButton != null)
+			gestureToggleButton.setChecked(buttonStatus);
 	}
 
 	protected void makeUseOfNewLocation(Location newLocation) {

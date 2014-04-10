@@ -72,14 +72,13 @@
         android:scaleType="fitXY" />
 
     <ToggleButton
-        android:id="@+id/toggleButton1"
+        android:id="@+id/gestureToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/textView1"
         android:layout_marginTop="5dp"
-        android:onClick="activateGestures"
-        android:text="ToggleButton" />
+        android:onClick="activateGestures" />
 
     <ImageButton
         android:id="@+id/call911"
@@ -100,7 +99,7 @@
         style="@style/CodeFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toggleButton1"
+        android:layout_below="@+id/gestureToggleButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
         android:gravity="center_horizontal"
@@ -110,8 +109,8 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/toggleButton1"
-        android:layout_alignBottom="@+id/toggleButton1"
+        android:layout_alignBaseline="@+id/gestureToggleButton"
+        android:layout_alignBottom="@+id/gestureToggleButton"
         android:layout_alignLeft="@+id/call911"
         android:text="Activate Gestures"
         android:textSize="24dp" />
