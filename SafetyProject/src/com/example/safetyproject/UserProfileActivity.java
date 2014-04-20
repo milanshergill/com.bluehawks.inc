@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 public class UserProfileActivity extends Activity {
 
-	EditText nameText, emailText, healthText;
-	String userName, userEmail, userHealthNeeds;
+	EditText nameText, phoneText, healthText;
+	String userName, userPhone, userHealthNeeds;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class UserProfileActivity extends Activity {
 		setContentView(R.layout.activity_user_profile);
 
 		nameText = (EditText) findViewById(R.id.nameText);
-		emailText = (EditText) findViewById(R.id.emailText);
+		phoneText = (EditText) findViewById(R.id.phoneText);
 		healthText = (EditText) findViewById(R.id.healthText);
 
 		// Enable this to clear user data
@@ -59,7 +59,7 @@ public class UserProfileActivity extends Activity {
 	public void saveUserProfile(View v) {
 		if (validateData()) {
 			userName = nameText.getText().toString();
-			userEmail = emailText.getText().toString();
+			userPhone = phoneText.getText().toString();
 			userHealthNeeds = healthText.getText().toString();
 
 			Toast.makeText(getApplicationContext(),
@@ -72,23 +72,22 @@ public class UserProfileActivity extends Activity {
 	private void updateFields() {
 		if (userName != null && !userName.isEmpty())
 			nameText.setText(userName);
-		if (userEmail != null && !userEmail.isEmpty())
-			emailText.setText(userEmail);
+		if (userPhone != null && !userPhone.isEmpty())
+			phoneText.setText(userPhone);
 		if (userHealthNeeds != null && !userHealthNeeds.isEmpty())
 			healthText.setText(userHealthNeeds);
 	}
 
 	private boolean validateData() {
 		String name = nameText.getText().toString();
-		String email = emailText.getText().toString();
-		// String health = healthText.getText().toString();
+		String phone = phoneText.getText().toString();
 		if (name.isEmpty()) {
 			nameText.setError("Please provide a valid name!");
 			return false;
-		} else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email)
+		} else if (!android.util.Patterns.PHONE.matcher(phone)
 				.matches()) {
-			emailText
-					.setError("Enter valid email address in format example@example.com");
+			phoneText
+					.setError("Enter valid phone number!");
 			return false;
 		}
 		return true;
@@ -100,7 +99,7 @@ public class UserProfileActivity extends Activity {
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 
-		if (userName != null && userEmail != null) {
+		if (userName != null && userPhone != null) {
 			// Save user name
 			if (!userName.isEmpty()) {
 				String nameFieldID = Integer.toString(nameText.getId());
@@ -108,9 +107,9 @@ public class UserProfileActivity extends Activity {
 			}
 
 			// Save user email
-			if (!userEmail.isEmpty()) {
-				String emailFieldID = Integer.toString(emailText.getId());
-				editor.putString(emailFieldID, userEmail);
+			if (!userPhone.isEmpty()) {
+				String phoneFieldID = Integer.toString(phoneText.getId());
+				editor.putString(phoneFieldID, userPhone);
 			}
 
 			if (userHealthNeeds != null) {
@@ -131,17 +130,17 @@ public class UserProfileActivity extends Activity {
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		String nameFieldID = Integer.toString(nameText.getId());
-		String emailFieldID = Integer.toString(emailText.getId());
+		String phoneFieldID = Integer.toString(phoneText.getId());
 		String healthFieldID = Integer.toString(healthText.getId());
 
 		String storedName = sharedPref.getString(nameFieldID, null);
-		String storedEmail = sharedPref.getString(emailFieldID, null);
+		String storedPhone = sharedPref.getString(phoneFieldID, null);
 		String storedHealth = sharedPref.getString(healthFieldID, null);
 
 		if (storedName != null)
 			userName = storedName;
-		if (storedEmail != null)
-			userEmail = storedEmail;
+		if (storedPhone != null)
+			userPhone = storedPhone;
 		if (storedHealth != null)
 			userHealthNeeds = storedHealth;
 	}
@@ -153,7 +152,7 @@ public class UserProfileActivity extends Activity {
 		SharedPreferences.Editor editor = sharedPref.edit();
 
 		editor.remove(Integer.toString(nameText.getId()));
-		editor.remove(Integer.toString(emailText.getId()));
+		editor.remove(Integer.toString(phoneText.getId()));
 		editor.remove(Integer.toString(healthText.getId()));
 		editor.commit();
 	}

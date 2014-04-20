@@ -6,25 +6,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFF"
     tools:context=".GestureActivity" >
 
     <ImageButton
-        android:id="@+id/circleOf6"
-       android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:id="@+id/sendInformation"
+        android:layout_width="@dimen/image_margin"
+        android:layout_height="@dimen/image_margin"
         android:layout_alignBaseline="@+id/iAmHere"
         android:layout_alignBottom="@+id/iAmHere"
-        android:background="@drawable/friends_icon"
-        android:scaleType="fitXY"
+        android:layout_alignLeft="@+id/alert"
         android:adjustViewBounds="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/inform_security"
         android:clickable="true"
-        android:onClick="startCircleOf6Activity"
-        android:layout_alignLeft="@+id/alert" />
+        android:onClick="startSendInformationActivity"
+        android:scaleType="fitXY" />
 
     <ImageButton
         android:id="@+id/alert"
-       android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/image_margin"
+        android:layout_height="@dimen/image_margin"
         android:layout_above="@+id/iAmHere"
         android:layout_alignParentRight="true"
         android:layout_marginRight="22dp"
@@ -36,39 +38,15 @@
 
     <ImageButton
         android:id="@+id/iAmHere"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/image_margin"
+        android:layout_height="@dimen/image_margin"
         android:layout_alignLeft="@+id/call911"
         android:layout_below="@+id/call911"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:adjustViewBounds="true"
         android:background="@drawable/map_icon"
         android:clickable="true"
         android:onClick="startsetTimerActivity"
-        android:scaleType="fitXY" />
-
-    <ImageButton
-        android:id="@+id/addInformation"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignLeft="@+id/iAmHere"
-        android:layout_below="@+id/iAmHere"
-        android:layout_marginTop="19dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/add_information_icon"
-        android:clickable="true"
-        android:onClick="startAddInformationActivity"
-        android:scaleType="fitXY" />
-
-    <ImageButton
-        android:id="@+id/gestureButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignRight="@+id/circleOf6"
-        android:layout_alignTop="@+id/addInformation"
-        android:clickable="true"
-        android:onClick="startGestureRecognition"
-        android:src="@drawable/gesture_icon"
         android:scaleType="fitXY" />
 
     <ToggleButton
@@ -82,8 +60,8 @@
 
     <ImageButton
         android:id="@+id/call911"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/image_margin"
+        android:layout_height="@dimen/image_margin"
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_marginLeft="27dp"
@@ -102,6 +80,7 @@
         android:layout_below="@+id/gestureToggleButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:text="Welcome to Safety First Application" />
 

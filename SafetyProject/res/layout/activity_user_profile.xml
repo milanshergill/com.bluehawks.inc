@@ -39,14 +39,14 @@
         android:layout_marginTop="25dp"
         android:textSize="16dp"
         android:textStyle="bold"
-        android:text="Email Address" />
+        android:text="Phone Number" />
     
      <TextView
         android:id="@+id/TextView02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/emailText"
-        android:layout_below="@+id/emailText"
+        android:layout_alignLeft="@+id/phoneText"
+        android:layout_below="@+id/phoneText"
         android:layout_marginTop="25dp"
         android:textSize="16dp"
         android:textStyle="bold"
@@ -70,18 +70,18 @@
     </EditText>
     
     <EditText
-        android:id="@+id/emailText"
+        android:id="@+id/phoneText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/TextView01"
         android:layout_below="@+id/TextView01"
         android:layout_marginTop="10dp"
-        android:hint="email id"
+        android:hint="phone number"
         android:textColorHint="#FFFFFF"
         android:maxLength="20"
         android:textSize="14dp"
         android:ems="18"
-        android:inputType="textEmailAddress" />
+        android:inputType="textPhonetic" />
 
     <EditText
         android:id="@+id/healthText"

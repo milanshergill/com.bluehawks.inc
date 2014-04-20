@@ -11,8 +11,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +24,13 @@ public class SendDataToServer extends Activity {
 	// private static String url = "http://10.24.2.26:8080/GoogleMap/helpMe";
 	private static String url = "http://107.170.96.216:8888/start";
 	private static final String TAG_NAME = "name";
-	private static final String TAG_AGE = "age";
+	private static final String TAG_PHONE = "phone";
 	private static final String TAG_HEALTH = "health";
 
 	private static final String TAG_LATITUDE = "latitude";
 	private static final String TAG_LONGITUDE = "longitude";
 
-	String userName, userEmail, userHealthNeeds, latitude, longitude;
+	String userName, userPhone, userHealthNeeds, latitude, longitude;
 	TextView dataStatus, serverResponse, informationSent;
 	String jsonStr = "No Reply";
 
@@ -36,6 +38,11 @@ public class SendDataToServer extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_send_data_to_server);
+		
+		this.getWindow().addFlags(
+				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+
 		dataStatus = (TextView) findViewById(R.id.dataStatus);
 		serverResponse = (TextView) findViewById(R.id.serverResponse);
 		informationSent = (TextView) findViewById(R.id.infoSent);
@@ -48,15 +55,15 @@ public class SendDataToServer extends Activity {
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		String nameFieldID = Integer.toString(R.id.nameText);
-		String emailFieldID = Integer.toString(R.id.emailText);
+		String phoneFieldID = Integer.toString(R.id.phoneText);
 		String healthFieldID = Integer.toString(R.id.healthText);
 
 		String storedName = sharedPref.getString(nameFieldID, null);
-		String storedEmail = sharedPref.getString(emailFieldID, null);
+		String storedPhone = sharedPref.getString(phoneFieldID, null);
 		String storedHealth = sharedPref.getString(healthFieldID, null);
 
 		userName = "No Name";
-		userEmail = "No Email";
+		userPhone = "No Phone";
 		userHealthNeeds = "No Health Information";
 
 		// User Location
@@ -70,8 +77,8 @@ public class SendDataToServer extends Activity {
 
 		if (storedName != null)
 			userName = storedName;
-		if (storedEmail != null)
-			userEmail = storedEmail;
+		if (storedPhone != null)
+			userPhone = storedPhone;
 		if (storedHealth != null)
 			userHealthNeeds = storedHealth;
 		new SendDataToServerHelper().execute();
@@ -99,7 +106,7 @@ public class SendDataToServer extends Activity {
 			ServiceHandler sh = new ServiceHandler();
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair(TAG_NAME, userName));
-			params.add(new BasicNameValuePair(TAG_AGE, userEmail));
+			params.add(new BasicNameValuePair(TAG_PHONE, userPhone));
 			params.add(new BasicNameValuePair(TAG_HEALTH, userHealthNeeds));
 			params.add(new BasicNameValuePair(TAG_LATITUDE, latitude));
 			params.add(new BasicNameValuePair(TAG_LONGITUDE, longitude));
@@ -113,6 +120,7 @@ public class SendDataToServer extends Activity {
 				Toast.makeText(getApplicationContext(),
 						"Server not responding!\n" + e.getMessage(),
 						Toast.LENGTH_SHORT).show();
+				Log.d("SafetyFirst", "Server not responding to send alerts to Server!");
 			}
 
 			return null;
@@ -126,8 +134,8 @@ public class SendDataToServer extends Activity {
 				pDialog.dismiss();
 			dataStatus.setText("Data Sent");
 			serverResponse.setText(jsonStr);
-			informationSent.setText("Name: " + userName + "\nEmail: "
-					+ userEmail + "\nHealth: " + userHealthNeeds
+			informationSent.setText("Name: " + userName + "\nPhone Number: "
+					+ userPhone + "\nHealth: " + userHealthNeeds
 					+ "\nlatitude: " + latitude + "\nlongitude: " + longitude);
 		}
 	}

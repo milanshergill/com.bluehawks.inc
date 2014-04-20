@@ -8,5 +8,7 @@
     <string name="title_activity_new_location">NewLocationActivity</string>
     <string name="title_activity_user_profile">UserProfile</string>
     <string name="title_activity_iam_here">IAmHereActivity</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>
