@@ -31,6 +31,16 @@
             android:clickable="true"
             android:onClick="startSendInformationActivity"
             android:scaleType="fitXY" />
+        
+        <TextView
+            android:id="@+id/serverReplyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendInformation"
+            android:layout_marginTop="1dp"
+            android:textColor="#000000"
+            android:text="Server Reply"
+            android:textSize="15dp" />
 
         <ImageButton
             android:id="@+id/alert"

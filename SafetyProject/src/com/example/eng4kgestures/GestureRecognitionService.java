@@ -3,18 +3,24 @@ package com.example.eng4kgestures;
 import java.util.ArrayList;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.os.Binder;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Process;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -28,12 +34,16 @@ public class GestureRecognitionService extends Service implements
 	private ArrayList<Acceleration> accelerationList;
 	Acceleration acceletationObject;
 	private float accelX, accelY, accelZ;
-	private static CountDownTimer timer, udpTimer;
+	private static CountDownTimer timer;
 	int foundSame = 0, count = 0;
 	double minDistance = -1;
 	boolean buttonPressed = false;
 	private GestureDataBase gestureDataBase;
 	ArrayList<Gesture> savedGestures;
+	AudioManager am;
+	ComponentName mediaReceiverComponent;
+	// Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
 
 	@Override
 	public void onCreate() {
@@ -48,9 +58,14 @@ public class GestureRecognitionService extends Service implements
 		// setting up database for acceleration recording
 		gestureDataBase = new GestureDataBase(this);
 		gestureDataBase.openReadable();
-		
-		//Array list to hold sensor data
-	    accelerationList = new ArrayList<Acceleration>();
+
+		//
+		am = (AudioManager) getApplicationContext().getSystemService(
+				Context.AUDIO_SERVICE);
+		mediaReceiverComponent = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
+
+		// Array list to hold sensor data
+		accelerationList = new ArrayList<Acceleration>();
 
 		timer = new CountDownTimer(10000, 20) {
 			public void onTick(long millisUntilFinished) {
@@ -96,47 +111,49 @@ public class GestureRecognitionService extends Service implements
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// We don't provide binding, so return null
-		return null;
+		// Start listening for button presses
+		am.registerMediaButtonEventReceiver(mediaReceiverComponent);
+		return mBinder;
 	}
 
 	@Override
 	public void onDestroy() {
+		Log.d("SafetyFirst", "Service was finished through onDestroy Method!");
 		Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
 		sensorManager.unregisterListener(this);
-        gestureDataBase.close();
+		gestureDataBase.close();
+		// Stop listening for button presses
+		am.unregisterMediaButtonEventReceiver(mediaReceiverComponent);
 	}
 
 	// Handler that receives messages from the thread
-	private final class ServiceHandler extends Handler {
+	private static final class ServiceHandler extends Handler {
 		public ServiceHandler(Looper looper) {
 			super(looper);
 		}
 
 		@Override
 		public void handleMessage(Message msg) {
-			// Normally we would do some work here, like download a file.
-			// For our sample, we just sleep for 5 seconds.
-			long endTime = System.currentTimeMillis() + 5 * 1000;
-			while (System.currentTimeMillis() < endTime) {
-				synchronized (this) {
-					try {
-						wait(endTime - System.currentTimeMillis());
-					} catch (Exception e) {
-					}
-				}
-			}
-			// Stop the service using the startId, so that we don't stop
-			// the service in the middle of handling another job
-			stopSelf(msg.arg1);
+			// Handle the gesture testing feature here...
 		}
 	}
+	
+	/**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class LocalBinder extends Binder {
+        GestureRecognitionService getService() {
+            // Return this instance of service so clients can call public methods
+            return GestureRecognitionService.this;
+        }
+    }
 
 	protected void processData(double d) {
 		// Process only when there is new data recorded to test
 		if (!accelerationList.isEmpty()) {
 			boolean thresholdMet = false;
-			int size = accelerationList.size();
+			accelerationList.size();
 			for (int i = 0; (i < accelerationList.size()) && (!thresholdMet);) {
 				float value = (float) Math
 						.pow((Math.pow(accelerationList.get(i)
@@ -152,7 +169,7 @@ public class GestureRecognitionService extends Service implements
 				}
 
 			}
-			int k = accelerationList.size();
+			accelerationList.size();
 			if (!accelerationList.isEmpty()) {
 				int j = Math.min(50, accelerationList.size());
 				for (; j < accelerationList.size();) {
@@ -220,47 +237,6 @@ public class GestureRecognitionService extends Service implements
 		return gestureObject;
 	}
 
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		int action = event.getAction();
-		int keyCode = event.getKeyCode();
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_VOLUME_UP:
-			if (action == KeyEvent.ACTION_DOWN) {
-				if (!buttonPressed) {
-					buttonPressed = true;
-					timer.start();
-				}
-			}
-			if (action == KeyEvent.ACTION_UP) {
-				if (timer != null) {
-					timer.cancel();
-					timer.onFinish();
-				}
-				buttonPressed = false;
-			}
-			return true;
-		case KeyEvent.KEYCODE_VOLUME_DOWN:
-			if (action == KeyEvent.ACTION_DOWN) {
-				if (!buttonPressed) {
-					buttonPressed = true;
-					timer.start();
-				}
-			}
-			if (action == KeyEvent.ACTION_UP) {
-				if (timer != null) {
-					timer.cancel();
-					timer.onFinish();
-				}
-				buttonPressed = false;
-			}
-			return true;
-			// default:
-			// return super.dispatchKeyEvent(event);
-		default:
-			return false;
-		}
-	}
-
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
@@ -276,5 +252,4 @@ public class GestureRecognitionService extends Service implements
 			accelZ = event.values[2];
 		}
 	}
-
 }

@@ -32,10 +32,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -57,6 +57,8 @@ public class MainActivity extends Activity {
 	boolean keepLocationServiceRunning = false;
 	Intent gestureServiceIntent;
 	ToggleButton gestureToggleButton;
+	ServiceConnection conn;
+	TextView serverReplyText;
 
 	private MyAdapter listAdapter;
 	private DrawerLayout mDrawerLayout;
@@ -97,6 +99,8 @@ public class MainActivity extends Activity {
 		// PushService.setDefaultPushCallback(this, MainActivity.class);
 		// ParseInstallation.getCurrentInstallation().saveInBackground();
 
+		serverReplyText = (TextView) findViewById(R.id.serverReplyText);
+		
 		listAdapter = new MyAdapter(getApplicationContext(),
 				generateNavigationItems());
 
@@ -257,14 +261,14 @@ public class MainActivity extends Activity {
 	public void activateGestures(View v) {
 
 		if (gestureToggleButton.isChecked()) {
+			Log.d("SafetyFirst", "Button was checked now!");
 			if (!serviceBounded && serviceStarted) {
-				ServiceConnection conn = new ServiceConnection() {
+				conn = new ServiceConnection() {
 
 					@Override
 					public void onServiceDisconnected(ComponentName name) {
 						Toast.makeText(getApplicationContext(),
-								"Service Disconnected", Toast.LENGTH_SHORT)
-								.show();
+								"Service unBounded", Toast.LENGTH_SHORT).show();
 					}
 
 					@Override
@@ -278,8 +282,13 @@ public class MainActivity extends Activity {
 				serviceBounded = true;
 			}
 		} else {
-			if (gestureServiceIntent != null)
-				stopService(gestureServiceIntent);
+			Log.d("SafetyFirst", "Button was UNCHECKED now!");
+			if (gestureServiceIntent != null && conn != null) {
+				// stopService(gestureServiceIntent);
+				// serviceStarted = false;
+				serviceBounded = false;
+				unbindService(conn);
+			}
 		}
 	}
 
@@ -472,7 +481,6 @@ public class MainActivity extends Activity {
 	/*
 	 * 
 	 * Send Witness Information to Server Details Start Here
-	 * 
 	 */
 	private void showInformationFromUserDialog() {
 		LayoutInflater factory = LayoutInflater.from(this);
@@ -490,7 +498,10 @@ public class MainActivity extends Activity {
 								MultiAutoCompleteTextView infoText = (MultiAutoCompleteTextView) sendDialogView
 										.findViewById(R.id.informationText);
 								dialog.dismiss();
-								sendInformationToSecurity(infoText.toString());
+								Log.d("SafetyFirst", "Message Printed "
+										+ infoText.getText().toString());
+								sendInformationToSecurity(infoText.getText()
+										.toString());
 							}
 						})
 
@@ -527,12 +538,20 @@ public class MainActivity extends Activity {
 		try {
 			String serverReply = new SendDataToServerHelper().execute(userName,
 					userPhone, infoText).get();
-			if (serverReply.equals("Success")) {
-				Toast.makeText(getApplicationContext(), "Security Alerted!",
-						Toast.LENGTH_SHORT).show();
+			if (serverReply != null) {
+				serverReplyText.setText("Server Reply: " + serverReply);
+				if (serverReply.equals("Success")) {
+					Toast.makeText(getApplicationContext(),
+							"Security Alerted!", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"No Reply from Server!", Toast.LENGTH_SHORT).show();
+				}
 			} else {
+				serverReplyText.setText("Server Reply: " + "null");
 				Toast.makeText(getApplicationContext(),
-						"No Reply from Server!", Toast.LENGTH_SHORT).show();
+						"Server not available, connection refused!",
+						Toast.LENGTH_SHORT).show();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
