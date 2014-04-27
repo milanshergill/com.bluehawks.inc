@@ -2,23 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#FFFFFF"
     tools:context=".GestureActivity" >
 
     <ImageButton
         android:id="@+id/sendInformation"
-        android:layout_width="@dimen/image_margin"
-        android:layout_height="@dimen/image_margin"
-        android:layout_alignBaseline="@+id/iAmHere"
-        android:layout_alignBottom="@+id/iAmHere"
+        android:layout_width="@dimen/image_margin2"
+        android:layout_height="@dimen/image_margin2"
+        android:layout_alignBaseline="@+id/buddy_guard"
+        android:layout_alignBottom="@+id/buddy_guard"
         android:layout_alignLeft="@+id/alert"
+        android:layout_marginTop="50dp"
         android:adjustViewBounds="true"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/inform_security"
+        android:background="@drawable/witness_background"
         android:clickable="true"
         android:onClick="startSendInformationActivity"
         android:scaleType="fitXY" />
@@ -27,24 +27,24 @@
         android:id="@+id/alert"
         android:layout_width="@dimen/image_margin"
         android:layout_height="@dimen/image_margin"
-        android:layout_above="@+id/iAmHere"
+        android:layout_above="@+id/buddy_guard"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="22dp"
+        android:layout_marginRight="25dp"
         android:adjustViewBounds="true"
-        android:background="@drawable/alert_icon"
+        android:background="@drawable/alert_background"
         android:clickable="true"
         android:onClick="startAlertLocationActivity"
         android:scaleType="fitXY" />
 
     <ImageButton
-        android:id="@+id/iAmHere"
-        android:layout_width="@dimen/image_margin"
-        android:layout_height="@dimen/image_margin"
+        android:id="@+id/buddy_guard"
+        android:layout_width="@dimen/image_margin2"
+        android:layout_height="@dimen/image_margin2"
         android:layout_alignLeft="@+id/call911"
         android:layout_below="@+id/call911"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:adjustViewBounds="true"
-        android:background="@drawable/map_icon"
+        android:background="@drawable/buddyguard_background"
         android:clickable="true"
         android:onClick="startsetTimerActivity"
         android:scaleType="fitXY" />
@@ -54,44 +54,97 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_marginTop="5dp"
+        android:layout_alignRight="@+id/alert"
+        android:layout_marginTop="10dp"
         android:onClick="activateGestures" />
 
     <ImageButton
         android:id="@+id/call911"
         android:layout_width="@dimen/image_margin"
         android:layout_height="@dimen/image_margin"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginLeft="27dp"
-        android:layout_marginTop="34dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/team_motto"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="50dp"
         android:adjustViewBounds="true"
-        android:background="@drawable/call_911"
+        android:background="@drawable/call911_background"
         android:clickable="true"
         android:onClick="startCall911Activity"
         android:scaleType="fitXY" />
 
     <TextView
-        android:id="@+id/textView1"
-        style="@style/CodeFont"
+        android:id="@+id/team_motto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/gestureToggleButton"
+        android:layout_alignLeft="@+id/call911"
+        android:layout_alignRight="@+id/alert"
+        android:layout_below="@+id/activateGesturesText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="serif"
         android:gravity="center_horizontal"
-        android:text="Welcome to Safety First Application" />
+        android:text="Safety is just a gesture away."
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="italic" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/activateGesturesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/gestureToggleButton"
         android:layout_alignBottom="@+id/gestureToggleButton"
         android:layout_alignLeft="@+id/call911"
         android:text="Activate Gestures"
-        android:textSize="24dp" />
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/call911"
+        android:layout_alignRight="@+id/call911"
+        android:layout_below="@+id/call911"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="Call 911" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/alert"
+        android:layout_alignRight="@+id/alert"
+        android:layout_below="@+id/alert"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="Alert!" />
+
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buddy_guard"
+        android:layout_alignRight="@+id/buddy_guard"
+        android:layout_below="@+id/buddy_guard"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="BuddyGuard" />
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sendInformation"
+        android:layout_alignRight="@+id/sendInformation"
+        android:layout_below="@+id/sendInformation"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="Witness" />
 
 </RelativeLayout>

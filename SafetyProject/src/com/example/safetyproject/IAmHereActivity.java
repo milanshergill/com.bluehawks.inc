@@ -145,10 +145,10 @@ public class IAmHereActivity extends Activity implements
 	public void onTimePickerTimeSetClick(DialogFragment dialog, int hour,
 			int min) {
 
-		// totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
-		totalTimeCountInMilliseconds = 10 * 1000;
-		// timeBlinkInMilliseconds = 10 * 1000;
-		timeBlinkInMilliseconds = 5 * 1000;
+		 totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
+//		totalTimeCountInMilliseconds = 10 * 1000;
+		 timeBlinkInMilliseconds = 10 * 1000;
+//		timeBlinkInMilliseconds = 5 * 1000;
 
 		startTimer();
 		timerButton.setText(CANCEL_TIMER);

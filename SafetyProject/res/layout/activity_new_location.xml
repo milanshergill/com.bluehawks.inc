@@ -9,7 +9,7 @@
     tools:context=".NewLocationActivity" >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/activateGesturesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
@@ -18,7 +18,7 @@
         android:id="@+id/locationTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/activateGesturesText"
         android:layout_marginTop="100dp"
         android:text="TextView" />
 
@@ -26,8 +26,8 @@
         android:id="@+id/currentLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/activateGesturesText"
+        android:layout_below="@+id/activateGesturesText"
         android:layout_marginTop="16dp"
         android:text="Print Current Location"
         android:onClick="printCurrentLocation" />

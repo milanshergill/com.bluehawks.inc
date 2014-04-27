@@ -36,7 +36,7 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		clearData();
+		//clearData();
 		SharedPreferences pref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		if (pref.getBoolean("activity_executed", false)) {

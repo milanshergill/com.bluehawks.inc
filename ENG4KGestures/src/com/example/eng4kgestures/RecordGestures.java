@@ -94,7 +94,7 @@ public class RecordGestures extends Activity implements SensorEventListener {
 			}
 			int k = accelerationList.size();
 			if(!accelerationList.isEmpty()) {
-				int j = Math.min(50,accelerationList.size());
+				int j = Math.min(25,accelerationList.size());
 				for(;j<accelerationList.size();)
 				{
 					accelerationList.remove(j);

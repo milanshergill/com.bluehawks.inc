@@ -7,11 +7,13 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,7 +26,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -35,15 +36,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.eng4kgestures.GestureRecognitionService;
 import com.example.eng4kgestures.RecordGestures;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.PushService;
 
 public class MainActivity extends Activity {
 
@@ -53,12 +50,9 @@ public class MainActivity extends Activity {
 	LocationManager locationManager;
 	LocationListener locationListener;
 	String locationProvider;
-	boolean serviceBounded = false, serviceStarted = false;
 	boolean keepLocationServiceRunning = false;
-	Intent gestureServiceIntent;
 	ToggleButton gestureToggleButton;
 	ServiceConnection conn;
-	TextView serverReplyText;
 
 	private MyAdapter listAdapter;
 	private DrawerLayout mDrawerLayout;
@@ -69,19 +63,23 @@ public class MainActivity extends Activity {
 
 	/* Variables for Navigation Drawer */
 	String userName = "Milandeep Shergill";
-	String feature_circle = "Circle of 6";
+	String feature_circle = "Emergency Friends";
 	String feature_gesture = "Record Gestures";
 	String feature_profile = "Profile";
+	String feature_highAlert = "High Alert Mode";
 
 	String feature_circle_info = "Add your friends";
 	String feature_gesture_info = "Change your recorded gestures";
 	String feature_profile_info = "Change your profile";
+	String feature_highAlert_info = "Enter high alert mode";
 
-	/* Information Server Details */
-	private static String url = "http://107.170.96.216:8888/info";
+	/* Alert/Information Server Details */
+	private static String url_alert = "http://107.170.96.216:8888/start";
+	private static String url_info = "http://107.170.96.216:8888/info";
 	private static final String TAG_NAME = "name";
 	private static final String TAG_PHONE = "phone";
 	private static final String TAG_INFO = "info";
+	private static final String TAG_HEALTH = "health";
 
 	private static final String TAG_LATITUDE = "latitude";
 	private static final String TAG_LONGITUDE = "longitude";
@@ -92,15 +90,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
 		setContentView(R.layout.drawer_layout);
-		// To track statistics around application
-		// ParseAnalytics.trackAppOpened(getIntent());
-		//
-		// // inform the Parse Cloud that it is ready for notifications
-		// PushService.setDefaultPushCallback(this, MainActivity.class);
-		// ParseInstallation.getCurrentInstallation().saveInBackground();
 
-		serverReplyText = (TextView) findViewById(R.id.serverReplyText);
-		
+		// Initialize the Analytics for Parse Push Notifications
+		ParseAnalytics.trackAppOpened(getIntent());
+
 		listAdapter = new MyAdapter(getApplicationContext(),
 				generateNavigationItems());
 
@@ -141,17 +134,7 @@ public class MainActivity extends Activity {
 		// Set the list's click listener
 		mDrawerList.setOnItemClickListener(new NavigationTitleClickListener());
 
-		Parse.initialize(this, "aiizf8TiGbMBXOuqChsatoDvaD0MpWyjaz5tuiQs",
-				"qVha5rt4cvvxb32060SZfiRF9YfNRvXB8Nz9Bhhl");
-		PushService.setDefaultPushCallback(this, MainActivity.class);
-		ParseAnalytics.trackAppOpened(getIntent());
-
 		gestureToggleButton = (ToggleButton) findViewById(R.id.gestureToggleButton);
-
-		// start the gesture recognition service
-		gestureServiceIntent = new Intent(this, GestureRecognitionService.class);
-		startService(gestureServiceIntent);
-		serviceStarted = true;
 
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this
@@ -230,19 +213,23 @@ public class MainActivity extends Activity {
 				feature_circle_info));
 		models.add(new Model(R.drawable.gesture_icon, feature_gesture,
 				feature_gesture_info));
+		models.add(new Model(R.drawable.high_alert_icon, feature_highAlert,
+				feature_highAlert_info));
 
 		return models;
 	}
 
 	public void startCall911Activity(View v) {
-		String phoneCallUri = "tel:647";
-		Intent phoneCallIntent = new Intent(Intent.ACTION_CALL);
-		phoneCallIntent.setData(Uri.parse(phoneCallUri));
-		startActivity(phoneCallIntent);
+		// String phoneCallUri = "tel:647";
+		// Intent phoneCallIntent = new Intent(Intent.ACTION_CALL);
+		// phoneCallIntent.setData(Uri.parse(phoneCallUri));
+		// startActivity(phoneCallIntent);
+		showCallEmergencyDialog();
 	}
 
 	public void startAlertLocationActivity(View v) {
 		keepLocationServiceRunning = true;
+		// showAlertFromUserDialog();
 		Intent sendDataToServerActivity = new Intent(this,
 				SendDataToServer.class);
 		startActivity(sendDataToServerActivity);
@@ -262,33 +249,9 @@ public class MainActivity extends Activity {
 
 		if (gestureToggleButton.isChecked()) {
 			Log.d("SafetyFirst", "Button was checked now!");
-			if (!serviceBounded && serviceStarted) {
-				conn = new ServiceConnection() {
 
-					@Override
-					public void onServiceDisconnected(ComponentName name) {
-						Toast.makeText(getApplicationContext(),
-								"Service unBounded", Toast.LENGTH_SHORT).show();
-					}
-
-					@Override
-					public void onServiceConnected(ComponentName name,
-							IBinder service) {
-						Toast.makeText(getApplicationContext(),
-								"Service Bound", Toast.LENGTH_SHORT).show();
-					}
-				};
-				bindService(gestureServiceIntent, conn, BIND_AUTO_CREATE);
-				serviceBounded = true;
-			}
 		} else {
-			Log.d("SafetyFirst", "Button was UNCHECKED now!");
-			if (gestureServiceIntent != null && conn != null) {
-				// stopService(gestureServiceIntent);
-				// serviceStarted = false;
-				serviceBounded = false;
-				unbindService(conn);
-			}
+
 		}
 	}
 
@@ -323,6 +286,27 @@ public class MainActivity extends Activity {
 			// Try to get the cached gps location for faster response
 			currentKnownLocation = locationManager
 					.getLastKnownLocation(locationProvider);
+		}
+
+		// Display the notification received from Parse to user
+		Intent intent = getIntent();
+		if (intent != null) {
+			Bundle extras = intent.getExtras();
+			if (extras != null) {
+				String notificationData = extras.getString("com.parse.Data");
+				if (notificationData != null) {
+					String data = "Sorry, no data found!";
+					try {
+				        JSONObject json = new JSONObject(notificationData);
+						data = json.getString("alert");
+				    } catch (JSONException e) {
+				        e.printStackTrace();
+				        Log.d("SafetyFirst", "Error reading parse notification!");
+				    }
+					Log.d("SafetyFirst", data);
+					showNotificationAlert(data);
+				}
+			}
 		}
 	}
 
@@ -456,18 +440,23 @@ public class MainActivity extends Activity {
 					.getItemAtPosition(position);
 			String selectedOptionName = selectedModel.getTitle();
 			Log.d("SafetyFirst", selectedOptionName);
-			Class<?> className = null;
-			if (selectedOptionName.equals(feature_profile))
-				className = UserProfileActivity.class;
-			else if (selectedOptionName.equals(feature_circle))
-				className = CircleOf6.class;
-			else if (selectedOptionName.equals(feature_gesture))
-				className = RecordGestures.class;
+			if (selectedOptionName.equals(feature_highAlert)) {
+				// Start the Screen Flashing here
+				showHighAlertModeDialog();
+			} else {
+				Class<?> className = null;
+				if (selectedOptionName.equals(feature_profile))
+					className = UserProfileActivity.class;
+				else if (selectedOptionName.equals(feature_circle))
+					className = CircleOf6.class;
+				else if (selectedOptionName.equals(feature_gesture))
+					className = RecordGestures.class;
 
-			if (className != null) {
-				Intent featureActivity = new Intent(view.getContext(),
-						className);
-				startActivity(featureActivity);
+				if (className != null) {
+					Intent featureActivity = new Intent(view.getContext(),
+							className);
+					startActivity(featureActivity);
+				}
 			}
 		}
 	}
@@ -480,13 +469,72 @@ public class MainActivity extends Activity {
 
 	/*
 	 * 
-	 * Send Witness Information to Server Details Start Here
+	 * Change to high alert mode dialog box
+	 */
+	private void showCallEmergencyDialog() {
+		AlertDialog emergencyDialog = new AlertDialog.Builder(this)
+				// set message and title
+				.setTitle("Call Emergency")
+				.setMessage("Do you want to call 911?")
+
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// call emergency number here
+								dialog.dismiss();
+								String phoneCallUri = "tel:647";
+								Intent phoneCallIntent = new Intent(
+										Intent.ACTION_CALL);
+								phoneCallIntent.setData(Uri.parse(phoneCallUri));
+								startActivity(phoneCallIntent);
+							}
+						})
+
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
+		emergencyDialog.show();
+	}
+
+	/*
+	 * 
+	 * Change to high alert mode dialog box
+	 */
+	private void showHighAlertModeDialog() {
+		AlertDialog highAlertModeDialog = new AlertDialog.Builder(this)
+				// set message and title
+				.setTitle("High Alert Mode")
+				.setMessage("Do you want to change to High Alert Mode?")
+
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// Change to high Alert mode here
+								dialog.dismiss();
+							}
+						})
+
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
+		highAlertModeDialog.show();
+	}
+
+	/*
+	 * 
+	 * Send Witness Information Dialog Box
 	 */
 	private void showInformationFromUserDialog() {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View sendDialogView = factory.inflate(
 				R.layout.send_info_dialog_layout, null);
-		AlertDialog sendGestureDialog = new AlertDialog.Builder(this)
+		AlertDialog witnessDialog = new AlertDialog.Builder(this)
 				// set message and title
 				.setTitle("Send Information to Server")
 
@@ -501,7 +549,7 @@ public class MainActivity extends Activity {
 								Log.d("SafetyFirst", "Message Printed "
 										+ infoText.getText().toString());
 								sendInformationToSecurity(infoText.getText()
-										.toString());
+										.toString(), url_info);
 							}
 						})
 
@@ -512,34 +560,87 @@ public class MainActivity extends Activity {
 								dialog.dismiss();
 							}
 						}).create();
-		sendGestureDialog.setView(sendDialogView);
-		sendGestureDialog.show();
+		witnessDialog.setView(sendDialogView);
+		witnessDialog.show();
 	}
 
-	private void sendInformationToSecurity(String infoText) {
-		String userName, userPhone;
+	/*
+	 * 
+	 * Send ALert Information Dialog Box
+	 */
+	private void showAlertFromUserDialog() {
+		AlertDialog alertDialog = new AlertDialog.Builder(this)
+				// set message and title
+				.setTitle("Send Alert to Security")
+				.setMessage("Do you want to inform security?")
+
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								// Send alert to security here
+								sendInformationToSecurity("Alert Message",
+										url_alert);
+							}
+						})
+
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
+		alertDialog.show();
+	}
+	
+	/*
+	 * 
+	 * Show Parse Notification alert to user
+	 */
+	private void showNotificationAlert(String data) {
+		AlertDialog notificationDialog = new AlertDialog.Builder(this)
+				// set message and title
+				.setTitle("SafetyFirst Notification")
+				.setMessage(data)
+
+				.setNeutralButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).create();
+		notificationDialog.show();
+	}
+
+	private void sendInformationToSecurity(String infoText, String url) {
+		String userName, userPhone, userHealth;
 
 		// Retrieve all the latest user information
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		String nameFieldID = Integer.toString(R.id.nameText);
 		String phoneFieldID = Integer.toString(R.id.phoneText);
+		String healthFieldID = Integer.toString(R.id.healthText);
 
 		String storedName = sharedPref.getString(nameFieldID, null);
 		String storedPhone = sharedPref.getString(phoneFieldID, null);
+		String storedHealth = sharedPref.getString(healthFieldID, null);
 
 		userName = "No Name";
 		userPhone = "No Phone";
+		userHealth = "No Health Info";
 
 		if (storedName != null)
 			userName = storedName;
 		if (storedPhone != null)
 			userPhone = storedPhone;
+		if (storedHealth != null)
+			userHealth = storedPhone;
 		try {
 			String serverReply = new SendDataToServerHelper().execute(userName,
-					userPhone, infoText).get();
+					userPhone, userHealth, infoText, url).get();
 			if (serverReply != null) {
-				serverReplyText.setText("Server Reply: " + serverReply);
 				if (serverReply.equals("Success")) {
 					Toast.makeText(getApplicationContext(),
 							"Security Alerted!", Toast.LENGTH_SHORT).show();
@@ -548,7 +649,6 @@ public class MainActivity extends Activity {
 							"No Reply from Server!", Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				serverReplyText.setText("Server Reply: " + "null");
 				Toast.makeText(getApplicationContext(),
 						"Server not available, connection refused!",
 						Toast.LENGTH_SHORT).show();
@@ -569,10 +669,12 @@ public class MainActivity extends Activity {
 			AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... args) {
-			// On trust bases the length of input arguments should be 3
+			// On trust bases the length of input arguments should be 5
 			String userName = args[0];
 			String userPhone = args[1];
-			String informationText = args[2];
+			String userHealth = args[2];
+			String informationText = args[3];
+			String url = args[4];
 
 			String latitude, longitude;
 			// User Location
@@ -590,6 +692,7 @@ public class MainActivity extends Activity {
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair(TAG_NAME, userName));
 			params.add(new BasicNameValuePair(TAG_PHONE, userPhone));
+			params.add(new BasicNameValuePair(TAG_HEALTH, userHealth));
 			params.add(new BasicNameValuePair(TAG_INFO, informationText));
 			params.add(new BasicNameValuePair(TAG_LATITUDE, latitude));
 			params.add(new BasicNameValuePair(TAG_LONGITUDE, longitude));

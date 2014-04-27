@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SafetyProject</string>
+    <string name="app_name">SafetyFirst</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="preference_file_key">PreferenceFileName</string>
     <string name="title_activity_new_location">NewLocationActivity</string>
-    <string name="title_activity_user_profile">UserProfile</string>
-    <string name="title_activity_iam_here">IAmHereActivity</string>
+    <string name="title_activity_user_profile">User Profile</string>
+    <string name="title_activity_iam_here">SafetyFirst</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 

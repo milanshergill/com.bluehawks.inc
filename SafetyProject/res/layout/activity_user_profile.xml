@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2C7F98"
+    android:background="#FFFFFF"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -10,7 +10,7 @@
     tools:context=".UserProfileActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/team_motto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -20,10 +20,10 @@
         android:textSize="28dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/activateGesturesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/team_motto"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="25dp"
         android:textSize="16dp"
@@ -56,8 +56,8 @@
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/activateGesturesText"
+        android:layout_below="@+id/activateGesturesText"
         android:layout_marginTop="10dp"
         android:hint="max 16 chars"
         android:textColorHint="#FFFFFF"

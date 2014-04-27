@@ -156,7 +156,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 			}
 			int k = accelerationList.size();
 			if(!accelerationList.isEmpty()) {
-				int j = Math.min(50,accelerationList.size());
+				int j = Math.min(25,accelerationList.size());
 				for(;j<accelerationList.size();)
 				{
 					accelerationList.remove(j);
@@ -233,7 +233,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 					modifiedTestGesture = (Acceleration[]) TemporalCompressionAverage .calculateAverage(testGesture);
 					modifiedTestGesture = NormalizeArray.normalizeArray(modifiedTestGesture);
 					testGesture.setAccelerationArray(modifiedTestGesture);
-					results.setText("check the logcat for results");
+					//results.setText("check the logcat for results");
 					
 					minDistance = 10000;
 					String selectedGestureName = "None Selected";
