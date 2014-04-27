@@ -2,6 +2,9 @@ package com.example.safetyproject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -38,7 +41,7 @@ public class SendDataToServer extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_send_data_to_server);
-		
+
 		this.getWindow().addFlags(
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -66,22 +69,43 @@ public class SendDataToServer extends Activity {
 		userPhone = "No Phone";
 		userHealthNeeds = "No Health Information";
 
-		// User Location
-		latitude = "No Location Found";
-		longitude = "No Location Found";
-
-		if (MainActivity.currentKnownLocation != null) {
-			latitude = "" + MainActivity.currentKnownLocation.getLatitude();
-			longitude = "" + MainActivity.currentKnownLocation.getLongitude();
-		}
-
 		if (storedName != null)
 			userName = storedName;
 		if (storedPhone != null)
 			userPhone = storedPhone;
 		if (storedHealth != null)
 			userHealthNeeds = storedHealth;
-		new SendDataToServerHelper().execute();
+
+		// Default User Location "Tait McKanzie Centre"
+		latitude = "43.776360";
+		longitude = "-79.512405";
+
+		final ScheduledExecutorService scheduler = Executors
+				.newSingleThreadScheduledExecutor();
+
+		// If current Location not available then try three times else send
+		// default Location
+		scheduler.scheduleAtFixedRate(new Runnable() {
+			int triesRemaining = 3;
+
+			public void run() {
+				triesRemaining--;
+				Log.d("SafetyFirst", "Trying to send location...");
+				if (MainActivity.currentKnownLocation != null) {
+					latitude = ""
+							+ MainActivity.currentKnownLocation.getLatitude();
+					longitude = ""
+							+ MainActivity.currentKnownLocation.getLongitude();
+					Log.d("SafetyFirst", "Finished");
+					new SendDataToServerHelper().execute();
+					scheduler.shutdown();
+				} else if (triesRemaining < 1) {
+					// Send default location
+					new SendDataToServerHelper().execute();
+					scheduler.shutdown();
+				}
+			}
+		}, 0, 10, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -92,11 +116,11 @@ public class SendDataToServer extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			// Showing progress dialog
-			dataStatus.setText("Executing send");
-			pDialog = new ProgressDialog(SendDataToServer.this);
-			pDialog.setMessage("Please wait...");
-			pDialog.setCancelable(false);
-			pDialog.show();
+			// dataStatus.setText("Executing send");
+			// pDialog = new ProgressDialog(SendDataToServer.this);
+			// pDialog.setMessage("Please wait...");
+			// pDialog.setCancelable(false);
+			// pDialog.show();
 		}
 
 		@Override
@@ -114,13 +138,14 @@ public class SendDataToServer extends Activity {
 			try {
 				// Making a request to url and getting response
 				jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, params);
-				// String jsonStr = sh.makeServiceCall(url1,
-				// ServiceHandler.GET);
+				Log.d("SafetyFirst", "Server Response: " + jsonStr);
+
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(),
 						"Server not responding!\n" + e.getMessage(),
 						Toast.LENGTH_SHORT).show();
-				Log.d("SafetyFirst", "Server not responding to send alerts to Server!");
+				Log.d("SafetyFirst",
+						"Server not responding to send alerts to Server!");
 			}
 
 			return null;
@@ -130,8 +155,8 @@ public class SendDataToServer extends Activity {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			// Dismiss the progress dialog
-			if (pDialog.isShowing())
-				pDialog.dismiss();
+			// if (pDialog.isShowing())
+			// pDialog.dismiss();
 			dataStatus.setText("Data Sent");
 			serverResponse.setText(jsonStr);
 			informationSent.setText("Name: " + userName + "\nPhone Number: "

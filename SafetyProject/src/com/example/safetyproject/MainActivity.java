@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,12 +22,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -36,6 +42,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -76,6 +83,7 @@ public class MainActivity extends Activity {
 	/* Alert/Information Server Details */
 	private static String url_alert = "http://107.170.96.216:8888/start";
 	private static String url_info = "http://107.170.96.216:8888/info";
+	private static String url_highAlert = "http://107.170.96.216:8888/highAlert";
 	private static final String TAG_NAME = "name";
 	private static final String TAG_PHONE = "phone";
 	private static final String TAG_INFO = "info";
@@ -83,6 +91,10 @@ public class MainActivity extends Activity {
 
 	private static final String TAG_LATITUDE = "latitude";
 	private static final String TAG_LONGITUDE = "longitude";
+
+	/* High Alert Mode Option */
+	AnimationDrawable highAlertDrawable;
+	boolean highAlertModeON = false;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -297,12 +309,13 @@ public class MainActivity extends Activity {
 				if (notificationData != null) {
 					String data = "Sorry, no data found!";
 					try {
-				        JSONObject json = new JSONObject(notificationData);
+						JSONObject json = new JSONObject(notificationData);
 						data = json.getString("alert");
-				    } catch (JSONException e) {
-				        e.printStackTrace();
-				        Log.d("SafetyFirst", "Error reading parse notification!");
-				    }
+					} catch (JSONException e) {
+						e.printStackTrace();
+						Log.d("SafetyFirst",
+								"Error reading parse notification!");
+					}
 					Log.d("SafetyFirst", data);
 					showNotificationAlert(data);
 				}
@@ -507,23 +520,70 @@ public class MainActivity extends Activity {
 		AlertDialog highAlertModeDialog = new AlertDialog.Builder(this)
 				// set message and title
 				.setTitle("High Alert Mode")
-				.setMessage("Do you want to change to High Alert Mode?")
+				.setMessage("Choose the option below.")
 
-				.setPositiveButton("Yes",
+				.setPositiveButton("Turn On",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// Change to high Alert mode here
 								dialog.dismiss();
+								// Change to high Alert mode here
+								final RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_layout);
+								highAlertDrawable = new AnimationDrawable();
+								final Handler handler = new Handler();
+
+								highAlertDrawable.addFrame(new ColorDrawable(
+										Color.WHITE), 1000);
+								highAlertDrawable.addFrame(new ColorDrawable(
+										Color.RED), 1000);
+								highAlertDrawable.setOneShot(false);
+
+								layout.setBackgroundDrawable(highAlertDrawable);
+								handler.postDelayed(new Runnable() {
+									@Override
+									public void run() {
+										highAlertDrawable.start();
+									}
+								}, 200);
+								highAlertModeON = true;
+								enterHighAlertMode();
 							}
 						})
 
-				.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				}).create();
+				.setNegativeButton("Turn Off",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								if (highAlertDrawable != null
+										&& highAlertDrawable.isRunning()) {
+									highAlertDrawable.stop();
+								}
+								final RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_layout);
+								layout.setBackgroundColor(0xFFFFFF);
+								highAlertModeON = false;
+							}
+						}).create();
 		highAlertModeDialog.show();
+	}
+
+	protected void enterHighAlertMode() {
+		// Periodically send location information to server every 30 seconds
+		final ScheduledExecutorService scheduler = Executors
+				.newSingleThreadScheduledExecutor();
+
+		scheduler.scheduleAtFixedRate(new Runnable() {
+			public void run() {
+				if (highAlertModeON) {
+					// Send data to server
+					new SendHighAlertDataToServerHelper().execute();
+				}
+				else {
+					scheduler.shutdown();
+				}
+			}
+		}, 0, 30, TimeUnit.SECONDS);
+
 	}
 
 	/*
@@ -592,24 +652,21 @@ public class MainActivity extends Activity {
 				}).create();
 		alertDialog.show();
 	}
-	
+
 	/*
 	 * 
 	 * Show Parse Notification alert to user
 	 */
 	private void showNotificationAlert(String data) {
 		AlertDialog notificationDialog = new AlertDialog.Builder(this)
-				// set message and title
-				.setTitle("SafetyFirst Notification")
-				.setMessage(data)
+		// set message and title
+				.setTitle("SafetyFirst Notification").setMessage(data)
 
-				.setNeutralButton("OK",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-							}
-						}).create();
+				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
 		notificationDialog.show();
 	}
 
@@ -711,6 +768,48 @@ public class MainActivity extends Activity {
 						"Server not responding to send information to Server!");
 			}
 
+			return null;
+		}
+	}
+
+	/**
+	 * Async task class to get json by making HTTP call
+	 * */
+	private class SendHighAlertDataToServerHelper extends
+			AsyncTask<Void, Void, Void> {
+		@Override
+		protected Void doInBackground(Void... args) {
+
+			String latitude, longitude;
+			// User Location
+			latitude = "No Location Found";
+			longitude = "No Location Found";
+
+			if (MainActivity.currentKnownLocation != null) {
+				latitude = "" + MainActivity.currentKnownLocation.getLatitude();
+				longitude = ""
+						+ MainActivity.currentKnownLocation.getLongitude();
+			}
+
+			// Creating service handler class instance
+			ServiceHandler sh = new ServiceHandler();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair(TAG_LATITUDE, latitude));
+			params.add(new BasicNameValuePair(TAG_LONGITUDE, longitude));
+
+			try {
+				Log.d("SafetyFirst", "Trying to send High Alert Data...");
+
+				// Making a request to url and getting response
+				String serverReply = sh.makeServiceCall(url_highAlert,
+						ServiceHandler.POST, params);
+				Log.d("SafetyFirst", serverReply);
+
+			} catch (Exception e) {
+				Log.d("SafetyFirst",
+						"Server not responding to send information to Server!\n Error: "
+								+ e.toString());
+			}
 			return null;
 		}
 	}
