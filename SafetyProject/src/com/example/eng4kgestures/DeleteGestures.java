@@ -6,6 +6,7 @@ import com.example.safetyproject.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -75,6 +76,12 @@ public class DeleteGestures extends Activity {
 		adapter.notifyDataSetChanged();
 	}
 	
+	public void onClickClearAll(View v) {
+		// Clear all gestures in database
+		AlertDialog diaBox = ClearAllDialog(this);
+		diaBox.show();
+	}
+	
 	OnItemLongClickListener listItemClickListener = new OnItemLongClickListener() {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -115,5 +122,29 @@ public class DeleteGestures extends Activity {
 		})
 		.create();
 		return deleteGestureDialog;
+	}
+    
+    private AlertDialog ClearAllDialog(final Context context)
+	{
+		AlertDialog clearDatabaseDialog = new AlertDialog.Builder(this) 
+	    //set message and title
+		.setTitle("Clear Database") 
+		.setMessage("Do you want to clear database?")
+		
+		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				context.deleteDatabase(MySQLiteHelper.DATABASE_NAME);
+				clearItems();
+			    dialog.dismiss();
+		    }
+		})
+		
+		.setNegativeButton("No", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		    }
+		})
+		.create();
+		return clearDatabaseDialog;
 	}
 }

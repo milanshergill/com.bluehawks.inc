@@ -25,16 +25,22 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,10 +52,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.eng4kgestures.Acceleration;
+import com.example.eng4kgestures.DynamicTimeWarping;
+import com.example.eng4kgestures.Gesture;
+import com.example.eng4kgestures.GestureDataBase;
+import com.example.eng4kgestures.NormalizeArray;
 import com.example.eng4kgestures.RecordGestures;
+import com.example.eng4kgestures.TemporalCompressionAverage;
 import com.parse.ParseAnalytics;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SensorEventListener {
 
 	// Delta time to check new location's validity
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -95,6 +107,18 @@ public class MainActivity extends Activity {
 	/* High Alert Mode Option */
 	AnimationDrawable highAlertDrawable;
 	boolean highAlertModeON = false;
+
+	/* Gesture Activate Data */
+	SensorManager sensorManager;
+	Sensor accelerometerSensor;
+	private ArrayList<Acceleration> accelerationList;
+	Acceleration acceletationObject;
+	private float accelX, accelY, accelZ;
+	private static CountDownTimer timer;
+	double minDistance = -1;
+	private GestureDataBase gestureDataBase;
+	ArrayList<Gesture> savedGestures;
+	String ALERT_GESTURE = "You will need to record atleast one gesture before activating gestures.";
 
 	@SuppressLint("NewApi")
 	@Override
@@ -146,7 +170,32 @@ public class MainActivity extends Activity {
 		// Set the list's click listener
 		mDrawerList.setOnItemClickListener(new NavigationTitleClickListener());
 
+		// Gesture related declarations
 		gestureToggleButton = (ToggleButton) findViewById(R.id.gestureToggleButton);
+
+		// setting up database for acceleration recording
+		gestureDataBase = new GestureDataBase(this);
+		gestureDataBase.openReadable();
+
+		// Array list to hold sensor data
+		accelerationList = new ArrayList<Acceleration>();
+
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		accelerometerSensor = sensorManager
+				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+		timer = new CountDownTimer(10000, 20) {
+			public void onTick(long millisUntilFinished) {
+				acceletationObject = new Acceleration(accelX, accelY, accelZ);
+				accelerationList.add(acceletationObject);
+			}
+
+			public void onFinish() {
+				processData(14.0);
+				// Clear the old readings from the list
+				accelerationList.clear();
+			}
+		};
 
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this
@@ -258,12 +307,13 @@ public class MainActivity extends Activity {
 	}
 
 	public void activateGestures(View v) {
-
 		if (gestureToggleButton.isChecked()) {
-			Log.d("SafetyFirst", "Button was checked now!");
-
-		} else {
-
+			// Get the list of all the gestures stored in Database
+			savedGestures = gestureDataBase.getAllGestures();
+			if (savedGestures.isEmpty()) {
+				gestureToggleButton.setChecked(false);
+				showAlertRecordGestureDialog();
+			}
 		}
 	}
 
@@ -585,7 +635,7 @@ public class MainActivity extends Activity {
 			public void run() {
 				if (highAlertModeON) {
 					// Send data to server
-					new SendHighAlertDataToServerHelper().execute();
+					new SendDataToServerHelper().execute();
 				} else {
 					scheduler.shutdown();
 				}
@@ -676,6 +726,24 @@ public class MainActivity extends Activity {
 					}
 				}).create();
 		notificationDialog.show();
+	}
+
+	/*
+	 * 
+	 * Show Alert Dialog to User to record atleast 1 gesture before activating
+	 * gestures
+	 */
+	private void showAlertRecordGestureDialog() {
+		AlertDialog alertDialog = new AlertDialog.Builder(this)
+		// set message and title
+				.setTitle("Activate Gestures Alert").setMessage(ALERT_GESTURE)
+
+				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
+		alertDialog.show();
 	}
 
 	private void sendInformationToSecurity(String infoText, String url) {
@@ -820,6 +888,148 @@ public class MainActivity extends Activity {
 								+ e.toString());
 			}
 			return null;
+		}
+	}
+
+	/* Methods required for Gesture Activation */
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		// TODO Auto-generated method stub
+		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+			accelX = event.values[0];
+			accelY = event.values[1];
+			accelZ = event.values[2];
+		}
+	}
+
+	protected void processData(double d) {
+		// Process only when there is new data recorded to test
+		if (!accelerationList.isEmpty()) {
+			boolean thresholdMet = false;
+			for (int i = 0; (i < accelerationList.size()) && (!thresholdMet);) {
+				float value = (float) Math
+						.pow((Math.pow(accelerationList.get(i)
+								.getAccelerationX(), 2)
+								+ Math.pow(accelerationList.get(i)
+										.getAccelerationY(), 2) + Math.pow(
+								accelerationList.get(i).getAccelerationZ(), 2)),
+								0.5);
+				if (value < d) {
+					accelerationList.remove(i);
+				} else {
+					thresholdMet = true;
+				}
+
+			}
+			if (!accelerationList.isEmpty()) {
+				int j = Math.min(25, accelerationList.size());
+				for (; j < accelerationList.size();) {
+					accelerationList.remove(j);
+				}
+			}
+
+			if (!accelerationList.isEmpty()) {
+
+				// Get the list of all the gestures stored in Database
+				savedGestures = gestureDataBase.getAllGestures();
+
+				// Create the gesture object for newly recorded gesture
+				String name = "Test Gesture";
+				Gesture testGesture = createGesureObject(name, accelerationList);
+				try {
+					Acceleration[] modifiedTestGesture;
+					modifiedTestGesture = (Acceleration[]) TemporalCompressionAverage
+							.calculateAverage(testGesture);
+					modifiedTestGesture = NormalizeArray
+							.normalizeArray(modifiedTestGesture);
+					testGesture.setAccelerationArray(modifiedTestGesture);
+
+					minDistance = 10000;
+					String selectedGestureName = "None Selected";
+					// Compare the newly gesture object with all saved gestures
+					for (int i = 0; i < savedGestures.size(); i++) {
+						Acceleration[] modifiedSavedGesture;
+						modifiedSavedGesture = (Acceleration[]) TemporalCompressionAverage
+								.calculateAverage(savedGestures.get(i));
+						modifiedSavedGesture = NormalizeArray
+								.normalizeArray(modifiedSavedGesture);
+						savedGestures.get(i).setAccelerationArray(
+								modifiedSavedGesture);
+						if (minDistance != Math.min(minDistance,
+								(double) DynamicTimeWarping.calcDistance(
+										savedGestures.get(i), testGesture))) {
+							minDistance = Math.min(minDistance,
+									(double) DynamicTimeWarping.calcDistance(
+											savedGestures.get(i), testGesture));
+							selectedGestureName = savedGestures.get(i)
+									.getName();
+						}
+					}
+					Toast.makeText(
+							getBaseContext(),
+							"Gesture Selected is: " + selectedGestureName
+									+ " with min distance: " + minDistance,
+							Toast.LENGTH_LONG).show();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public Gesture createGesureObject(String name,
+			ArrayList<Acceleration> accelerationList) {
+		int size = accelerationList.size();
+		Acceleration[] accelerationArray = new Acceleration[size];
+		for (int i = 0; i < size; i++) {
+			accelerationArray[i] = accelerationList.get(i);
+		}
+
+		Gesture gestureObject = new Gesture(name, accelerationArray);
+		return gestureObject;
+	}
+
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		int action = event.getAction();
+		int keyCode = event.getKeyCode();
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_VOLUME_UP:
+			if (action == KeyEvent.ACTION_DOWN) {
+				if (gestureToggleButton.isChecked()) {
+					accelerationList.clear();
+					timer.start();
+				}
+			}
+			if (action == KeyEvent.ACTION_UP) {
+				if (timer != null) {
+					timer.cancel();
+					timer.onFinish();
+				}
+			}
+			return true;
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+			if (action == KeyEvent.ACTION_DOWN) {
+				if (gestureToggleButton.isChecked()) {
+					accelerationList.clear();
+					timer.start();
+				}
+			}
+			if (action == KeyEvent.ACTION_UP) {
+				if (timer != null) {
+					timer.cancel();
+					timer.onFinish();
+				}
+			}
+			return true;
+		default:
+			return super.dispatchKeyEvent(event);
 		}
 	}
 }

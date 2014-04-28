@@ -1,5 +1,7 @@
 package com.example.safetyproject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -145,10 +147,10 @@ public class IAmHereActivity extends Activity implements
 	public void onTimePickerTimeSetClick(DialogFragment dialog, int hour,
 			int min) {
 
-		 totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
-//		totalTimeCountInMilliseconds = 10 * 1000;
-		 timeBlinkInMilliseconds = 10 * 1000;
-//		timeBlinkInMilliseconds = 5 * 1000;
+		totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
+		// totalTimeCountInMilliseconds = 10 * 1000;
+		timeBlinkInMilliseconds = 10 * 1000;
+		// timeBlinkInMilliseconds = 5 * 1000;
 
 		startTimer();
 		timerButton.setText(CANCEL_TIMER);
@@ -198,14 +200,30 @@ public class IAmHereActivity extends Activity implements
 				"Messages to friends and security sent...", Toast.LENGTH_SHORT)
 				.show();
 		String manualMsg = eventInfoText.getText().toString();
+		String latitude = "";
+		String longitude = "";
+		if (MainActivity.currentKnownLocation != null) {
+			latitude = "" + MainActivity.currentKnownLocation.getLatitude();
+			longitude = ""
+					+ MainActivity.currentKnownLocation.getLongitude();
+		}
+		URL locationLink = null;
+		try {
+			locationLink = new URL("http://maps.google.com/maps?q="+latitude+","+longitude+"&ll="+latitude+","+longitude+"&z=17");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (CircleOf6.contactList != null && CircleOf6.buttonIDs != null) {
 			for (int i = 0; i < 6; i++) {
 				CircleFriend friend = CircleOf6.contactList
 						.get(CircleOf6.buttonIDs[i]);
 				if (friend != null && friend.getPhoneNumber() != null)
 					sendSMS(friend.getPhoneNumber(),
-							"Hello this message is from SafetyFirst app. Your friend might be in trouble.\n"
-									+ manualMsg);
+							"This message is from SafetyFirst application."
+									+ " BuddyGuard Alert - \"" + manualMsg
+									+ "\". Here is the current location: "
+									+ locationLink);
 			}
 		}
 	}

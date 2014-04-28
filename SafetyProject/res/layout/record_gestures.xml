@@ -1,43 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <EditText
         android:id="@+id/gestureName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:inputType="textEmailAddress"
         android:ems="10"
         android:hint="Enter Gesture Name" >
+
         <requestFocus />
     </EditText>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/startRecording"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickStartRecording"
-            android:text="Start Recording" />
-
-        <Button
-            android:id="@+id/stopRecording"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/startRecording"
-            android:onClick="onClickStopRecording"
-            android:text="Stop Recording" />
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/Recording_Status"
         android:layout_width="wrap_content"
-        android:layout_height="49dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:text="Waiting for data to be recorded..." />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/startRecording"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/gestureName"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/record_gesture_background"
+        android:onClick="onClickStartRecording" />
+
+    <Button
+        android:id="@+id/deleteGestures"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/startRecording"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/delete_gesture_background"
+        android:onClick="onClickDeleteGestures" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/deleteGestures"
+        android:layout_alignRight="@+id/deleteGestures"
+        android:layout_below="@+id/deleteGestures"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="Delete Gesture" />
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startRecording"
+        android:layout_alignRight="@+id/startRecording"
+        android:layout_below="@+id/startRecording"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:text="Record Gesture" />
+
+</RelativeLayout>
