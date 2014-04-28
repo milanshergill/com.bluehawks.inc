@@ -12,130 +12,161 @@
         android:id="@+id/team_motto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Circle of 6" />
-    
+        android:layout_centerHorizontal="true"
+        android:text="Emergency Friends"
+        android:textColor="#000000"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:typeface="serif" />
+
+    <Button
+        android:id="@+id/center"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/buddy_guard"
+        android:scaleType="fitXY" />
+
     <Button
         android:id="@+id/Button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/team_motto"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_above="@id/center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="50dp"
+        android:layout_toLeftOf="@id/center"
         android:background="@drawable/button_background"
-        android:onClick="addContact" />
-    
-     <Button
+        android:onClick="addContact"
+        android:scaleType="fitXY" />
+
+    <Button
         android:id="@+id/Button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Button1"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/Button1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/center"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@id/center"
         android:background="@drawable/button_background"
-        android:onClick="addContact" />
+        android:onClick="addContact"
+        android:scaleType="fitXY" />
 
     <Button
         android:id="@+id/Button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Button2"
-        android:layout_below="@+id/Button2"
-        android:layout_marginTop="49dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_above="@id/center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/center"
         android:background="@drawable/button_background"
-        android:onClick="addContact" />
-    
+        android:onClick="addContact"
+        android:scaleType="fitXY" />
+
     <Button
         android:id="@+id/Button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Button5"
-        android:layout_toRightOf="@+id/Button6"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/center"
         android:background="@drawable/button_background"
-        android:onClick="addContact" />
+        android:onClick="addContact"
+        android:scaleType="fitXY" />
 
     <Button
         android:id="@+id/Button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Button3"
-        android:layout_alignBottom="@+id/Button3"
-        android:layout_alignLeft="@+id/Button6"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_above="@id/center"
+        android:layout_marginBottom="50dp"
+        android:layout_centerInParent="true"
         android:background="@drawable/button_background"
-        android:onClick="addContact" />
-    
-     <Button
-        android:id="@+id/Button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Button2"
-        android:layout_alignBottom="@+id/Button2"
-        android:layout_marginRight="24dp"
-        android:layout_toLeftOf="@+id/Button1"
-        android:background="@drawable/button_background"
-        android:onClick="addContact" />
+        android:onClick="addContact"
+        android:scaleType="fitXY" />
 
     <Button
-        android:id="@+id/activate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
-        android:text="Activate"
-        android:onClick="activateFeature" />
+        android:id="@+id/Button6"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/center"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_background"
+        android:onClick="addContact"
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/textView01"
-        android:layout_width="50dp"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button1"
+        android:layout_alignLeft="@+id/Button1"
         android:layout_alignRight="@+id/Button1"
-        android:maxLength="7"
-        android:text="TextView" />
-    
+        android:layout_below="@+id/Button1"
+        android:layout_marginTop="-6dp"
+        android:gravity="center_horizontal"
+        android:text="Name" />
+
     <TextView
         android:id="@+id/textView02"
-        android:layout_width="50dp"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/Button2"
+        android:layout_alignRight="@+id/Button2"
         android:layout_below="@+id/Button2"
-        android:maxLength="7"
-        android:text="TextView" />
+        android:layout_marginTop="1dp"
+        android:gravity="center_horizontal"
+        android:text="Name" />
 
     <TextView
         android:id="@+id/textView03"
-        android:layout_width="50dp"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button3"
         android:layout_alignLeft="@+id/Button3"
-        android:maxLength="7"
-        android:text="TextView" />
+        android:layout_alignRight="@+id/Button3"
+        android:layout_below="@+id/Button3"
+        android:layout_marginTop="-6dp"
+        android:gravity="center_horizontal"
+        android:text="Name" />
 
     <TextView
         android:id="@+id/textView04"
-        android:layout_width="50dp"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button4"
+        android:layout_alignLeft="@+id/Button4"
         android:layout_alignRight="@+id/Button4"
-        android:maxLength="7"
-        android:text="TextView" />
+        android:layout_below="@+id/Button4"
+        android:layout_marginTop="1dp"
+        android:gravity="center_horizontal"
+        android:text="Name" />
 
-    <TextView
+   <TextView
         android:id="@+id/textView05"
-        android:layout_width="50dp"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button5"
+        android:layout_alignLeft="@+id/Button5"
         android:layout_alignRight="@+id/Button5"
-        android:maxLength="7"
-        android:text="TextView" />
+        android:layout_below="@+id/Button5"
+        android:layout_marginTop="-48dp"
+        android:gravity="center_horizontal"
+        android:text="Name" />
 
     <TextView
         android:id="@+id/textView06"
-        android:layout_width="50dp"
+        style="@style/ButtonNameText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Button6"
         android:layout_alignRight="@+id/Button6"
         android:layout_below="@+id/Button6"
-        android:maxLength="7"
-        android:text="TextView" />
+        android:layout_marginTop="1dp"
+        android:gravity="center_horizontal"
+        android:text="Name" />
 
 </RelativeLayout>

@@ -14,7 +14,8 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
-	private String[] DUMMY_CODES = { "1234", "5678", "abcd", "efgh" };
+	private String[] DUMMY_CODES = { "1234", "5678", "0000", "7777" };
+	public final static String saveIdForUserName = "ThisIsUserIdForUserNameOfSafetyFirst";
 
 	EditText accessCodeField;
 
@@ -36,7 +37,7 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//clearData();
+//		 clearData();
 		SharedPreferences pref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		if (pref.getBoolean("activity_executed", false)) {
@@ -68,6 +69,8 @@ public class LoginActivity extends Activity {
 					Context.MODE_PRIVATE);
 			Editor ed = pref.edit();
 			ed.putBoolean("activity_executed", true);
+			String userName = getUserName(Integer.parseInt(accessCode));
+			ed.putString(saveIdForUserName, userName);
 			ed.commit();
 
 			Toast.makeText(getApplicationContext(), "Registration Successful!",
@@ -86,5 +89,24 @@ public class LoginActivity extends Activity {
 				return true;
 		}
 		return false;
+	}
+
+	private String getUserName(int code) {
+		String userName = null;
+		switch (code) {
+		case 1234:
+			userName = "Milandeep Shergill";
+			break;
+		case 5678:
+			userName = "Jatin Behl";
+			break;
+		case 0000:
+			userName = "Manjeet Kaur";
+			break;
+		case 7777:
+			userName = "Khady Lo Seck";
+			break;
+		}
+		return userName;
 	}
 }

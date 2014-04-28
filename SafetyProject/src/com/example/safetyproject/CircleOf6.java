@@ -1,8 +1,6 @@
 package com.example.safetyproject;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,16 +14,24 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.NavUtils;
+import android.provider.MediaStore;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -74,8 +80,8 @@ public class CircleOf6 extends Activity {
 		textContact4 = (TextView) findViewById(R.id.textView04);
 		textContact5 = (TextView) findViewById(R.id.textView05);
 		textContact6 = (TextView) findViewById(R.id.textView06);
-		
-//		clearData();
+
+		// clearData();
 	}
 
 	@Override
@@ -84,11 +90,11 @@ public class CircleOf6 extends Activity {
 		getMenuInflater().inflate(R.menu.circle_of6, menu);
 		return true;
 	}
-	
+
 	@Override
 	public void onStop() {
 		super.onStop(); // Always call the superclass method first
-		
+
 		// Save the data before stopping
 		try {
 			saveToSharedFile(0, true);
@@ -101,7 +107,7 @@ public class CircleOf6 extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart(); // Always call the superclass method first
-		
+
 		// Set the data back before starting
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -111,9 +117,12 @@ public class CircleOf6 extends Activity {
 			if (friendInfo != null) {
 				CircleFriend friend = null;
 				try {
-					friend = (CircleFriend) ObjectSerializer.deserialize(friendInfo);
-					Log.i("SharedPreference", "Key: " + i + " " + friend.getName());
-					Log.i("SharedPreference", "Value: " + i + " " + friend.getPhotoURI());
+					friend = (CircleFriend) ObjectSerializer
+							.deserialize(friendInfo);
+					Log.i("SharedPreference",
+							"Key: " + i + " " + friend.getName());
+					Log.i("SharedPreference",
+							"Value: " + i + " " + friend.getPhotoURI());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -129,30 +138,31 @@ public class CircleOf6 extends Activity {
 		unregisterReceiver(receiver);
 		super.onDestroy();
 	}
-	
-	private void saveToSharedFile(int buttonID, boolean checkAll) throws IOException {
+
+	private void saveToSharedFile(int buttonID, boolean checkAll)
+			throws IOException {
 		// Save the circle of 6 data
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
-		
+
 		if (!checkAll) {
 			String buttonStr = Integer.toString(buttonID);
 			String data = ObjectSerializer.serialize(contactList.get(buttonID));
 			editor.putString(buttonStr, data);
-		}
-		else {
+		} else {
 			for (int i = 0; i < 6; i++) {
 				if (contactList.get(buttonIDs[i]) != null) {
 					String buttonStr = Integer.toString(buttonIDs[i]);
-					String data = ObjectSerializer.serialize(contactList.get(buttonIDs[i]));
+					String data = ObjectSerializer.serialize(contactList
+							.get(buttonIDs[i]));
 					editor.putString(buttonStr, data);
 				}
 			}
 		}
 		editor.commit();
 	}
-	
+
 	private void clearData() {
 		// Clear all the preferences in the shared preference file
 		SharedPreferences sharedPref = getSharedPreferences(
@@ -169,48 +179,50 @@ public class CircleOf6 extends Activity {
 	@SuppressLint("NewApi")
 	private void updateCircles() {
 		for (int i = 0; i < 6; i++) {
-			if (contactList.get(buttonIDs[i]) != null && contactList.get(buttonIDs[i]).getPhoneNumber() != null) {
-				if(buttonIDs[i] == buttonIDs[0]){
+			if (contactList.get(buttonIDs[i]) != null
+					&& contactList.get(buttonIDs[i]).getPhoneNumber() != null) {
+				if (buttonIDs[i] == buttonIDs[0]) {
 					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
-						addContact1.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
-								.getPhotoURI()));
+						addContact1.setBackground(getContactPhoto(contactList
+								.get(buttonIDs[i]).getPhotoURI()));
 					if (contactList.get(buttonIDs[i]).getName() != null)
-						textContact1.setText(contactList.get(buttonIDs[i]).getName());
-				}
-				else if(buttonIDs[i] == buttonIDs[1]){ 
+						textContact1.setText(contactList.get(buttonIDs[i])
+								.getName());
+				} else if (buttonIDs[i] == buttonIDs[1]) {
 					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
-						addContact2.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
-								.getPhotoURI()));
+						addContact2.setBackground(getContactPhoto(contactList
+								.get(buttonIDs[i]).getPhotoURI()));
 					if (contactList.get(buttonIDs[i]).getName() != null)
-						textContact2.setText(contactList.get(buttonIDs[i]).getName());
-				}
-				else if(buttonIDs[i] == buttonIDs[2]){ 
+						textContact2.setText(contactList.get(buttonIDs[i])
+								.getName());
+				} else if (buttonIDs[i] == buttonIDs[2]) {
 					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
-						addContact3.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
-								.getPhotoURI()));
+						addContact3.setBackground(getContactPhoto(contactList
+								.get(buttonIDs[i]).getPhotoURI()));
 					if (contactList.get(buttonIDs[i]).getName() != null)
-						textContact3.setText(contactList.get(buttonIDs[i]).getName());
-				}
-				else if(buttonIDs[i] == buttonIDs[3]){ 
+						textContact3.setText(contactList.get(buttonIDs[i])
+								.getName());
+				} else if (buttonIDs[i] == buttonIDs[3]) {
 					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
-						addContact4.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
-								.getPhotoURI()));
+						addContact4.setBackground(getContactPhoto(contactList
+								.get(buttonIDs[i]).getPhotoURI()));
 					if (contactList.get(buttonIDs[i]).getName() != null)
-						textContact4.setText(contactList.get(buttonIDs[i]).getName());
-				}
-				else if(buttonIDs[i] == buttonIDs[4]){ 
+						textContact4.setText(contactList.get(buttonIDs[i])
+								.getName());
+				} else if (buttonIDs[i] == buttonIDs[4]) {
 					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
-						addContact5.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
-								.getPhotoURI()));
+						addContact5.setBackground(getContactPhoto(contactList
+								.get(buttonIDs[i]).getPhotoURI()));
 					if (contactList.get(buttonIDs[i]).getName() != null)
-						textContact5.setText(contactList.get(buttonIDs[i]).getName());
-				}
-				else if(buttonIDs[i] == buttonIDs[5]){ 
+						textContact5.setText(contactList.get(buttonIDs[i])
+								.getName());
+				} else if (buttonIDs[i] == buttonIDs[5]) {
 					if (contactList.get(buttonIDs[i]).getPhotoURI() != null)
-						addContact6.setBackground(getContactPhoto(contactList.get(buttonIDs[i])
-								.getPhotoURI()));
+						addContact6.setBackground(getContactPhoto(contactList
+								.get(buttonIDs[i]).getPhotoURI()));
 					if (contactList.get(buttonIDs[i]).getName() != null)
-						textContact6.setText(contactList.get(buttonIDs[i]).getName());
+						textContact6.setText(contactList.get(buttonIDs[i])
+								.getName());
 				}
 			}
 		}
@@ -239,51 +251,51 @@ public class CircleOf6 extends Activity {
 		case (R.id.Button1):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact1, textContact1,
-						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
+						retrieveContactName(data), retrievePhotoURI(data),
+						retrieveContactPhoto(data), retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button2):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact2, textContact2,
-						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
+						retrieveContactName(data), retrievePhotoURI(data),
+						retrieveContactPhoto(data), retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button3):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact3, textContact3,
-						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
+						retrieveContactName(data), retrievePhotoURI(data),
+						retrieveContactPhoto(data), retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button4):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact4, textContact4,
-						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
+						retrieveContactName(data), retrievePhotoURI(data),
+						retrieveContactPhoto(data), retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button5):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact5, textContact5,
-						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
+						retrieveContactName(data), retrievePhotoURI(data),
+						retrieveContactPhoto(data), retrievePhoneNumber(data));
 			}
 			break;
 		case (R.id.Button6):
 			if (resultCode == Activity.RESULT_OK) {
 				saveContact(addContact6, textContact6,
-						retrieveContactName(data), retrievePhotoURI(data), retrieveContactPhoto(data),
-						retrievePhoneNumber(data));
+						retrieveContactName(data), retrievePhotoURI(data),
+						retrieveContactPhoto(data), retrievePhoneNumber(data));
 			}
 			break;
 		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	private void saveContact(Button button, TextView textView, String name, String photoURI,
-			Drawable contactPhoto, String contactNumber) {
+	private void saveContact(Button button, TextView textView, String name,
+			String photoURI, Drawable contactPhoto, String contactNumber) {
 		if (contactNumber != null) {
 			CircleFriend newFriend = new CircleFriend(name, contactNumber,
 					photoURI);
@@ -364,33 +376,65 @@ public class CircleOf6 extends Activity {
 			String photoURI = c
 					.getString(c
 							.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-			
+
 			photo = getContactPhoto(photoURI);
 		}
 
 		return photo;
 	}
-	
-	
-	
+
 	private Drawable getContactPhoto(String photoURI) {
 		Drawable photo = null;
-		
+
 		Uri uri = null;
 		if (photoURI != null) {
 			uri = Uri.parse(photoURI);
+			Bitmap bm = null, circularBitmap = null;
 			try {
-				InputStream inputStream = getContentResolver()
-						.openInputStream(uri);
-				photo = Drawable.createFromStream(inputStream,
-						photoURI.toString());
-			} catch (FileNotFoundException e) {
-				photo = getResources().getDrawable(R.drawable.ic_launcher);
+				bm = MediaStore.Images.Media.getBitmap(
+						this.getContentResolver(), uri);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (bm != null) {
+				circularBitmap = getRoundedCornerBitmap(bm, 100);
+			}
+
+			if (circularBitmap != null) {
+				photo = new BitmapDrawable(getResources(), circularBitmap);
 			}
 		} else
 			photo = getResources().getDrawable(R.drawable.ic_launcher);
-		
+
 		return photo;
+	}
+
+	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+		int w = bitmap.getWidth();
+		int h = bitmap.getHeight();
+
+		int radius = Math.min(h / 2, w / 2);
+		Bitmap output = Bitmap.createBitmap(w + 8, h + 8, Config.ARGB_8888);
+
+		Paint p = new Paint();
+		p.setAntiAlias(true);
+
+		Canvas c = new Canvas(output);
+		c.drawARGB(0, 0, 0, 0);
+		p.setStyle(Style.FILL);
+
+		c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+
+		p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+
+		c.drawBitmap(bitmap, 4, 4, p);
+		p.setXfermode(null);
+		p.setStyle(Style.STROKE);
+		p.setColor(Color.RED);
+		p.setStrokeWidth(3);
+		c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+
+		return output;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

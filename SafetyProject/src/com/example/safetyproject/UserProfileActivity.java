@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +25,10 @@ public class UserProfileActivity extends Activity {
 		nameText = (EditText) findViewById(R.id.nameText);
 		phoneText = (EditText) findViewById(R.id.phoneText);
 		healthText = (EditText) findViewById(R.id.healthText);
+
+		// Make name text non-editable
+		nameText.setInputType(InputType.TYPE_NULL);
+		nameText.setBackgroundColor(0xFFBDBDBD);
 
 		// Enable this to clear user data
 		// clearData();
@@ -64,7 +69,7 @@ public class UserProfileActivity extends Activity {
 
 			Toast.makeText(getApplicationContext(),
 					"Profile saved successfully.", Toast.LENGTH_SHORT).show();
-			
+
 			finish();
 		}
 	}
@@ -84,10 +89,8 @@ public class UserProfileActivity extends Activity {
 		if (name.isEmpty()) {
 			nameText.setError("Please provide a valid name!");
 			return false;
-		} else if (!android.util.Patterns.PHONE.matcher(phone)
-				.matches()) {
-			phoneText
-					.setError("Enter valid phone number!");
+		} else if (!android.util.Patterns.PHONE.matcher(phone).matches()) {
+			phoneText.setError("Enter valid phone number!");
 			return false;
 		}
 		return true;
@@ -133,7 +136,8 @@ public class UserProfileActivity extends Activity {
 		String phoneFieldID = Integer.toString(phoneText.getId());
 		String healthFieldID = Integer.toString(healthText.getId());
 
-		String storedName = sharedPref.getString(nameFieldID, null);
+		String storedName = sharedPref.getString(
+				LoginActivity.saveIdForUserName, null);
 		String storedPhone = sharedPref.getString(phoneFieldID, null);
 		String storedHealth = sharedPref.getString(healthFieldID, null);
 

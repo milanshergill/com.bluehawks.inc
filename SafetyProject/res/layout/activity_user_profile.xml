@@ -61,7 +61,7 @@
         android:layout_marginTop="10dp"
         android:hint="max 16 chars"
         android:textColorHint="#FFFFFF"
-        android:maxLength="16"
+        android:maxLength="18"
         android:textSize="14dp"
         android:ems="18"
         android:inputType="textEmailAddress" >

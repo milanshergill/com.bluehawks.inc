@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 	private CharSequence mTitle;
 
 	/* Variables for Navigation Drawer */
-	String userName = "Milandeep Shergill";
+	String userName = "Default Name";
 	String feature_circle = "Emergency Friends";
 	String feature_gesture = "Record Gestures";
 	String feature_profile = "Profile";
@@ -281,6 +281,10 @@ public class MainActivity extends Activity {
 		keepLocationServiceRunning = false;
 		loadFromSharedFile();
 
+		if (listAdapter != null) {
+			listAdapter.getItem(0).setTitle(userName);
+		}
+
 		if (locationManager != null) {
 
 			// Register the listener with the Location Manager to receive
@@ -306,6 +310,7 @@ public class MainActivity extends Activity {
 			Bundle extras = intent.getExtras();
 			if (extras != null) {
 				String notificationData = extras.getString("com.parse.Data");
+				intent.removeExtra("com.parse.Data");
 				if (notificationData != null) {
 					String data = "Sorry, no data found!";
 					try {
@@ -362,10 +367,14 @@ public class MainActivity extends Activity {
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		String buttonID = Integer.toString(gestureToggleButton.getId());
-
+		String storedUserName = sharedPref.getString(
+				LoginActivity.saveIdForUserName, null);
 		boolean buttonStatus = sharedPref.getBoolean(buttonID, false);
 		if (gestureToggleButton != null)
 			gestureToggleButton.setChecked(buttonStatus);
+		if (storedUserName != null && userName != null) {
+			userName = storedUserName;
+		}
 	}
 
 	protected void makeUseOfNewLocation(Location newLocation) {
@@ -577,12 +586,11 @@ public class MainActivity extends Activity {
 				if (highAlertModeON) {
 					// Send data to server
 					new SendHighAlertDataToServerHelper().execute();
-				}
-				else {
+				} else {
 					scheduler.shutdown();
 				}
 			}
-		}, 0, 30, TimeUnit.SECONDS);
+		}, 0, 5, TimeUnit.SECONDS);
 
 	}
 
@@ -680,7 +688,8 @@ public class MainActivity extends Activity {
 		String phoneFieldID = Integer.toString(R.id.phoneText);
 		String healthFieldID = Integer.toString(R.id.healthText);
 
-		String storedName = sharedPref.getString(nameFieldID, null);
+		String storedName = sharedPref.getString(
+				LoginActivity.saveIdForUserName, null);
 		String storedPhone = sharedPref.getString(phoneFieldID, null);
 		String storedHealth = sharedPref.getString(healthFieldID, null);
 
@@ -803,7 +812,7 @@ public class MainActivity extends Activity {
 				// Making a request to url and getting response
 				String serverReply = sh.makeServiceCall(url_highAlert,
 						ServiceHandler.POST, params);
-				Log.d("SafetyFirst", serverReply);
+				Log.d("SafetyFirst", "Server Reply: " + serverReply);
 
 			} catch (Exception e) {
 				Log.d("SafetyFirst",
