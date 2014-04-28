@@ -635,7 +635,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 			public void run() {
 				if (highAlertModeON) {
 					// Send data to server
-					sendInformationToSecurity("Fudu Banda", url_highAlert);
+					new SendHighAlertDataToServerHelper().execute();
 				} else {
 					scheduler.shutdown();
 				}
