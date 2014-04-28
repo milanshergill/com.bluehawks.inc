@@ -45,10 +45,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -115,10 +117,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 	Acceleration acceletationObject;
 	private float accelX, accelY, accelZ;
 	private static CountDownTimer timer;
+	boolean startRecording = false;
 	double minDistance = -1;
 	private GestureDataBase gestureDataBase;
 	ArrayList<Gesture> savedGestures;
 	String ALERT_GESTURE = "You will need to record atleast one gesture before activating gestures.";
+	TextView gestureStatus;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -126,6 +130,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
 		setContentView(R.layout.drawer_layout);
+
+		this.getWindow().addFlags(
+				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
 		// Initialize the Analytics for Parse Push Notifications
 		ParseAnalytics.trackAppOpened(getIntent());
@@ -170,12 +178,17 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// Set the list's click listener
 		mDrawerList.setOnItemClickListener(new NavigationTitleClickListener());
 
+		// Open the drawer initially to inform the user about it
+		mDrawerLayout.openDrawer(mDrawerList);
+
 		// Gesture related declarations
 		gestureToggleButton = (ToggleButton) findViewById(R.id.gestureToggleButton);
 
 		// setting up database for acceleration recording
 		gestureDataBase = new GestureDataBase(this);
 		gestureDataBase.openReadable();
+
+		gestureStatus = (TextView) findViewById(R.id.testingStatus);
 
 		// Array list to hold sensor data
 		accelerationList = new ArrayList<Acceleration>();
@@ -184,14 +197,24 @@ public class MainActivity extends Activity implements SensorEventListener {
 		accelerometerSensor = sensorManager
 				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+		sensorManager.registerListener(this, accelerometerSensor,
+				SensorManager.SENSOR_DELAY_FASTEST);
+
 		timer = new CountDownTimer(10000, 20) {
 			public void onTick(long millisUntilFinished) {
-				acceletationObject = new Acceleration(accelX, accelY, accelZ);
-				accelerationList.add(acceletationObject);
+				if (startRecording) {
+					acceletationObject = new Acceleration(accelX, accelY,
+							accelZ);
+					accelerationList.add(acceletationObject);
+				}
 			}
 
 			public void onFinish() {
+				gestureStatus
+						.setText("Finished test, processing now... Initial data includes "
+								+ accelerationList.size() + " values");
 				processData(14.0);
+				startRecording = false;
 				// Clear the old readings from the list
 				accelerationList.clear();
 			}
@@ -309,10 +332,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 	public void activateGestures(View v) {
 		if (gestureToggleButton.isChecked()) {
 			// Get the list of all the gestures stored in Database
-			savedGestures = gestureDataBase.getAllGestures();
+			ArrayList<Gesture> savedGestures = gestureDataBase.getAllGestures();
 			if (savedGestures.isEmpty()) {
 				gestureToggleButton.setChecked(false);
-				showAlertRecordGestureDialog();
+				showRecordGestureAlertDialog();
 			}
 		}
 	}
@@ -330,6 +353,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 		keepLocationServiceRunning = false;
 		loadFromSharedFile();
+		gestureDataBase.openReadable();
+		sensorManager.registerListener(this, accelerometerSensor,
+				SensorManager.SENSOR_DELAY_FASTEST);
 
 		if (listAdapter != null) {
 			listAdapter.getItem(0).setTitle(userName);
@@ -376,12 +402,25 @@ public class MainActivity extends Activity implements SensorEventListener {
 				}
 			}
 		}
+
+		// Each time verify if there are gestures in database and toggle is on
+		if (gestureToggleButton != null && gestureToggleButton.isChecked()) {
+			// Get the list of all the gestures stored in Database
+			ArrayList<Gesture> savedGestures = gestureDataBase.getAllGestures();
+			if (savedGestures.isEmpty()) {
+				gestureToggleButton.setChecked(false);
+				// showAlertRecordGestureDialog();
+			}
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+
+		gestureDataBase.close();
+		sensorManager.unregisterListener(this);
 
 		try {
 			saveToSharedFile();
@@ -733,7 +772,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	 * Show Alert Dialog to User to record atleast 1 gesture before activating
 	 * gestures
 	 */
-	private void showAlertRecordGestureDialog() {
+	private void showRecordGestureAlertDialog() {
 		AlertDialog alertDialog = new AlertDialog.Builder(this)
 		// set message and title
 				.setTitle("Activate Gestures Alert").setMessage(ALERT_GESTURE)
@@ -741,6 +780,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
+						mDrawerLayout.openDrawer(mDrawerList);
+						mDrawerList.getChildAt(3).setPressed(true);
 					}
 				}).create();
 		alertDialog.show();
@@ -927,6 +968,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 				}
 
 			}
+
+			gestureStatus.setText("After first processing, data includes "
+					+ accelerationList.size() + " values");
 			if (!accelerationList.isEmpty()) {
 				int j = Math.min(25, accelerationList.size());
 				for (; j < accelerationList.size();) {
@@ -1003,11 +1047,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 		case KeyEvent.KEYCODE_VOLUME_UP:
 			if (action == KeyEvent.ACTION_DOWN) {
 				if (gestureToggleButton.isChecked()) {
+					gestureStatus.setText("Starting Test...");
+					startRecording = true;
 					accelerationList.clear();
 					timer.start();
 				}
 			}
 			if (action == KeyEvent.ACTION_UP) {
+				startRecording = false;
 				if (timer != null) {
 					timer.cancel();
 					timer.onFinish();
@@ -1017,11 +1064,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 			if (action == KeyEvent.ACTION_DOWN) {
 				if (gestureToggleButton.isChecked()) {
+					gestureStatus.setText("Starting Test...");
+					startRecording = true;
 					accelerationList.clear();
 					timer.start();
 				}
 			}
 			if (action == KeyEvent.ACTION_UP) {
+				startRecording = false;
 				if (timer != null) {
 					timer.cancel();
 					timer.onFinish();
