@@ -1,16 +1,19 @@
 package com.example.safetyproject;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -29,6 +32,7 @@ public class IAmHereActivity extends Activity implements
 
 	private String START_TIMER = "Start Timer";
 	private String CANCEL_TIMER = "Cancel Timer";
+	public static String BUDDYGUARD_TIMER = "buddyGuard_timer";
 	private String defaultTimerText = "00:00";
 
 	private static final int MAX_SMS_MESSAGE_LENGTH = 160;
@@ -46,6 +50,8 @@ public class IAmHereActivity extends Activity implements
 	CountDownTimer countDownTimer;
 
 	LoginDialogFragment passwordDialog;
+
+	boolean timerActivated = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,23 @@ public class IAmHereActivity extends Activity implements
 	protected void onDestroy() {
 		unregisterReceiver(receiver);
 		super.onDestroy();
+	}
+
+	private void saveToSharedFile() throws IOException {
+		// Save timer status
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putBoolean(BUDDYGUARD_TIMER, timerActivated);
+		// Commit Changes
+		editor.commit();
+	}
+
+	private void loadFromSharedFile() {
+		// Load user profile data
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		timerActivated = sharedPref.getBoolean(BUDDYGUARD_TIMER, false);
 	}
 
 	/******
@@ -147,13 +170,32 @@ public class IAmHereActivity extends Activity implements
 	public void onTimePickerTimeSetClick(DialogFragment dialog, int hour,
 			int min) {
 
-		totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
-		// totalTimeCountInMilliseconds = 10 * 1000;
-		timeBlinkInMilliseconds = 10 * 1000;
-		// timeBlinkInMilliseconds = 5 * 1000;
+		// totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
+		totalTimeCountInMilliseconds = 10 * 1000;
+		// timeBlinkInMilliseconds = 10 * 1000;
+		timeBlinkInMilliseconds = 5 * 1000;
 
 		startTimer();
 		timerButton.setText(CANCEL_TIMER);
+		
+		timerActivated = true;
+		try {
+			saveToSharedFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Run the timer using broadcast receiver and AlarmManager
+		Intent intent = new Intent(this, TimeExpiredBroadcastReceiver.class);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(
+				this.getApplicationContext(), 0, intent, 0);
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+				+ (10 * 1000), pendingIntent);
+		Toast.makeText(this, "Alarm set in " + 5 + " seconds",
+				Toast.LENGTH_LONG).show();
+
 	}
 
 	@Override
@@ -197,19 +239,20 @@ public class IAmHereActivity extends Activity implements
 	// Activate the feature to send messages to all the friends
 	public void activateFeature() {
 		Toast.makeText(getApplicationContext(),
-				"Messages to friends and security sent...", Toast.LENGTH_SHORT)
+				"Messages to emergency friends sent.", Toast.LENGTH_SHORT)
 				.show();
 		String manualMsg = eventInfoText.getText().toString();
 		String latitude = "";
 		String longitude = "";
 		if (MainActivity.currentKnownLocation != null) {
 			latitude = "" + MainActivity.currentKnownLocation.getLatitude();
-			longitude = ""
-					+ MainActivity.currentKnownLocation.getLongitude();
+			longitude = "" + MainActivity.currentKnownLocation.getLongitude();
 		}
 		URL locationLink = null;
 		try {
-			locationLink = new URL("http://maps.google.com/maps?q="+latitude+","+longitude+"&ll="+latitude+","+longitude+"&z=17");
+			locationLink = new URL("http://maps.google.com/maps?q=" + latitude
+					+ "," + longitude + "&ll=" + latitude + "," + longitude
+					+ "&z=17");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

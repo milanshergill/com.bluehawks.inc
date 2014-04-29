@@ -71,22 +71,24 @@ public class LoginDialogFragment extends DialogFragment {
 		passwordField = (EditText) promptsView.findViewById(R.id.password);
 
 		passwordTimer = (TextView) promptsView.findViewById(R.id.passwordTimer);
-		builder.setView(promptsView).setNeutralButton("LogIn",
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						// Do nothing here but perform actions in
-						// over-ridden method
-					}
-				});
+		builder.setCancelable(false)
+				.setView(promptsView)
+				.setNeutralButton("LogIn",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								// Do nothing here but perform actions in
+								// over-ridden method
+							}
+						});
 		return builder.create();
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart(); // super.onStart() is where dialog.show() is actually
-						 // called on the underlying dialog, so we have to do
-						 // it after this point
+							// called on the underlying dialog, so we have to do
+							// it after this point
 
 		// Start the password timer
 		if (startPasswordTimer)
@@ -117,7 +119,7 @@ public class LoginDialogFragment extends DialogFragment {
 	private void startPassowrdTimer() {
 
 		long totalTimeInMillis = 10 * 1000; // 10 secs
-		
+
 		// make the passtimer field visible
 		passwordTimer.setVisibility(View.VISIBLE);
 		passwordCountDownTimer = new CountDownTimer(totalTimeInMillis, 1000) {
@@ -129,7 +131,7 @@ public class LoginDialogFragment extends DialogFragment {
 				// format the textview to show the easily readable format
 				passwordTimer.setText(String.format("%02d", seconds / 60) + ":"
 						+ String.format("%02d", seconds % 60));
-				
+
 				if (playSound) {
 					mListener.playAlertSound();
 				}
@@ -141,7 +143,7 @@ public class LoginDialogFragment extends DialogFragment {
 				// this function will be called when the timecount is finished
 				mListener.passwordTimerEnded();
 				dismiss(); // dismiss the dialog
-				
+
 			}
 		}.start();
 	}

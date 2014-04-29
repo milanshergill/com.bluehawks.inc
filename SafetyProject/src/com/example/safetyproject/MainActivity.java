@@ -82,6 +82,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 
+	boolean buddyGuardTimerActivated = false;
+
 	/* Variables for Navigation Drawer */
 	String userName = "Default Name";
 	String feature_circle = "Emergency Friends";
@@ -412,6 +414,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 				// showAlertRecordGestureDialog();
 			}
 		}
+
+//		if (buddyGuardTimerActivated) {
+//			Intent buddy_intent = new Intent(this, MainActivity.class);
+//			startActivity(buddy_intent);
+//		}
 	}
 
 	@Override
@@ -459,6 +466,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 		String storedUserName = sharedPref.getString(
 				LoginActivity.saveIdForUserName, null);
 		boolean buttonStatus = sharedPref.getBoolean(buttonID, false);
+		buddyGuardTimerActivated = sharedPref.getBoolean(
+				IAmHereActivity.BUDDYGUARD_TIMER, false);
 		if (gestureToggleButton != null)
 			gestureToggleButton.setChecked(buttonStatus);
 		if (storedUserName != null && userName != null) {
@@ -782,6 +791,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 						dialog.dismiss();
 						mDrawerLayout.openDrawer(mDrawerList);
 						mDrawerList.getChildAt(3).setPressed(true);
+						Handler handler = new Handler();
+						handler.postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								mDrawerList.getChildAt(3).setPressed(false);
+							}
+						}, 500);
 					}
 				}).create();
 		alertDialog.show();
@@ -900,8 +916,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 			String latitude, longitude;
 			// User Location
-			latitude = "No Location Found";
-			longitude = "No Location Found";
+			latitude = "43.776360";
+			longitude = "-79.512405";
 
 			if (MainActivity.currentKnownLocation != null) {
 				latitude = "" + MainActivity.currentKnownLocation.getLatitude();
@@ -953,6 +969,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// Process only when there is new data recorded to test
 		if (!accelerationList.isEmpty()) {
 			boolean thresholdMet = false;
+			int size = accelerationList.size();
 			for (int i = 0; (i < accelerationList.size()) && (!thresholdMet);) {
 				float value = (float) Math
 						.pow((Math.pow(accelerationList.get(i)
@@ -969,14 +986,17 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 			}
 
-			gestureStatus.setText("After first processing, data includes "
-					+ accelerationList.size() + " values");
+			int k = accelerationList.size();
 			if (!accelerationList.isEmpty()) {
 				int j = Math.min(25, accelerationList.size());
 				for (; j < accelerationList.size();) {
 					accelerationList.remove(j);
 				}
 			}
+			
+			gestureStatus.setText("Gesture saved, initial size was " + size
+					+ " after cleanup size was " + k
+					+ " the size of accel array is " + accelerationList.size());
 
 			if (!accelerationList.isEmpty()) {
 

@@ -44,6 +44,10 @@ public class LoginActivity extends Activity {
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
 			finish();
+		} else if (pref.getBoolean(IAmHereActivity.BUDDYGUARD_TIMER, false)) {
+			Intent intent = new Intent(this, IAmHereActivity.class);
+			startActivity(intent);
+			finish();
 		}
 	}
 
@@ -52,6 +56,7 @@ public class LoginActivity extends Activity {
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 		Editor ed = pref.edit();
 		ed.putBoolean("activity_executed", false);
+		ed.putBoolean(IAmHereActivity.BUDDYGUARD_TIMER, false);
 		ed.commit();
 	}
 
