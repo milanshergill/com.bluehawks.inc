@@ -28,7 +28,7 @@
 
     <uses-permission android:name="com.example.safetyproject.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
         android:name="com.example.safetyproject.Application"
@@ -40,6 +40,7 @@
         <activity
             android:name="com.example.safetyproject.LoginActivity"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,48 +48,73 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.safetyproject.CircleOf6" >
+        <activity
+            android:name="com.example.safetyproject.CircleOf6"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.safetyproject.SetTimer" >
+        <activity
+            android:name="com.example.safetyproject.SetTimer"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.safetyproject.LocationActivity" >
+        <activity
+            android:name="com.example.safetyproject.LocationActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.safetyproject.SendDataToServer" >
+        <activity
+            android:name="com.example.safetyproject.SendDataToServer"
+            android:screenOrientation="portrait" >
         </activity>
 
-   <!--      <receiver android:name="com.example.eng4kgestures.MediaButtonReceiver" >
+        <!--
+             <receiver android:name="com.example.eng4kgestures.MediaButtonReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
                 <action android:name="android.media.VOLUME_CHANGED_ACTION" />
             </intent-filter> 
-        </receiver> -->
+        </receiver>
+        -->
 
-        <activity android:name="com.example.eng4kgestures.GestureActivity" >
+        <activity
+            android:name="com.example.eng4kgestures.GestureActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.eng4kgestures.DeleteGestures" >
+        <activity
+            android:name="com.example.eng4kgestures.DeleteGestures"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.eng4kgestures.RecordGestures" >
+        <activity
+            android:name="com.example.eng4kgestures.RecordGestures"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.eng4kgestures.TestGestures" >
+        <activity
+            android:name="com.example.eng4kgestures.TestGestures"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.safetyproject.NewLocationActivity"
-            android:label="@string/title_activity_new_location" >
+            android:label="@string/title_activity_new_location"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.safetyproject.UserProfileActivity"
-            android:label="@string/title_activity_user_profile" >
+            android:label="@string/title_activity_user_profile"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.example.safetyproject.UserProfile" >
+        <activity
+            android:name="com.example.safetyproject.UserProfile"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.safetyproject.IAmHereActivity"
             android:label="@string/title_activity_iam_here"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.safetyproject.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service android:name="com.example.eng4kgestures.GestureRecognitionService" >
@@ -113,13 +139,17 @@
         </receiver>
         <receiver android:name="TimeExpiredBroadcastReceiver" >
         </receiver>
-        <!--  <receiver android:name="VolumeKeyBroadcastReceiver" >
+        <!--
+        <receiver android:name="VolumeKeyBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.media.VOLUME_CHANGED_ACTION" />
             </intent-filter>
-        </receiver>  -->
-        <activity android:name="com.example.eng4kgestures.LockScreenActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+        </receiver>
+        -->
+        <activity
+            android:name="com.example.eng4kgestures.LockScreenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
     </application>
 

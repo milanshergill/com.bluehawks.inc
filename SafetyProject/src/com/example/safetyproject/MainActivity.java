@@ -336,6 +336,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	public void startsetTimerActivity(View v) {
 		Intent timerActivity = new Intent(this, IAmHereActivity.class);
+		timerActivity.putExtra("timer_expired", "Yes");
 		startActivity(timerActivity);
 	}
 
@@ -683,6 +684,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								dialog.dismiss();
+								// Let the location updates run in background
+								keepLocationServiceRunning = true;
 								// Change to high Alert mode here
 								final RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_layout);
 								highAlertDrawable = new AnimationDrawable();
@@ -711,6 +714,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								dialog.dismiss();
+								// Turn off location updates as well
+								keepLocationServiceRunning = false;
 								if (highAlertDrawable != null
 										&& highAlertDrawable.isRunning()) {
 									highAlertDrawable.stop();

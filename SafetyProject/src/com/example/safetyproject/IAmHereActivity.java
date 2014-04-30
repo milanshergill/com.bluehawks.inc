@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.SmsManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -72,6 +73,20 @@ public class IAmHereActivity extends Activity implements
 		getMenuInflater().inflate(R.menu.iam_here, menu);
 		return true;
 	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// Get passed intent
+		Intent intent = getIntent();
+		// Get message value from intent
+		if (intent != null) {
+			String message = intent.getStringExtra("timer_expired");
+			if (message != null && message.equals("Yes")) {
+				Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+			}
+		}
+	};
 
 	public void onClickedTimerButton(View v) {
 		if (timerButton.getText().equals(CANCEL_TIMER)) {
@@ -175,9 +190,9 @@ public class IAmHereActivity extends Activity implements
 		// timeBlinkInMilliseconds = 10 * 1000;
 		timeBlinkInMilliseconds = 5 * 1000;
 
-		startTimer();
+		// startTimer();
 		timerButton.setText(CANCEL_TIMER);
-		
+
 		timerActivated = true;
 		try {
 			saveToSharedFile();
@@ -342,4 +357,23 @@ public class IAmHereActivity extends Activity implements
 				notification);
 		r.play();
 	}
+
+	// public boolean dispatchKeyEvent(KeyEvent event) {
+	// int action = event.getAction();
+	// int keyCode = event.getKeyCode();
+	// switch (keyCode) {
+	// case KeyEvent.KEYCODE_BACK:
+	// if (action == KeyEvent.ACTION_DOWN) {
+	// // Nothing
+	// }
+	// if (action == KeyEvent.ACTION_UP) {
+	// // Press finished, switch to Main Activity
+	// // Intent mainIntent = new Intent(this, MainActivity.class);
+	// // startActivity(mainIntent);
+	// }
+	// return true;
+	// default:
+	// return super.dispatchKeyEvent(event);
+	// }
+	// }
 }
