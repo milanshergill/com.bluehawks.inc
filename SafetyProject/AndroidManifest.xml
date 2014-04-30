@@ -28,6 +28,7 @@
 
     <uses-permission android:name="com.example.safetyproject.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
         android:name="com.example.safetyproject.Application"
@@ -55,12 +56,12 @@
         <activity android:name="com.example.safetyproject.SendDataToServer" >
         </activity>
 
-        <receiver android:name="com.example.eng4kgestures.MediaButtonReceiver" >
+   <!--      <receiver android:name="com.example.eng4kgestures.MediaButtonReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
                 <action android:name="android.media.VOLUME_CHANGED_ACTION" />
-            </intent-filter>
-        </receiver>
+            </intent-filter> 
+        </receiver> -->
 
         <activity android:name="com.example.eng4kgestures.GestureActivity" >
         </activity>
@@ -112,6 +113,14 @@
         </receiver>
         <receiver android:name="TimeExpiredBroadcastReceiver" >
         </receiver>
+        <!--  <receiver android:name="VolumeKeyBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+            </intent-filter>
+        </receiver>  -->
+        <activity android:name="com.example.eng4kgestures.LockScreenActivity"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
     </application>
 
 </manifest>

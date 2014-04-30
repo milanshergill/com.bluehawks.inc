@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000" >
+
+    <EditText
+        android:id="@+id/serverIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:ems="20"
+        android:hint="Enter server ip address..."
+        android:visibility="invisible" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/serverIP"
+        android:layout_marginTop="20dp"
+        android:onClick="onClickStart"
+        android:text="Start"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/start"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/serverIP"
+        android:layout_marginTop="20dp"
+        android:onClick="onClickStop"
+        android:text="Stop"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/stopUDPTranfer"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/start"
+        android:layout_below="@+id/start"
+        android:layout_marginTop="10dp"
+        android:onClick="onClickStopUDPTransfer"
+        android:text="Stop Transfer"
+        android:visibility="invisible" />
+
+    <GridView
+        android:id="@+id/resultsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/start"
+        android:layout_alignRight="@+id/stop"
+        android:layout_below="@+id/resultsView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layoutDirection="ltr"
+        android:numColumns="2"
+        android:visibility="invisible" >
+    </GridView>
+
+    <TextView
+        android:id="@+id/testingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/resultsView"
+        android:layout_below="@+id/stopUDPTranfer"
+        android:layout_marginTop="5dp"
+        android:text="Status..."
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/serverReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/testingStatus"
+        android:layout_below="@+id/testingStatus"
+        android:text="Server Reply..."
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/resultsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/resultsList"
+        android:layout_below="@id/serverReply"
+        android:text="Waiting for test..."
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

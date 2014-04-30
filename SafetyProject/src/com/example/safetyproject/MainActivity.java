@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -58,6 +61,7 @@ import com.example.eng4kgestures.Acceleration;
 import com.example.eng4kgestures.DynamicTimeWarping;
 import com.example.eng4kgestures.Gesture;
 import com.example.eng4kgestures.GestureDataBase;
+import com.example.eng4kgestures.LockScreenActivity;
 import com.example.eng4kgestures.NormalizeArray;
 import com.example.eng4kgestures.RecordGestures;
 import com.example.eng4kgestures.TemporalCompressionAverage;
@@ -90,11 +94,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 	String feature_gesture = "Record Gestures";
 	String feature_profile = "Profile";
 	String feature_highAlert = "High Alert Mode";
+	String feature_screen_lock = "Lock Screen";
 
 	String feature_circle_info = "Add your friends";
 	String feature_gesture_info = "Change your recorded gestures";
 	String feature_profile_info = "Change your profile";
 	String feature_highAlert_info = "Enter high alert mode";
+	String feature_screen_lock_info = "Lock your screen";
 
 	/* Alert/Information Server Details */
 	private static String url_alert = "http://107.170.96.216:8888/start";
@@ -125,6 +131,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 	ArrayList<Gesture> savedGestures;
 	String ALERT_GESTURE = "You will need to record atleast one gesture before activating gestures.";
 	TextView gestureStatus;
+	double MIN_DIS_TO_ACTIVATE_GESTURE = 30;
+
+	/* Prevent Phone from locking */
+	KeyguardManager mKeyGuardManager;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -135,7 +145,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 		this.getWindow().addFlags(
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+						| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		// Initialize the Analytics for Parse Push Notifications
 		ParseAnalytics.trackAppOpened(getIntent());
@@ -301,6 +312,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 				feature_gesture_info));
 		models.add(new Model(R.drawable.high_alert_icon, feature_highAlert,
 				feature_highAlert_info));
+		models.add(new Model(R.drawable.screen_lock_icon, feature_screen_lock,
+				feature_screen_lock_info));
 
 		return models;
 	}
@@ -415,10 +428,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 			}
 		}
 
-//		if (buddyGuardTimerActivated) {
-//			Intent buddy_intent = new Intent(this, MainActivity.class);
-//			startActivity(buddy_intent);
-//		}
+		// if (buddyGuardTimerActivated) {
+		// Intent buddy_intent = new Intent(this, MainActivity.class);
+		// startActivity(buddy_intent);
+		// }
 	}
 
 	@Override
@@ -563,6 +576,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 			if (selectedOptionName.equals(feature_highAlert)) {
 				// Start the Screen Flashing here
 				showHighAlertModeDialog();
+			} else if (selectedOptionName.equals(feature_screen_lock)) {
+				// Show Lock Screen Option
+				showScreenLockDialog(view.getContext());
 			} else {
 				Class<?> className = null;
 				if (selectedOptionName.equals(feature_profile))
@@ -617,6 +633,39 @@ public class MainActivity extends Activity implements SensorEventListener {
 					}
 				}).create();
 		emergencyDialog.show();
+	}
+
+	/*
+	 * 
+	 * Screen Lock Dialog
+	 */
+	private void showScreenLockDialog(final Context context) {
+		AlertDialog screenLockDialog = new AlertDialog.Builder(this)
+				// set message and title
+				.setTitle("Lock Screen")
+				.setMessage("Do you want to lock your screen?")
+
+				.setPositiveButton("Lock",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								// Lock the screen
+
+								Intent lockScreenActivity = new Intent(context,
+										LockScreenActivity.class);
+								startActivity(lockScreenActivity);
+							}
+						})
+
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).create();
+		screenLockDialog.show();
 	}
 
 	/*
@@ -827,12 +876,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 		if (storedPhone != null)
 			userPhone = storedPhone;
 		if (storedHealth != null)
-			userHealth = storedPhone;
+			userHealth = storedHealth;
 		try {
 			String serverReply = new SendDataToServerHelper().execute(userName,
 					userPhone, userHealth, infoText, url).get();
 			if (serverReply != null) {
-				if (serverReply.equals("Success")) {
+				if (serverReply.equals("Sucess")) {
 					Toast.makeText(getApplicationContext(),
 							"Security Alerted!", Toast.LENGTH_SHORT).show();
 				} else {
@@ -868,9 +917,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 			String url = args[4];
 
 			String latitude, longitude;
-			// User Location
-			latitude = "No Location Found";
-			longitude = "No Location Found";
+			// User Default Location
+			latitude = "43.776360";
+			longitude = "-79.512405";
 
 			if (MainActivity.currentKnownLocation != null) {
 				latitude = "" + MainActivity.currentKnownLocation.getLatitude();
@@ -892,12 +941,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 				// Making a request to url and getting response
 				String serverReply = sh.makeServiceCall(url,
 						ServiceHandler.POST, params);
+				Log.d("SafetyFirst",
+						"Server Reply: " + serverReply);
 				return serverReply;
 
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(),
-						"Server not responding!\n" + e.getMessage(),
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(),
+//						"Server not responding!\n" + e.getMessage(),
+//						Toast.LENGTH_SHORT).show();
 				Log.d("SafetyFirst",
 						"Server not responding to send information to Server!");
 			}
@@ -993,7 +1044,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 					accelerationList.remove(j);
 				}
 			}
-			
+
 			gestureStatus.setText("Gesture saved, initial size was " + size
 					+ " after cleanup size was " + k
 					+ " the size of accel array is " + accelerationList.size());
@@ -1040,6 +1091,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 							"Gesture Selected is: " + selectedGestureName
 									+ " with min distance: " + minDistance,
 							Toast.LENGTH_LONG).show();
+					// Send alert to security
+					if (minDistance < MIN_DIS_TO_ACTIVATE_GESTURE) {
+						sendInformationToSecurity("This is just an autotmatic alert message", url_alert);
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
