@@ -10,6 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="15dp"
         android:hint="Enter server ip address..."
+        android:visibility="invisible"
         android:ems="20" >
 
         <requestFocus />
@@ -23,6 +24,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:onClick="onClickStart"
+        android:background="@color/buttonColor"
         android:text="Start" />
 
     <Button
@@ -34,6 +36,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:onClick="onClickStop"
+        android:background="@color/buttonColor"
         android:text="Stop" />
     
     <Button
@@ -44,6 +47,7 @@
         android:layout_marginTop="10dp"
         android:onClick="onClickStopUDPTransfer"
         android:text="Stop Transfer"
+        android:visibility="invisible"
         android:layout_alignLeft="@+id/start"/>
 
     <TextView
@@ -66,7 +70,7 @@
         android:layout_alignRight="@+id/stop"
         android:layout_marginRight="10dp"
         android:layout_below="@+id/resultsView"
-        android:numColumns="2"
+        android:numColumns="1"
         android:layoutDirection="ltr"
         android:layout_marginTop="15dp" >
 

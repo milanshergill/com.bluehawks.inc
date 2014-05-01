@@ -169,7 +169,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 				savedGestures = gestureDataBase.getAllGestures();
 				
 				if(savedGestures.size() > 0)
-					results.setText("Results");
+					results.setText("Results: ");
 				else
 					results.setText("No saved gestures in database, record gestures first!");
 				
@@ -250,7 +250,7 @@ public class TestGestures extends Activity implements SensorEventListener {
 						}
 					}
 					addItem(selectedGestureName);
-					addItem("" + minDistance);
+					//addItem("" + minDistance);
 					Toast.makeText(getBaseContext(), "Gesture Selected is: " + selectedGestureName, Toast.LENGTH_LONG).show();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

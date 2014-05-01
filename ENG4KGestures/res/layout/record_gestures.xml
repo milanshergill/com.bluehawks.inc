@@ -8,8 +8,10 @@
         android:id="@+id/gestureName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Enter Gesture Name" >
+
         <requestFocus />
     </EditText>
 
@@ -22,6 +24,8 @@
             android:id="@+id/startRecording"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/buttonColor"
             android:onClick="onClickStartRecording"
             android:text="Start Recording" />
 
@@ -30,14 +34,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/startRecording"
+            android:layout_marginTop="10dp"
+            android:background="@color/buttonColor"
             android:onClick="onClickStopRecording"
             android:text="Stop Recording" />
-    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/Recording_Status"
-        android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:text="Waiting for data to be recorded..." />
+        <TextView
+            android:id="@+id/Recording_Status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:text="Waiting for data to be recorded..." />
+        
+    </RelativeLayout>
 
 </LinearLayout>

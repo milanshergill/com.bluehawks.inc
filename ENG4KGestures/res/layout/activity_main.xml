@@ -20,9 +20,11 @@
         android:id="@+id/RecordGestures"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_below="@id/linearLayout1"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
         android:text="Record Gestures" 
+        android:background="@color/buttonColor"
         android:onClick="onClickRecordGestures"/>
 
     <Button
@@ -30,8 +32,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/RecordGestures"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:onClick="onClickTestGestures"
+        android:background="@color/buttonColor"
         android:text="Test Gestures" />
 
     <Button
@@ -42,6 +46,7 @@
         android:layout_below="@+id/TestGestures"
         android:layout_marginTop="50dp"
         android:onClick="onClickClearDatabase"
+        android:background="@color/buttonColor"
         android:text="Clear Database" />
 
     <Button
@@ -50,8 +55,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/clearDatabase"
+        android:layout_marginTop="10dp"
         android:layout_alignLeft="@+id/clearDatabase"
         android:onClick="onClickDeleteGestures"
+        android:background="@color/buttonColor"
         android:text="Delete Gestures" />
 
 </RelativeLayout>
