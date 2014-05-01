@@ -118,7 +118,7 @@ public class LoginDialogFragment extends DialogFragment {
 
 	private void startPassowrdTimer() {
 
-		long totalTimeInMillis = 10 * 1000; // 10 secs
+		long totalTimeInMillis = 5 * 1000; // 10 secs
 
 		// make the passtimer field visible
 		passwordTimer.setVisibility(View.VISIBLE);
@@ -142,7 +142,11 @@ public class LoginDialogFragment extends DialogFragment {
 			public void onFinish() {
 				// this function will be called when the timecount is finished
 				mListener.passwordTimerEnded();
-				dismiss(); // dismiss the dialog
+				try {
+					dismiss(); // dismiss the dialog
+				} catch (Exception e) {
+
+				}
 
 			}
 		}.start();

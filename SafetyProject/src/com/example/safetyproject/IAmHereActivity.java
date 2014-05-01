@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -19,9 +20,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.NavUtils;
 import android.telephony.SmsManager;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,6 +38,8 @@ public class IAmHereActivity extends Activity implements
 	private String CANCEL_TIMER = "Cancel Timer";
 	public static String BUDDYGUARD_TIMER = "buddyGuard_timer";
 	private String defaultTimerText = "00:00";
+
+	private String intentMessage;
 
 	private static final int MAX_SMS_MESSAGE_LENGTH = 160;
 	private static final String SMS_SENT = "i.am.here.sentsms";
@@ -54,17 +59,38 @@ public class IAmHereActivity extends Activity implements
 
 	boolean timerActivated = false;
 
+	private HashMap<Integer, CircleFriend> contactList;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iam_here);
 
-		registerReceiver(receiver, new IntentFilter(SMS_SENT)); // SMS_SENT is a
-																// constant
+		// Enable the home UP navigation
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		contactList = new HashMap<Integer, CircleFriend>();
+
+		// registerReceiver(receiver, new IntentFilter(SMS_SENT)); // SMS_SENT
+		// is a
+		// constant
 
 		timerText = (TextView) findViewById(R.id.timerText);
 		eventInfoText = (TextView) findViewById(R.id.eventText);
 		timerButton = (Button) findViewById(R.id.timerButton);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		Log.d("SafetyFirst", "onNewIntent is called!");
+
+		// Get message value from intent
+		if (intent != null) {
+			intentMessage = intent.getStringExtra("timer_expired");
+			intent.removeExtra("timer_expired");
+		}
+
+		super.onNewIntent(intent);
 	}
 
 	@Override
@@ -75,18 +101,58 @@ public class IAmHereActivity extends Activity implements
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home: {
+			Intent intent = new Intent(this, MainActivity.class);
+			startActivity(intent);
+			// NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
-		// Get passed intent
-		Intent intent = getIntent();
+
+		// if (receiver != null) {
+		// registerReceiver(receiver, new IntentFilter(SMS_SENT));
+		// }
+
+		loadFromSharedFile();
+
+		String resumeIntentMessage = null;
+		boolean shown = false;
 		// Get message value from intent
+		Intent intent = getIntent();
 		if (intent != null) {
-			String message = intent.getStringExtra("timer_expired");
-			if (message != null && message.equals("Yes")) {
-				Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-			}
+			resumeIntentMessage = intent.getStringExtra("timer_expired");
+			intent.removeExtra("timer_expired");
+		}
+
+		if (intentMessage != null && intentMessage.equals("Yes")) {
+			// Toast.makeText(this, intentMessage, Toast.LENGTH_LONG).show();
+			showUnCanceleablePasswordDialog();
+			shown = true;
+		}
+
+		if (resumeIntentMessage != null && resumeIntentMessage.equals("Yes")
+				&& !shown) {
+			// Toast.makeText(this, intentMessage, Toast.LENGTH_LONG).show();
+			showUnCanceleablePasswordDialog();
 		}
 	};
+
+	// @Override
+	// protected void onPause() {
+	// super.onPause();
+	// if (receiver != null) {
+	// unregisterReceiver(receiver);
+	// }
+	// }
 
 	public void onClickedTimerButton(View v) {
 		if (timerButton.getText().equals(CANCEL_TIMER)) {
@@ -98,11 +164,11 @@ public class IAmHereActivity extends Activity implements
 		}
 	}
 
-	@Override
-	protected void onDestroy() {
-		unregisterReceiver(receiver);
-		super.onDestroy();
-	}
+	// @Override
+	// protected void onDestroy() {
+	// unregisterReceiver(receiver);
+	// super.onDestroy();
+	// }
 
 	private void saveToSharedFile() throws IOException {
 		// Save timer status
@@ -118,7 +184,27 @@ public class IAmHereActivity extends Activity implements
 		// Load user profile data
 		SharedPreferences sharedPref = getSharedPreferences(
 				getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-		timerActivated = sharedPref.getBoolean(BUDDYGUARD_TIMER, false);
+		// timerActivated = sharedPref.getBoolean(BUDDYGUARD_TIMER, false);
+
+		// Load the saved contacts
+		for (int i = 0; i < 6; i++) {
+			String friendInfo = sharedPref.getString("friend" + i, null);
+			if (friendInfo != null) {
+				CircleFriend friend = null;
+				try {
+					friend = (CircleFriend) ObjectSerializer
+							.deserialize(friendInfo);
+					Log.i("SharedPreference",
+							"Key: " + i + " " + friend.getName());
+					Log.i("SharedPreference",
+							"Value: " + i + " " + friend.getPhotoURI());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				contactList.put(i, friend);
+			}
+		}
 	}
 
 	/******
@@ -185,12 +271,13 @@ public class IAmHereActivity extends Activity implements
 	public void onTimePickerTimeSetClick(DialogFragment dialog, int hour,
 			int min) {
 
+		int timeSeconds = 7;
 		// totalTimeCountInMilliseconds = hour * 3600 * 1000 + min * 60 * 1000;
-		totalTimeCountInMilliseconds = 10 * 1000;
+		totalTimeCountInMilliseconds = timeSeconds * 1000;
 		// timeBlinkInMilliseconds = 10 * 1000;
-		timeBlinkInMilliseconds = 5 * 1000;
+		timeBlinkInMilliseconds = 4 * 1000;
 
-		// startTimer();
+		startTimer();
 		timerButton.setText(CANCEL_TIMER);
 
 		timerActivated = true;
@@ -207,9 +294,9 @@ public class IAmHereActivity extends Activity implements
 				this.getApplicationContext(), 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-				+ (10 * 1000), pendingIntent);
-		Toast.makeText(this, "Alarm set in " + 5 + " seconds",
-				Toast.LENGTH_LONG).show();
+				+ (timeSeconds * 1000), pendingIntent);
+		// Toast.makeText(this, "Alarm set in " + 5 + " seconds",
+		// Toast.LENGTH_LONG).show();
 
 	}
 
@@ -246,7 +333,7 @@ public class IAmHereActivity extends Activity implements
 			public void onFinish() {
 				timerText.setText("Time up!");
 				timerText.setVisibility(View.VISIBLE);
-				showUnCanceleablePasswordDialog();
+				// showUnCanceleablePasswordDialog();
 			}
 		}.start();
 	}
@@ -257,8 +344,8 @@ public class IAmHereActivity extends Activity implements
 				"Messages to emergency friends sent.", Toast.LENGTH_SHORT)
 				.show();
 		String manualMsg = eventInfoText.getText().toString();
-		String latitude = "";
-		String longitude = "";
+		String latitude = "43.773751";
+		String longitude = "-79.505060";
 		if (MainActivity.currentKnownLocation != null) {
 			latitude = "" + MainActivity.currentKnownLocation.getLatitude();
 			longitude = "" + MainActivity.currentKnownLocation.getLongitude();
@@ -272,10 +359,9 @@ public class IAmHereActivity extends Activity implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (CircleOf6.contactList != null && CircleOf6.buttonIDs != null) {
+		if (contactList != null) {
 			for (int i = 0; i < 6; i++) {
-				CircleFriend friend = CircleOf6.contactList
-						.get(CircleOf6.buttonIDs[i]);
+				CircleFriend friend = contactList.get(i);
 				if (friend != null && friend.getPhoneNumber() != null)
 					sendSMS(friend.getPhoneNumber(),
 							"This message is from SafetyFirst application."

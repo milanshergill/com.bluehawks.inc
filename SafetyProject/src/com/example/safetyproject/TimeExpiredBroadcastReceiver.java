@@ -17,8 +17,9 @@ public class TimeExpiredBroadcastReceiver extends BroadcastReceiver {
 		vibrator.vibrate(2000);
 		Intent buddyGuardIntent = new Intent(context, IAmHereActivity.class);
 		// Let the activity know that timer expired
-        intent.putExtra("timer_expired", "Yes");
 		buddyGuardIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+		buddyGuardIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		buddyGuardIntent.putExtra("timer_expired", "Yes");
 	    context.startActivity(buddyGuardIntent);
 	}
 }

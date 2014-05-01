@@ -81,7 +81,7 @@ public class CircleOf6 extends Activity {
 		textContact5 = (TextView) findViewById(R.id.textView05);
 		textContact6 = (TextView) findViewById(R.id.textView06);
 
-		// clearData();
+//		 clearData();
 	}
 
 	@Override
@@ -157,6 +157,7 @@ public class CircleOf6 extends Activity {
 					String data = ObjectSerializer.serialize(contactList
 							.get(buttonIDs[i]));
 					editor.putString(buttonStr, data);
+					editor.putString("friend" + i, data);
 				}
 			}
 		}
@@ -172,6 +173,7 @@ public class CircleOf6 extends Activity {
 		for (int i = 0; i < 6; i++) {
 			String buttonStr = Integer.toString(buttonIDs[i]);
 			editor.remove(buttonStr);
+			editor.remove("friend" + i);
 		}
 		editor.commit();
 	}

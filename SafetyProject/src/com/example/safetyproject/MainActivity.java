@@ -336,7 +336,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	public void startsetTimerActivity(View v) {
 		Intent timerActivity = new Intent(this, IAmHereActivity.class);
-		timerActivity.putExtra("timer_expired", "Yes");
 		startActivity(timerActivity);
 	}
 

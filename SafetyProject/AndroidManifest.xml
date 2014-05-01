@@ -108,6 +108,7 @@
             android:name="com.example.safetyproject.IAmHereActivity"
             android:label="@string/title_activity_iam_here"
             android:launchMode="singleTask"
+            android:parentActivityName="com.example.safetyproject.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
