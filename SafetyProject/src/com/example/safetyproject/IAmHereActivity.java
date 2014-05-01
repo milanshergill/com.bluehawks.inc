@@ -364,10 +364,10 @@ public class IAmHereActivity extends Activity implements
 				CircleFriend friend = contactList.get(i);
 				if (friend != null && friend.getPhoneNumber() != null)
 					sendSMS(friend.getPhoneNumber(),
-							"This message is from SafetyFirst application."
-									+ " BuddyGuard Alert - \"" + manualMsg
-									+ "\". Here is the current location: "
-									+ locationLink);
+							"SafetyFirst message. BuddyGuard Alert - " + locationLink);
+//									+ " BuddyGuard Alert - \"" + manualMsg
+//									+ "\". Here is the current location: "
+//									+ locationLink);
 			}
 		}
 	}

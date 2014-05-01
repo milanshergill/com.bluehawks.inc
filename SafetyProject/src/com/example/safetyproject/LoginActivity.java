@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
-	private String[] DUMMY_CODES = { "1234", "5678", "0000", "7777" };
+	private String[] DUMMY_CODES = { "1234", "5678", "0000", "7777", "5555" };
 	public final static String saveIdForUserName = "ThisIsUserIdForUserNameOfSafetyFirst";
 
 	EditText accessCodeField;
@@ -111,6 +111,9 @@ public class LoginActivity extends Activity {
 		case 7777:
 			userName = "Khady Lo Seck";
 			break;
+		case 5555:
+			userName = "Khemesse";
+			break;	
 		}
 		return userName;
 	}

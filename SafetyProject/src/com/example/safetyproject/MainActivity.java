@@ -191,8 +191,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// Set the list's click listener
 		mDrawerList.setOnItemClickListener(new NavigationTitleClickListener());
 
-		// Open the drawer initially to inform the user about it
-		mDrawerLayout.openDrawer(mDrawerList);
+		// // Open the drawer initially to inform the user about it
+		// mDrawerLayout.openDrawer(mDrawerList);
 
 		// Gesture related declarations
 		gestureToggleButton = (ToggleButton) findViewById(R.id.gestureToggleButton);
@@ -328,13 +328,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	public void startAlertLocationActivity(View v) {
 		keepLocationServiceRunning = true;
-		// showAlertFromUserDialog();
-		Intent sendDataToServerActivity = new Intent(this,
-				SendDataToServer.class);
-		startActivity(sendDataToServerActivity);
+		showAlertFromUserDialog();
+		// Intent sendDataToServerActivity = new Intent(this,
+		// SendDataToServer.class);
+		// startActivity(sendDataToServerActivity);
 	}
 
 	public void startsetTimerActivity(View v) {
+		keepLocationServiceRunning = true;
 		Intent timerActivity = new Intent(this, IAmHereActivity.class);
 		startActivity(timerActivity);
 	}
@@ -396,27 +397,27 @@ public class MainActivity extends Activity implements SensorEventListener {
 		}
 
 		// Display the notification received from Parse to user
-		Intent intent = getIntent();
-		if (intent != null) {
-			Bundle extras = intent.getExtras();
-			if (extras != null) {
-				String notificationData = extras.getString("com.parse.Data");
-				intent.removeExtra("com.parse.Data");
-				if (notificationData != null) {
-					String data = "Sorry, no data found!";
-					try {
-						JSONObject json = new JSONObject(notificationData);
-						data = json.getString("alert");
-					} catch (JSONException e) {
-						e.printStackTrace();
-						Log.d("SafetyFirst",
-								"Error reading parse notification!");
-					}
-					Log.d("SafetyFirst", data);
-					showNotificationAlert(data);
-				}
-			}
-		}
+//		Intent intent = getIntent();
+//		if (intent != null) {
+//			Bundle extras = intent.getExtras();
+//			if (extras != null) {
+//				String notificationData = extras.getString("com.parse.Data");
+//				getIntent().removeExtra("com.parse.Data");
+//				if (notificationData != null) {
+//					String data = "Sorry, no data found!";
+//					try {
+//						JSONObject json = new JSONObject(notificationData);
+//						data = json.getString("alert");
+//					} catch (JSONException e) {
+//						e.printStackTrace();
+//						Log.d("SafetyFirst",
+//								"Error reading parse notification!");
+//					}
+//					Log.d("SafetyFirst", data);
+//					showNotificationAlert(data);
+//				}
+//			}
+//		}
 
 		// Each time verify if there are gestures in database and toggle is on
 		if (gestureToggleButton != null && gestureToggleButton.isChecked()) {
@@ -651,7 +652,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 									int which) {
 								dialog.dismiss();
 								// Lock the screen
-
+								keepLocationServiceRunning = true;
 								Intent lockScreenActivity = new Intent(context,
 										LockScreenActivity.class);
 								startActivity(lockScreenActivity);
@@ -889,13 +890,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 					Toast.makeText(getApplicationContext(),
 							"Security Alerted!", Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(getApplicationContext(),
-							"No Reply from Server!", Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getApplicationContext(),
+					// "No Reply from Server!", Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				Toast.makeText(getApplicationContext(),
-						"Server not available, connection refused!",
-						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(getApplicationContext(),
+				// "Server not available, connection refused!",
+				// Toast.LENGTH_SHORT).show();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -922,8 +923,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 			String latitude, longitude;
 			// User Default Location
-			latitude = "43.776360";
-			longitude = "-79.512405";
+			latitude = "43.773751";
+			longitude = "-79.505060";
 
 			if (MainActivity.currentKnownLocation != null) {
 				latitude = "" + MainActivity.currentKnownLocation.getLatitude();
@@ -945,16 +946,66 @@ public class MainActivity extends Activity implements SensorEventListener {
 				// Making a request to url and getting response
 				String serverReply = sh.makeServiceCall(url,
 						ServiceHandler.POST, params);
-				Log.d("SafetyFirst",
-						"Server Reply: " + serverReply);
+				Log.d("SafetyFirst", "Server Reply: " + serverReply);
 				return serverReply;
 
 			} catch (Exception e) {
-//				Toast.makeText(getApplicationContext(),
-//						"Server not responding!\n" + e.getMessage(),
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(getApplicationContext(),
+				// "Server not responding!\n" + e.getMessage(),
+				// Toast.LENGTH_SHORT).show();
 				Log.d("SafetyFirst",
 						"Server not responding to send information to Server!");
+			}
+
+			return null;
+		}
+	}
+
+	/**
+	 * Async task class to get json by making HTTP call
+	 * */
+	private class SendAlertDataToServerHelper extends
+			AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... args) {
+			// On trust bases the length of input arguments should be 4
+			String userName = args[0];
+			String userPhone = args[1];
+			String userHealth = args[2];
+			String url = args[3];
+
+			String latitude, longitude;
+			// User Default Location
+			latitude = "43.773751";
+			longitude = "-79.505060";
+
+			if (MainActivity.currentKnownLocation != null) {
+				latitude = "" + MainActivity.currentKnownLocation.getLatitude();
+				longitude = ""
+						+ MainActivity.currentKnownLocation.getLongitude();
+			}
+
+			// Creating service handler class instance
+			ServiceHandler sh = new ServiceHandler();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair(TAG_NAME, userName));
+			params.add(new BasicNameValuePair(TAG_PHONE, userPhone));
+			params.add(new BasicNameValuePair(TAG_HEALTH, userHealth));
+			params.add(new BasicNameValuePair(TAG_LATITUDE, latitude));
+			params.add(new BasicNameValuePair(TAG_LONGITUDE, longitude));
+
+			try {
+				// Making a request to url and getting response
+				String serverReply = sh.makeServiceCall(url,
+						ServiceHandler.POST, params);
+				Log.d("SafetyFirst", "Server Reply: " + serverReply);
+				return serverReply;
+
+			} catch (Exception e) {
+				// Toast.makeText(getApplicationContext(),
+				// "Server not responding!\n" + e.getMessage(),
+				// Toast.LENGTH_SHORT).show();
+				Log.d("SafetyFirst", "Server not responding!");
 			}
 
 			return null;
@@ -971,8 +1022,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 			String latitude, longitude;
 			// User Location
-			latitude = "43.776360";
-			longitude = "-79.512405";
+			latitude = "43.773751";
+			longitude = "-79.505060";
 
 			if (MainActivity.currentKnownLocation != null) {
 				latitude = "" + MainActivity.currentKnownLocation.getLatitude();
@@ -1097,7 +1148,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 							Toast.LENGTH_LONG).show();
 					// Send alert to security
 					if (minDistance < MIN_DIS_TO_ACTIVATE_GESTURE) {
-						sendInformationToSecurity("This is just an autotmatic alert message", url_alert);
+						sendInformationToSecurity(
+								"This is just an autotmatic alert message",
+								url_alert);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
