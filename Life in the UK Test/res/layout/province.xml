@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/LinearLayout01"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView android:id="@+id/ScrollView01"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:orientation="vertical" android:layout_width="fill_parent"
+ android:layout_height="fill_parent"
+ android:background="@drawable/background2">
+
+<TextView android:id="@+id/TextView03" 
+android:layout_height="wrap_content" 
+android:text="@string/provinceinfo" 
+android:textSize="17dip"
+android:textColor="#ffffff"
+android:textStyle="normal"
+android:layout_width="fill_parent"
+android:layout_marginTop="5dip">
+</TextView>
+
+<TextView android:id="@+id/TextView031" 
+android:layout_height="wrap_content" 
+android:text="@string/alert" 
+android:textSize="18dip"
+android:textColor="#ff0000"
+android:textStyle="bold"
+android:layout_width="fill_parent"
+android:layout_marginTop="10dip"
+android:layout_below="@+id/TextView03">
+</TextView>
+<TextView android:id="@+id/TextView032" 
+android:layout_height="wrap_content" 
+android:text="# The questions contained under Federal Government are COMPULSORY for each province. Thus study both topics Federal Govern. and your appropriate Province !!" 
+android:textSize="17dip"
+android:textColor="#00ff00"
+android:textStyle="normal"
+android:layout_width="fill_parent"
+android:layout_marginTop="5dip"
+android:layout_below="@+id/TextView031">
+</TextView>
+<TextView android:id="@+id/TextView033" 
+android:layout_height="wrap_content" 
+android:text="# The questions contained under this section are up-to date till the release date. Please confirm them once !!" 
+android:textSize="17dip"
+android:textColor="#00ff00"
+android:textStyle="normal"
+android:layout_width="fill_parent"
+android:layout_marginTop="5dip"
+android:layout_below="@+id/TextView032">
+</TextView>
+
+<TextView android:id="@+id/TextView04" 
+android:layout_height="wrap_content" 
+android:text="@string/provinceselect" 
+android:textSize="17dip"
+android:textColor="#ffffff"
+android:textStyle="normal"
+android:layout_width="fill_parent"
+android:layout_marginTop="10dip"
+android:layout_below="@+id/TextView033">
+</TextView>
+<Spinner
+android:id="@+id/spinner"
+android:layout_width="fill_parent"
+android:layout_height="50dip"
+android:prompt="@string/spinner_prompt"
+android:layout_below="@+id/TextView04"
+android:layout_marginTop="8dip"></Spinner>
+
+<Button
+android:id="@+id/done"
+android:text="Done"
+android:textSize="17dip"
+android:textColor="#ffffff"
+android:textStyle="bold"
+android:typeface="serif"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:background="@drawable/nextbutton"
+android:layout_marginTop="10dip"
+android:layout_below="@+id/spinner"
+android:layout_centerHorizontal="true"></Button>
+</RelativeLayout>
+</ScrollView>
+</LinearLayout>
+

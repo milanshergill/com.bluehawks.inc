@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bluehawksinc.lifeintheuktest"
+    android:versionCode="2"
+    android:versionName="1.1" >
+
+    <application
+        android:icon="@drawable/logo"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".Logo"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Name"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Quiz1"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".reset"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End"
+            android:label="BlueHawks Inc."
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Sign"
+            android:label="Blue Hawks"
+            android:launchMode="singleTask"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Main_Screen"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleInstance"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock1"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock2"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock3"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock4"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock5"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock6"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock7"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock8"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock9"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock10"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock11"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock12"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock13"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock14"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock15"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Mock_random"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".QuizInfo"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SignInfo"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Select"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Info"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Last"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Finish"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Finish1"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Last1"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End1"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End2"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End3"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End4"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End6"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End7"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End8"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End9"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End10"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End11"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End12"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End13"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End14"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End15"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".End_random"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Results"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans1"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans2"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans3"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans4"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans5"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans6"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans7"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans8"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans9"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans10"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans11"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans12"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans13"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans14"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans15"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".ans_random"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".MockInfo"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleInstance"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Special"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Special_Sign"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpecialInfo"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Chapters"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Chapter2"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Chapter3"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Chapter4"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Chapter5"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Chapter6"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Settings"
+            android:label="BlueHawks Inc."
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".Setting"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".TestInfo"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpCh2"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpAll"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpCh3"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpCh4"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpCh5"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <activity
+            android:name=".SpCh6"
+            android:label="BlueHawks Inc."
+            android:launchMode="standard"
+            android:theme="@style/MyTheme" >
+        </activity>
+        <meta-data android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+        <!-- Activity required to show ad overlays. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        
+    </application>
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="14" />
+
+    <!-- Used to request banner and interstitial ads. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Used to avoid sending an ad request if there is no connectivity. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+</manifest>

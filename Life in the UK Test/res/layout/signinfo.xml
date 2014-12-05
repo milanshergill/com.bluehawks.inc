@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:id="@+id/LinearLayout01"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView android:id="@+id/ScrollView01"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content">  
+<RelativeLayout 
+android:layout_width="fill_parent" 
+android:layout_height="fill_parent" 
+android:soundEffectsEnabled="true"
+android:id="@+id/lay"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<TextView 
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/welcome" 
+android:text="This section contains the practice questions related to Canadian Citizenship Test. All the questions are based on “Study Guide – Discover Canada The Rights and Responsibilities of Citizenship”"
+android:layout_height="wrap_content" 
+android:layout_width="fill_parent"
+android:textColor="#ffffff"
+android:layout_alignParentTop="true"
+android:layout_marginTop="20dip"
+android:gravity="center_horizontal"
+></TextView>
+<TextView
+android:gravity="center_horizontal" 
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/welcome1" 
+android:text="You have no time limit to practice these questions."
+android:layout_height="wrap_content" 
+android:layout_width="fill_parent"
+android:textColor="#ffffff"
+android:layout_below="@+id/welcome"
+android:layout_marginTop="5dip"
+></TextView>
+<TextView 
+android:gravity="center_horizontal"
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/welcome2" 
+android:text="You can even save your progress in middle of the practice and continue later from the same question by exiting through the cross (exit) button on the top right corner of the questions"
+android:layout_height="wrap_content" 
+android:layout_width="fill_parent"
+android:textColor="#ffffff"
+android:layout_below="@+id/welcome1"
+android:layout_marginTop="5dip"
+></TextView>
+<TextView 
+android:gravity="center_horizontal"
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/welcome3" 
+android:text="In a real Citizenship Test you will be asked 20 questions on subjects such as:"
+android:layout_height="wrap_content" 
+android:layout_width="fill_parent"
+android:textColor="#ffffff"
+android:layout_below="@+id/welcome2"
+android:layout_marginTop="5dip"
+></TextView>
+
+<TextView 
+android:gravity="center_horizontal"
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/welcome4" 
+android:text="Right to vote and Right to run for elected office, Procedures related to elections, Rights and responsibilities of a citizen, Canadian social and cultural history and symbols, Canadian political history (including the political system and institutions) and Canadian physical and political geography"
+android:layout_height="wrap_content" 
+android:layout_width="fill_parent"
+android:textColor="#ff0000"
+android:layout_below="@+id/welcome3"
+android:layout_marginTop="5dip"
+></TextView>
+
+<Button
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/cont" 
+android:text="Continue" 
+android:layout_height="50dip" 
+android:layout_width="200dip" 
+android:background="@drawable/nextbutton"
+android:textColor="#ffffff"
+android:layout_centerHorizontal="true"
+android:layout_below="@+id/welcome4"
+android:layout_marginTop="15dip"
+></Button>
+</RelativeLayout>
+</ScrollView>
+</LinearLayout>

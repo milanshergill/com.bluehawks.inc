@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+<RelativeLayout
+android:id="@+id/layout"
+android:layout_width="wrap_content"
+android:layout_height="40dip"
+android:background="@drawable/list">	
+        <TextView android:id="@+id/mockname"
+	        android:text="Mock Test - 1"
+	        android:layout_height="wrap_content"
+	        android:layout_width="wrap_content"
+	        android:textColor="#ffffff"
+        	android:textSize="17dip"
+        	android:typeface="serif"
+        	android:textStyle="normal"
+        	android:layout_alignParentLeft="true"
+        	android:layout_centerVertical="true"
+        	android:layout_marginLeft="10dip"
+        	
+        	/>
+        
+        <ImageView android:id="@+id/arrow"
+        	android:src="@drawable/arrow"
+        	android:layout_height="wrap_content"
+        	android:layout_width="35dip"
+        	android:layout_centerVertical="true"
+        	android:layout_alignParentRight="true"
+        	android:layout_marginRight="100dip"    
+        	
+        />
+</RelativeLayout>	    
+</LinearLayout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/back" >
+
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/lay"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/back"
+            android:soundEffectsEnabled="true" >
+
+            <ImageView
+                android:id="@+id/logo1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dip"
+                android:src="@drawable/uk" >
+            </ImageView>
+
+            <TextView
+                android:id="@+id/fname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/logo1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dip"
+                android:text="Welcome"
+                android:textColor="#ff0000"
+                android:textSize="30dip"
+                android:textStyle="normal" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fname"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="1dip"
+                android:text="Player"
+                android:textColor="#ff0000"
+                android:textSize="30dip"
+                android:textStyle="normal" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dip"
+                android:clickable="true"
+                android:text="Not you? Tap here."
+                android:textColor="#ff0000"
+                android:textSize="13dip"
+                android:textStyle="normal" >
+            </TextView>
+
+            <Button
+                android:id="@+id/start"
+                android:layout_width="100dip"
+                android:layout_height="100dip"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/name1"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="25dip"
+                android:background="@drawable/button"
+                android:state_focused="true"
+                android:text="Settings"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:typeface="serif" >
+            </Button>
+
+            <Button
+                android:id="@+id/start2"
+                android:layout_width="100dip"
+                android:layout_height="100dip"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/name1"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="25dip"
+                android:background="@drawable/button"
+                android:text="Start"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:typeface="serif" >
+            </Button>
+
+            <Button
+                android:id="@+id/start3"
+                android:layout_width="100dip"
+                android:layout_height="100dip"
+                android:layout_below="@+id/name1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dip"
+                android:background="@drawable/button"
+                android:text="Results"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:typeface="serif" >
+            </Button>
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

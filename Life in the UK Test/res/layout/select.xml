@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:id="@+id/LinearLayout01"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:background="@drawable/back"
+xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView android:id="@+id/ScrollView01"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"> 
+<RelativeLayout 
+android:layout_width="fill_parent" 
+android:layout_height="fill_parent" 
+android:soundEffectsEnabled="true"
+android:id="@+id/lay"
+android:background="@drawable/back"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ImageView
+android:src="@drawable/uk"
+android:layout_centerHorizontal="true"
+android:layout_marginTop="20dip"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/logo1"></ImageView>
+
+<TextView
+android:id="@+id/fname"
+android:text="Life in the UK Test"
+android:layout_below="@+id/logo1"
+android:layout_marginTop="10dip"
+android:layout_height="wrap_content"
+android:layout_width="wrap_content"
+android:textColor="#ff0000"
+android:textSize="25dip"
+android:textStyle="bold"
+android:layout_centerHorizontal="true">
+</TextView>
+
+<Button
+android:state_focused="true"
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/rule" 
+android:text="Study Guide" 
+android:layout_height="50dip" 
+android:layout_width="200dip" 
+android:background="@drawable/nextbutton"
+android:textColor="#ffffff"
+android:layout_below="@+id/fname"
+android:layout_centerHorizontal="true"
+android:layout_marginTop="30dip"
+></Button>
+
+<Button
+android:state_focused="true"
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/mock" 
+android:text="Mock Test" 
+android:layout_height="50dip" 
+android:layout_width="200dip" 
+android:background="@drawable/nextbutton"
+android:textColor="#ffffff"
+android:layout_below="@+id/rule"
+android:layout_centerHorizontal="true"
+android:layout_marginTop="15dip"
+></Button>
+
+<Button
+android:state_focused="true"
+android:textStyle="bold"
+android:typeface="serif"
+android:id="@+id/important" 
+android:textSize="18dip"
+android:text="*Special Mock*"
+android:layout_height="50dip" 
+android:layout_width="200dip" 
+android:background="@drawable/nextbutton"
+android:textColor="#ff0000"
+android:layout_below="@+id/mock"
+android:layout_centerHorizontal="true"
+android:layout_marginTop="15dip"
+></Button>
+
+</RelativeLayout>
+</ScrollView>
+</LinearLayout>

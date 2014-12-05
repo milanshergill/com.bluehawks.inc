@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/background2" >
+
+            <TextView
+                android:id="@+id/ques"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textSize="17dip"
+                android:textStyle="bold" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/empty"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ques"
+                android:text="" >
+            </TextView>
+
+            <RadioGroup
+                android:id="@+id/group"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/empty"
+                android:orientation="vertical" >
+
+                <RadioButton
+                    android:id="@+id/Op1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="" >
+                </RadioButton>
+
+                <RadioButton
+                    android:id="@+id/Op2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="" >
+                </RadioButton>
+
+                <RadioButton
+                    android:id="@+id/Op3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="" >
+                </RadioButton>
+
+                <RadioButton
+                    android:id="@+id/Op4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="" >
+                </RadioButton>
+            </RadioGroup>
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/ad_unit_id" />
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

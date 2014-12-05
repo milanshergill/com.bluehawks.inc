@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="200dip"
+    android:background="@drawable/background2"
+    android:orientation="vertical">
+          <TextView android:id="@+id/infoques"
+        	android:text="What is the name"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:textColor="#00ffaa"
+        	android:typeface="serif"
+        	android:textSize="17dip"
+        	android:textStyle="normal"
+        />
+        <TextView android:id="@+id/infoans"
+	        android:text="score"
+	        android:layout_height="wrap_content"
+	        android:layout_width="wrap_content"
+	        android:textColor="#ffffff"
+        	android:textSize="16dip"
+        	android:textStyle="normal"
+        	android:typeface="sans"
+        	android:layout_marginTop="2dip"
+        	android:layout_marginBottom="5dip"
+	    />
+	    
+</LinearLayout>

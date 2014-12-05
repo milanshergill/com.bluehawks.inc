@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    	<ImageView android:id="@+id/ques_image"
+        	android:src="@drawable/cross"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:layout_marginBottom="5dip"        	
+        />
+        <TextView android:id="@+id/ques"
+        	android:text="	"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:textColor="#ffffff"
+        	android:textSize="15dip"
+        	android:textStyle="normal"
+        	android:layout_marginBottom="5dip" 
+        />
+        <TextView android:id="@+id/ans"
+	        android:text="ANDKFLFLLF"
+	        android:layout_height="wrap_content"
+	        android:layout_width="wrap_content"
+	        android:textColor="#af00aa"
+        	android:textSize="15dip"
+        	android:layout_marginBottom="5dip" 
+        	android:textStyle="bold"
+        	/>
+	    
+</LinearLayout>

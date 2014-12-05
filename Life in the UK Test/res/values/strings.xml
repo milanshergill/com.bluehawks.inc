@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UK Citizenship Test</string>
+    <string name="result">RESULTS<u></u></string>
+    <string name="canada"><u>Canadian Citizenship Test</u></string>
+<string name="provinceinfo">This section focus on updating your Knowledge about Federal Government, Provinces and Territories of Canada. 
+Remember the exam paper is generally designed for the country-wide purpose, not much focus on Provinces and Territories. 
+You may see only 1-3 questions in paper from this sections.</string>
+<string name="provinceselect">Please select the appropriate Province or Territory from below to start the test:</string>
+<string name="alert"><u>** ALERT **</u></string>
+<string name="spinner_prompt">Choose a Province or Territory</string>
+    <string-array name="spinner_array">
+        <item>Federal Government</item>
+        <item>Alberta</item>
+        <item>British Columbia</item>
+        <item>Manitoba</item>
+        <item>New Brunswick</item>
+        <item>Newfoundland and Labrador</item>
+        <item>NorthWest Territories</item>
+        <item>NovaScotia</item>
+        <item>Nunavut</item>
+        <item>Ontario</item>
+        <item>Prince Edward Island</item>
+        <item>Quebec</item>
+        <item>Sasketchwan</item>
+        <item>Yukon</item>
+    </string-array>
+
+    <string name="note0">Why has the test been introduced?</string>
+                        
+    <string name="note1">Becoming a British citizen or deciding to settle permanently in this country is an important event in your life. If you are applying for naturalisation as a British citizen or for indefinite leave to remain, you will need to show that you know about life in the UK.</string>
+                        
+    <string name="note2">Is the test only available in English?</string>
+                        
+    <string name="note3">The test is offered routinely in English. However, if you are taking the test in a centre based in Wales you may request to take a test in the Welsh language, or if taking the test in Scotland you may request to take the test in Scottish Gaelic. You can get further details from your test centre.</string>                    
+                        
+    <string name="note4">When do I take the test?</string>                    
+                        
+    <string name="note5">You should take the test before you apply for naturalisation as a British citizen or before you apply for indefinite leave to remain, provided you meet all the other requirements.</string>
+    <string name="note6">Where can I take the test?</string>
+    <string name="note7">There are around 65 test centres around the country where you can take your test in a welcoming and friendly environment. Most of them are also learning centres where you can brush up on your language or computer skills. Find out where your nearest test centres are using "Find a Test Centre" option under "Settings".</string>
+    <string name="note8">How do I book a test?</string>
+    <string name="note9">Contact a test centre during opening hours by telephone or in person. The test centre will offer you a place in one of their test sessions within 1 to 4 weeks of your request. There is a minimum waiting period of 7 days between making your booking and being able to take the test.</string>
+    <string name="note10">How much will the test cost?</string>
+    <string name="note11">From 1st June 2011 the cost of the test will be increased to £50 (VAT inclusive).</string>
+    <string name="note12">What will I be tested on?</string>
+    <string name="note13">The test is computer-based and is a series of 24 questions. It is based on "Life in the United Kingdom: A Journey to Citizenship (2nd Edition)". The Chapters included are :- Chapter 2 (A changing society), Chapter 3 (UK today: A profile), Chapter 4 (How the United Kingdom is governed), Chapter 5 (Everyday needs), Chapter 6 (Employment).</string>
+    <string name="note14">How do I prepare for my test?</string>
+    <string name="note15">This Application helps you to prepare for your Test in every aspect. The cool User Interface and Question Bank (taken from "Life in the United Kingdom: A Journey to Citizenship") is very easy to use and understand, thus you get a easy way to find success in passing your test.</string>
+    <string name="note16">How long does the test last?</string>
+    <string name="note17">You will have 45 minutes to answer 24 questions. This gives you plenty of time to choose your answers and check them again before the end. If you have certain medical conditions, you may be allowed more time. You must tell the test centre of any medical conditions when you book your test.</string>
+    <string name="note18">When do I get the results?</string>
+    <string name="note19">You will find out your results when the test session has finished. The test supervisor will tell you whether or not you have passed.</string>
+    <string name="note20">What is the pass mark?</string>
+    <string name="note21">The pass mark for the test is around 75%.</string>
+     <string name="note22">I have failed the test. Can I take it again?</string>
+     <string name="note23">Yes. But you will have to wait a minimum of 7 days to take the test again.</string>
+     <string name="note24">How will this Application help me?</string>
+     <string name="note25">This Application contains all the latest questions taken from "Life in the United Kingdom: A Journey to Citizenship (2nd Edition)" and some of them are directly taken from real Citizenship Exams. Hence, it prepares you in every possible way to make you pass your exam. You only job is to complete the "Study Guide" and all the "Mock Tests".</string>
+    <string name="eula_title">License</string>
+    <string name="eula_accept">Accept</string>
+    <string name="eula_refuse">Decline</string> 
+    <!-- License checking status messages -->
+    <string name="check_license">Check license</string>
+    <string name="checking_license">Checking license...</string>
+    <string name="dont_allow">Don\'t allow the user access</string>
+    <string name="allow">Allow the user access</string>
+    <string name="application_error">Application error: %1$s</string>
+
+    <!-- Unlicensed dialog messages -->
+    <string name="unlicensed_dialog_title">Application not licensed</string>
+    <string name="unlicensed_dialog_body">This application is not licensed. Please purchase it from Android Market.</string>
+    <string name="buy_button">Buy App</string>
+    <string name="quit_button">Exit</string>    
+    <string name="ad_unit_id">ca-app-pub-8174047566082605/8514952771</string> 
+    <string name="ad_unit_interstitial_id">ca-app-pub-8174047566082605/9991685974</string>    
+                        
+</resources>
