@@ -11,7 +11,7 @@
 # generated files
 bin/
 gen/
-/dsdas
+/dsdas/sds
 
 # Ignore gradle files
 .gradle/
